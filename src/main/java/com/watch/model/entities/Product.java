@@ -1,10 +1,12 @@
 package com.watch.model.entities;
 
 import com.watch.model.enums.Age;
+import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -14,6 +16,9 @@ public class Product {
 
     @Column(name = "name", nullable = false, length = 150)
     private String name;
+
+    @Column(name = "brand", length = 100)
+    private String brand;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -35,8 +40,8 @@ public class Product {
     @Column(name = "age", nullable = false, length = 10)
     private Age age ;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false, length = 20)
     private Category category;
 
     public Product() {
@@ -56,6 +61,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getDescription() {

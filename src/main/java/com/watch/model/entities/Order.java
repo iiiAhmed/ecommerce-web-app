@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,7 @@ public class Order {
     private LocalDateTime orderedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +47,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<CartItem> cartItems;
 
     public User() {
     }
@@ -144,5 +148,13 @@ public class User {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 }

@@ -3,10 +3,12 @@ package com.watch.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "order_items")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "order_item_id")
+    private int id;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
@@ -32,11 +34,11 @@ public class OrderItem {
         this.price = product.getPrice();
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

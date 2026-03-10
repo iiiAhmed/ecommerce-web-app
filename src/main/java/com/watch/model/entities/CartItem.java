@@ -3,7 +3,6 @@ package com.watch.model.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cart_items", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "product_id"}))
@@ -11,6 +10,7 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_item_id")
     private int cartItemId;
 
     @Column(name = "quantity", nullable = false)
