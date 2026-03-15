@@ -16,7 +16,11 @@ public class OrderDaoImpl implements OrderDao {
     public Order getOrderById(int id) {
         EntityManager em = getEm();
         try {
-            return em.find(Order.class, id);
+            List<Order> results = em.createQuery(
+                    "SELECT o FROM Order o LEFT JOIN FETCH o.items LEFT JOIN FETCH o.user WHERE o.orderId = :id", Order.class)
+                    .setParameter("id", id)
+                    .getResultList();
+            return results.isEmpty() ? null : results.get(0);
         } finally {
             if (em.isOpen()) em.close();
         }
