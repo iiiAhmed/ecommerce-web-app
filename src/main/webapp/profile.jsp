@@ -276,7 +276,7 @@
                                                     <td class="column-2" style="text-align: center;">${order.orderedAt}</td>
                                                     <td class="column-3" style="text-align: center;">$${order.totalAmount}</td>
                                                     <td class="column-4" style="text-align: center;">
-                                                        <a href="#" class="stext-107 cl1 hov-cl1 trans-04">
+                                                        <a href="orderDetails?id=${order.orderId}" class="stext-107 cl1 hov-cl1 trans-04">
                                                             View Details
                                                         </a>
                                                     </td>
