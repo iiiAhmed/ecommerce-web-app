@@ -1,7 +1,6 @@
 package com.watch.controller;
 
-import com.watch.model.dao.OrderDao;
-import com.watch.model.dao.OrderDaoImpl;
+import com.watch.model.services.OrderService;
 import com.watch.model.entities.Order;
 import com.watch.model.entities.User;
 import jakarta.servlet.ServletException;
@@ -17,12 +16,12 @@ import java.util.List;
 @WebServlet("/profile")
 public class ProfileServlet extends HttpServlet {
 
-    private OrderDao orderDao;
+    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        orderDao = new OrderDaoImpl();
+        orderService = new OrderService();
     }
 
     @Override
@@ -41,7 +40,7 @@ public class ProfileServlet extends HttpServlet {
         // Hardcoded User ID for testing
         int userId = 2; // Testing with user ID 2 
 
-        List<Order> userOrders = orderDao.getOrdersByUser(userId);
+        List<Order> userOrders = orderService.getOrdersByUser(userId);
 
         req.setAttribute("orders", userOrders);
         req.getRequestDispatcher("profile.jsp").forward(req, resp);

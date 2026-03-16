@@ -1,7 +1,6 @@
 package com.watch.controller;
 
-import com.watch.model.dao.OrderDao;
-import com.watch.model.dao.OrderDaoImpl;
+import com.watch.model.services.OrderService;
 import com.watch.model.entities.Order;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,12 +13,12 @@ import java.io.IOException;
 @WebServlet("/orderDetails")
 public class OrderDetailsServlet extends HttpServlet {
 
-    private OrderDao orderDao;
+    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        orderDao = new OrderDaoImpl();
+        orderService = new OrderService();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class OrderDetailsServlet extends HttpServlet {
 
         try {
             int orderId = Integer.parseInt(idParam);
-            Order order = orderDao.getOrderById(orderId);
+            Order order = orderService.getOrderById(orderId);
 
             if (order == null) {
                 resp.sendRedirect("profile");
