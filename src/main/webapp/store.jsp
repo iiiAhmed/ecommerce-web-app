@@ -93,7 +93,7 @@
 					   data-notify="0">
 						<i class="zmdi zmdi-favorite-outline"></i>
 					</a>
-					<a href="profile.html" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+					<a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 						<i class="zmdi zmdi-account-circle"></i>
 					</a>
 				</div>
@@ -118,7 +118,7 @@
 			   data-notify="0">
 				<i class="zmdi zmdi-favorite-outline"></i>
 			</a>
-			<a href="profile.html" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
+			<a href="profile" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
 				<i class="zmdi zmdi-account-circle"></i>
 			</a>
 		</div>

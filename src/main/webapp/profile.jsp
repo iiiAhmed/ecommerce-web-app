@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,7 +74,7 @@
                             <i class="zmdi zmdi-favorite-outline"></i>
                         </a>
 
-                        <a href="profile.html" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+                        <a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
                             <i class="zmdi zmdi-account-circle"></i>
                         </a>
                     </div>
@@ -104,7 +105,7 @@
                     <i class="zmdi zmdi-favorite-outline"></i>
                 </a>
 
-                <a href="profile.html" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
+                <a href="profile" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
                     <i class="zmdi zmdi-account-circle"></i>
                 </a>
             </div>
@@ -165,7 +166,7 @@
                                     style="font-weight: bold; color: #717fe0;">Profile Data</a></li>
                             <li class="p-b-10"><a href="shopping-cart.html" class="stext-107 cl2 hov-cl1 trans-04">My
                                     Cart</a></li>
-                            <li class="p-b-10"><a href="#" class="stext-107 cl2 hov-cl1 trans-04">Order History</a></li>
+                            <li class="p-b-10"><a href="#order-history" class="stext-107 cl2 hov-cl1 trans-04">Order History</a></li>
                             <li class="p-t-20"><a href="#" onclick="logout(); return false;"
                                     class="stext-107 cl2 hov-cl1 trans-04 text-danger">Sign Out</a></li>
                         </ul>
@@ -249,6 +250,50 @@
                                 Update Credit
                             </button>
                         </form>
+
+                        <hr class="m-tb-40">
+
+                        <!-- Order History Table -->
+                        <div id="order-history">
+                            <h4 class="mtext-105 cl2 p-b-20">
+                                Order History
+                            </h4>
+
+                            <div class="wrap-table-shopping-cart bg0 bor50">
+                                <table class="table-shopping-cart" style="min-width: unset;">
+                                    <tr class="table_head">
+                                        <th class="column-1" style="padding-left: 20px;">Order ID</th>
+                                        <th class="column-2" style="text-align: center;">Date</th>
+                                        <th class="column-3" style="text-align: center;">Total Amount</th>
+                                        <th class="column-4" style="text-align: center;">Action</th>
+                                    </tr>
+
+                                    <c:choose>
+                                        <c:when test="${not empty orders}">
+                                            <c:forEach var="order" items="${orders}">
+                                                <tr class="table_row">
+                                                    <td class="column-1" style="padding-left: 20px;">#${order.orderId}</td>
+                                                    <td class="column-2" style="text-align: center;">${order.orderedAt}</td>
+                                                    <td class="column-3" style="text-align: center;">$${order.totalAmount}</td>
+                                                    <td class="column-4" style="text-align: center;">
+                                                        <a href="orderDetails?id=${order.orderId}" class="stext-107 cl1 hov-cl1 trans-04">
+                                                            View Details
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr class="table_row">
+                                                <td colspan="4" class="column-1" style="text-align: center; padding: 20px;">
+                                                    You haven't placed any orders yet.
+                                                </td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </table>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
