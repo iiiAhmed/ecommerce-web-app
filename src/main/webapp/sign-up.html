@@ -42,14 +42,14 @@
 				<nav class="limiter-menu-desktop container">
 
 					<!-- Logo desktop -->
-					<a href="index.html" class="logo">
+					<a href="index.jsp" class="logo">
 						<img src="images/icons/logo-01.png" alt="IMG-LOGO">
 					</a>
 
 					<!-- Menu desktop -->
 					<div class="menu-desktop">
 						<ul class="main-menu">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li><a href="store.jsp">Shop</a></li>
 
 							<li><a href="about.html">About</a></li>
@@ -85,7 +85,7 @@
 		<div class="wrap-header-mobile">
 			<!-- Logo moblie -->
 			<div class="logo-mobile">
-				<a href="index.html"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
+				<a href="index.jsp"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
 			</div>
 
 			<!-- Icon header -->
@@ -120,7 +120,7 @@
 		<!-- Menu Mobile -->
 		<div class="menu-mobile">
 			<ul class="main-menu-m">
-				<li><a href="index.html">Home</a></li>
+				<li><a href="index.jsp">Home</a></li>
 				<li><a href="store.jsp">Shop</a></li>
 
 				<li><a href="about.html">About</a></li>
@@ -170,10 +170,12 @@
 		<div class="container">
 			<div class="flex-w flex-tr justify-content-center">
 				<div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-					<form id="signupForm" onsubmit="return validateSignUp(event)">
+					<form id="signupForm" method="POST" action="register" onsubmit="return validateSignUp(event)">
 						<h4 class="mtext-105 cl2 txt-center p-b-30">
 							Sign Up
 						</h4>
+
+						<div id="signupMessage" class="txt-center p-b-15" style="display:none;"></div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="name" name="name"
@@ -189,7 +191,7 @@
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="password" id="password"
-								name="password" placeholder="Password *" required minlength="6">
+								name="password" placeholder="Password (min 6 characters) *" required minlength="6">
 						</div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
@@ -199,22 +201,46 @@
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="job" name="job"
-								placeholder="Job Title" required>
+								placeholder="Job Title *" required>
 						</div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="number" id="credit_limit"
-								name="credit_limit" placeholder="Desired Credit Limit ($) *" required min="100">
+								name="credit_limit" placeholder="Credit Limit ($) * (min 100)" required min="100" step="0.01">
 						</div>
 
-						<div class="bor8 m-b-30">
+						<div class="bor8 m-b-20">
 							<textarea class="stext-111 cl2 plh3 size-120 p-lr-20 p-tb-25" id="address" name="address"
-								placeholder="Shipping Address" required></textarea>
+								placeholder="Shipping Address *" required></textarea>
 						</div>
 
-						<div class="bor8 m-b-30 how-pos4-parent">
-							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="interests"
-								name="interests" placeholder="Interests (e.g., Fashion, Tech)">
+						<!-- Interests: Category checkboxes -->
+						<div class="m-b-30">
+							<p class="stext-111 cl2 p-b-10"><b>Interests *</b> (select at least one)</p>
+							<div class="flex-w p-l-10">
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="LUXURY"> Luxury
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="SPORT"> Sport
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="CASUAL"> Casual
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="CLASSIC"> Classic
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="DIGITAL"> Digital
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="SMART"> Smart
+								</label>
+								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
+									<input type="checkbox" name="interests" value="DIVING"> Diving
+								</label>
+							</div>
+							<span id="interestsFeedback" class="stext-115 p-l-10" style="display:none; color:red;"></span>
 						</div>
 
 						<button type="submit"
@@ -237,9 +263,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Categories
-					</h4>
+					<h4 class="stext-301 cl0 p-b-30">Categories</h4>
 					<ul>
 						<li class="p-b-10"><a href="#" class="stext-107 cl7 hov-cl1 trans-04">Women</a></li>
 						<li class="p-b-10"><a href="#" class="stext-107 cl7 hov-cl1 trans-04">Men</a></li>
@@ -249,9 +273,7 @@
 				</div>
 
 				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Help
-					</h4>
+					<h4 class="stext-301 cl0 p-b-30">Help</h4>
 					<ul>
 						<li class="p-b-10"><a href="#" class="stext-107 cl7 hov-cl1 trans-04">Track Order</a></li>
 						<li class="p-b-10"><a href="#" class="stext-107 cl7 hov-cl1 trans-04">Returns </a></li>
@@ -261,9 +283,7 @@
 				</div>
 
 				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						GET IN TOUCH
-					</h4>
+					<h4 class="stext-301 cl0 p-b-30">GET IN TOUCH</h4>
 					<p class="stext-107 cl7 size-201">
 						Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us
 						on (+1) 96 716 6879
@@ -276,17 +296,13 @@
 				</div>
 
 				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Newsletter
-					</h4>
-
+					<h4 class="stext-301 cl0 p-b-30">Newsletter</h4>
 					<form>
 						<div class="wrap-input1 w-full p-b-4">
 							<input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
 								placeholder="email@example.com">
 							<div class="focus-input1 trans-04"></div>
 						</div>
-
 						<div class="p-t-18">
 							<button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
 								Subscribe
@@ -321,44 +337,108 @@
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
 	<script>
-		// CLIENT SIDE VALIDATION & AJAX MOCK
+		// Show error from URL params (e.g. email already taken)
+		$(document).ready(function () {
+			var params = new URLSearchParams(window.location.search);
+			if (params.get('error') === 'email_taken') {
+				$('#signupMessage').text('This email is already registered. Please use a different one.')
+					.css('color', 'red').show();
+			}
+		});
 
-		// Mocking an existing email in a real DB
-		const existingEmails = ['admin@example.com', 'test@test.com'];
-
-		// Asynchronous Technology Check: Check user name / email availability during registration
+		// AJAX email availability check via CheckEmailServlet
 		$('#email').on('blur', function () {
-			const emailInput = $(this).val();
-			const feedbackElem = $('#emailFeedback');
+			var emailInput = $(this).val();
+			var feedbackElem = $('#emailFeedback');
 
 			if (!emailInput) return;
 
-			// Simulate AJAX request to Servlet checks
 			feedbackElem.text('Checking availability...').css('color', 'blue').show();
 
-			setTimeout(() => {
-				if (existingEmails.includes(emailInput.toLowerCase())) {
-					feedbackElem.text('This email is already registered.').css('color', 'red');
-				} else {
-					feedbackElem.text('Email is available!').css('color', 'green');
+			$.ajax({
+				url: 'check-email',
+				type: 'GET',
+				data: { email: emailInput },
+				dataType: 'json',
+				success: function (data) {
+					if (data.available) {
+						feedbackElem.text('Email is available!').css('color', 'green');
+					} else {
+						feedbackElem.text('This email is already registered.').css('color', 'red');
+					}
+				},
+				error: function () {
+					feedbackElem.text('Could not check email. Please try again.').css('color', 'orange');
 				}
-			}, 800); // Mock network latency
+			});
 		});
 
 		function validateSignUp(e) {
-			const emailFeedback = $('#emailFeedback').text();
-			if (emailFeedback === 'This email is already registered.') {
+			var valid = true;
+
+			// Name: letters and spaces only
+			var name = $('#name').val().trim();
+			if (!/^[A-Za-z\s]+$/.test(name)) {
+				alert('Name must contain only letters and spaces.');
 				e.preventDefault();
-				alert("Please use a different email address.");
 				return false;
 			}
-			// Client side HTML5 validation (required, minlength) handles most basics natively
 
-			// Allow form submission to mocked success
-			e.preventDefault();
-			alert("Registration successful! Redirecting to login...");
-			window.location.href = 'sign-in.html';
-			return false;
+			// Email: basic format check (HTML5 handles most)
+			var email = $('#email').val().trim();
+			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+				alert('Please enter a valid email address.');
+				e.preventDefault();
+				return false;
+			}
+
+			// Check if email was flagged as taken
+			var emailFeedback = $('#emailFeedback').text();
+			if (emailFeedback === 'This email is already registered.') {
+				alert('Please use a different email address.');
+				e.preventDefault();
+				return false;
+			}
+
+			// Password: min 6
+			var password = $('#password').val();
+			if (password.length < 6) {
+				alert('Password must be at least 6 characters.');
+				e.preventDefault();
+				return false;
+			}
+
+			// Birthday: must be in the past
+			var birthday = $('#birthday').val();
+			if (!birthday) {
+				alert('Please enter your birthday.');
+				e.preventDefault();
+				return false;
+			}
+			if (new Date(birthday) >= new Date()) {
+				alert('Birthday must be a date in the past.');
+				e.preventDefault();
+				return false;
+			}
+
+			// Credit limit: min 100
+			var creditLimit = parseFloat($('#credit_limit').val());
+			if (isNaN(creditLimit) || creditLimit < 100) {
+				alert('Credit limit must be at least $100.');
+				e.preventDefault();
+				return false;
+			}
+
+			// Interests: at least one checkbox selected
+			var checkedInterests = $('input[name="interests"]:checked');
+			if (checkedInterests.length === 0) {
+				$('#interestsFeedback').text('Please select at least one interest.').show();
+				alert('Please select at least one interest.');
+				e.preventDefault();
+				return false;
+			}
+
+			return true; // allow form submission
 		}
 	</script>
 

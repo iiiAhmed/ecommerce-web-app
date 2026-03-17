@@ -42,14 +42,14 @@
                 <nav class="limiter-menu-desktop container">
 
                     <!-- Logo desktop -->
-                    <a href="index.html" class="logo">
+                    <a href="index.jsp" class="logo">
                         <img src="images/icons/logo-01.png" alt="IMG-LOGO">
                     </a>
 
                     <!-- Menu desktop -->
                     <div class="menu-desktop">
                         <ul class="main-menu">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="index.jsp">Home</a></li>
                             <li><a href="store.jsp">Shop</a></li>
 
                             <li><a href="about.html">About</a></li>
@@ -85,7 +85,7 @@
         <div class="wrap-header-mobile">
             <!-- Logo moblie -->
             <div class="logo-mobile">
-                <a href="index.html"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
+                <a href="index.jsp"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
             </div>
 
             <!-- Icon header -->
@@ -113,7 +113,7 @@
         <!-- Menu Mobile -->
         <div class="menu-mobile">
             <ul class="main-menu-m">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.jsp">Home</a></li>
                 <li><a href="store.jsp">Shop</a></li>
 
                 <li><a href="about.html">About</a></li>
@@ -150,10 +150,12 @@
         <div class="container">
             <div class="flex-w flex-tr justify-content-center">
                 <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-                    <form id="signInForm" onsubmit="return handleSignIn(event)">
+                    <form id="signInForm" method="POST" action="login">
                         <h4 class="mtext-105 cl2 txt-center p-b-30">
                             Sign In
                         </h4>
+
+                        <div id="loginMessage" class="txt-center p-b-15" style="display:none;"></div>
 
                         <div class="bor8 m-b-20 how-pos4-parent">
                             <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="email" id="loginEmail"
@@ -172,7 +174,7 @@
 
                         <div class="p-t-20 txt-center">
                             <span class="stext-111 cl2">Don't have an account?</span>
-                            <a href="sign-up.html" class="stext-111 cl1 hov-cl1 trans-04">Sign Up</a>
+                            <a href="sign-up.html" class="stext-111 cl1 hov-cl1 trans-04">Click here to sign up</a>
                         </div>
                     </form>
                 </div>
@@ -228,21 +230,19 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        function handleSignIn(e) {
-            e.preventDefault();
-            const email = $('#loginEmail').val();
+        $(document).ready(function () {
+            var params = new URLSearchParams(window.location.search);
+            var msgDiv = $('#loginMessage');
 
-            // Mocking role-based redirection 
-            if (email === 'admin@example.com') {
-                sessionStorage.setItem('userRole', 'admin');
-                alert('Welcome Administrator!');
-                window.location.href = 'admin-products.html'; // Admin Panel
-            } else {
-                sessionStorage.setItem('userRole', 'customer');
-                alert('Login successful!');
-                window.location.href = 'index.html'; // Home page for customers
+            if (params.get('error') === 'invalid') {
+                msgDiv.text('Invalid email or password. Please try again.')
+                    .css('color', 'red').show();
             }
-        }
+            if (params.get('registered') === 'true') {
+                msgDiv.text('Registration successful! Please sign in.')
+                    .css('color', 'green').show();
+            }
+        });
     </script>
 </body>
 
