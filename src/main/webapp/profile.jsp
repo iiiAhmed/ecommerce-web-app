@@ -43,14 +43,14 @@
                 <nav class="limiter-menu-desktop container">
 
                     <!-- Logo desktop -->
-                    <a href="index.html" class="logo">
+                    <a href="index.jsp" class="logo">
                         <img src="images/icons/logo-01.png" alt="IMG-LOGO">
                     </a>
 
                     <!-- Menu desktop -->
                     <div class="menu-desktop">
                         <ul class="main-menu">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="index.jsp">Home</a></li>
                             <li><a href="store.jsp">Shop</a></li>
 
                             <li><a href="about.html">About</a></li>
@@ -86,7 +86,7 @@
         <div class="wrap-header-mobile">
             <!-- Logo mobile -->
             <div class="logo-mobile">
-                <a href="index.html"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
+                <a href="index.jsp"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
             </div>
 
             <!-- Icon header -->
@@ -121,7 +121,7 @@
         <!-- Menu Mobile -->
         <div class="menu-mobile">
             <ul class="main-menu-m">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.jsp">Home</a></li>
                 <li><a href="store.jsp">Shop</a></li>
 
                 <li><a href="about.html">About</a></li>
@@ -178,8 +178,7 @@
                     <div class="bor10 p-lr-50 p-t-40 p-b-40 p-lr-15-sm">
 
                         <!-- Edit Profile Form -->
-                        <form id="profileForm"
-                            onsubmit="event.preventDefault(); alert('Profile Updated Successfully!');">
+                        <form id="profileForm" method="POST" action="update-profile">
                             <h4 class="mtext-105 cl2 p-b-30">
                                 Personal Details
                             </h4>
@@ -188,37 +187,37 @@
                                 <div class="col-sm-6 p-b-20">
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" name="name"
-                                            value="John Doe" required>
+                                            value="${user.name}" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 p-b-20">
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="email"
-                                            name="email" value="john.doe@example.com" disabled>
+                                            name="email" value="${user.email}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 p-b-20">
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="date"
-                                            name="birthday" value="1995-05-15" required>
+                                            name="birthday" value="${user.birthday}" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 p-b-20">
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" name="job"
-                                            value="Software Engineer" required>
+                                            value="${user.job}" required>
                                     </div>
                                 </div>
                                 <div class="col-12 p-b-20">
                                     <div class="bor8">
                                         <textarea class="stext-111 cl2 plh3 size-120 p-lr-20 p-tb-25" name="address"
-                                            required>123 Fake Street, Tech City</textarea>
+                                            required>${user.address}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 p-b-20">
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text"
-                                            name="interests" value="Technology, E-Commerce, Fashion">
+                                            name="interests" value="${user.interests}">
                                     </div>
                                 </div>
                             </div>
@@ -232,12 +231,12 @@
                         <hr class="m-tb-40">
 
                         <!-- Update Credit Limit Form -->
-                        <form id="creditLimitForm" onsubmit="return updateCredit(event)">
+                        <form id="creditLimitForm" method="POST" action="update-profile">
                             <h4 class="mtext-105 cl2 p-b-20">
                                 Credit Limit Management
                             </h4>
                             <p class="stext-111 cl6 p-b-15">Current Credit Limit: <span id="currentCredit"
-                                    style="font-weight:bold; color: #717fe0;">$5000.00</span></p>
+                                    style="font-weight:bold; color: #717fe0;">$${user.creditLimit}</span></p>
 
                             <div class="bor8 m-b-20" style="max-width: 300px;">
                                 <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="number" id="newCredit"
@@ -313,26 +312,10 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // Set mock credit initially
-        if (!localStorage.getItem('userCredit')) {
-            localStorage.setItem('userCredit', 5000.00);
-        }
-        $('#currentCredit').text('$' + parseFloat(localStorage.getItem('userCredit')).toFixed(2));
-
-        function updateCredit(e) {
-            e.preventDefault();
-            const newCredit = $('#newCredit').val();
-            localStorage.setItem('userCredit', newCredit);
-            $('#currentCredit').text('$' + parseFloat(newCredit).toFixed(2));
-            $('#newCredit').val('');
-            alert('Credit limit updated to $' + newCredit);
-            return false;
-        }
-
         function logout() {
-            sessionStorage.removeItem('userRole');
-            alert('Logged out successfully');
-            window.location.href = 'index.html';
+            if (confirm('Are you sure you want to sign out?')) {
+                window.location.href = 'logout';
+            }
         }
     </script>
 </body>

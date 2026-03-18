@@ -27,7 +27,6 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        /* // TODO: Uncomment this when auth finshed
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             resp.sendRedirect("sign-in.html");
@@ -35,10 +34,8 @@ public class ProfileServlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
         int userId = user.getUserId();
-        */
 
-        // Hardcoded User ID for testing
-        int userId = 2; // Testing with user ID 2 
+        req.setAttribute("user", user);
 
         List<Order> userOrders = orderService.getOrdersByUser(userId);
 

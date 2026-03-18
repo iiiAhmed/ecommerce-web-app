@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,6 +95,19 @@
 						<a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 							<i class="zmdi zmdi-account-circle"></i>
 						</a>
+
+						<c:choose>
+							<c:when test="${not empty sessionScope.user}">
+								<a href="#" onclick="confirmLogout(); return false;" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+									Sign Out
+								</a>
+							</c:when>
+							<c:otherwise>
+								<a href="sign-in.html" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+									Sign In
+								</a>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</nav>
 			</div>
@@ -156,6 +170,14 @@
 				<li>
 					<a href="contact.html">Contact</a>
 				</li>
+				<c:choose>
+					<c:when test="${not empty sessionScope.user}">
+						<li><a href="#" onclick="confirmLogout(); return false;">Sign Out</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="sign-in.html">Sign In</a></li>
+					</c:otherwise>
+				</c:choose>
 			</ul>
 		</div>
 
@@ -1754,6 +1776,14 @@
 				console.log('AJAX Mock: Server updated product quantities and user cart.');
 			}, 500);
 		});
+	</script>
+
+	<script>
+		function confirmLogout() {
+			if (confirm('Are you sure you want to sign out?')) {
+				window.location.href = 'logout';
+			}
+		}
 	</script>
 
 </body>
