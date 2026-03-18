@@ -32,8 +32,8 @@
 
                     <div class="menu-desktop">
                         <ul class="main-menu">
-                            <li><a href="admin-products.html">Manage Products</a></li>
-                            <li class="active-menu"><a href="admin-customers.html">Review Customers</a></li>
+                            <li><a href="admin-product">Manage Products</a></li>
+                            <li class="active-menu"><a href="admin-customers.jsp">Review Customers</a></li>
                             <li><a href="index.html" target="_blank">View Store</a></li>
                         </ul>
                     </div>
