@@ -53,6 +53,72 @@
 			color: #e67e22;
 			font-size: 12px;
 		}
+		#toast-container {
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			z-index: 9999;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			pointer-events: none;
+		}
+
+		.toast-item {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			background: #fff;
+			border-radius: 10px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+			padding: 14px 18px;
+			min-width: 240px;
+			max-width: 320px;
+			pointer-events: all;
+			animation: toastIn 0.3s ease forwards;
+			border-left: 4px solid #ccc;
+		}
+
+		.toast-item.success { border-left-color: #2ecc71; }
+		.toast-item.remove  { border-left-color: #e74c3c; }
+		.toast-item.error   { border-left-color: #e67e22; }
+
+		.toast-icon {
+			font-size: 20px;
+			flex-shrink: 0;
+		}
+
+		.toast-item.success .toast-icon { color: #2ecc71; }
+		.toast-item.remove  .toast-icon { color: #e74c3c; }
+		.toast-item.error   .toast-icon { color: #e67e22; }
+
+		.toast-body { flex: 1; }
+
+		.toast-title {
+			font-size: 13px;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 2px;
+		}
+
+		.toast-msg {
+			font-size: 12px;
+			color: #888;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 220px;
+		}
+
+		@keyframes toastIn {
+			from { opacity: 0; transform: translateX(40px); }
+			to   { opacity: 1; transform: translateX(0); }
+		}
+
+		@keyframes toastOut {
+			from { opacity: 1; transform: translateX(0); }
+			to   { opacity: 0; transform: translateX(40px); }
+		}
 	</style>
 </head>
 
@@ -86,7 +152,7 @@
 						<i class="zmdi zmdi-search"></i>
 					</div>
 					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-						 data-notify="0">
+						 data-notify="${cartCount}">
 						<i class="zmdi zmdi-shopping-cart"></i>
 					</div>
 					<a href="#" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
@@ -111,7 +177,7 @@
 				<i class="zmdi zmdi-search"></i>
 			</div>
 			<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
-				 data-notify="0">
+				 data-notify="${cartCount}">
 				<i class="zmdi zmdi-shopping-cart"></i>
 			</div>
 			<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
@@ -296,10 +362,11 @@
 
 									<div class="block2-qty flex-c-m trans-04">
 										<button type="button" class="block2-qty-btn"
-												onclick="changeQty(this, -1)">&minus;</button>
-										<span class="block2-qty-num">0</span>
+												onclick="changeQty(this, -1, '${product.productId}')">&minus;</button>
+										<c:set var="qtyInCart" value="${cartQuantities[product.productId]}"/>
+										<span class="block2-qty-num">${empty qtyInCart ? 0 : qtyInCart}</span>
 										<button type="button" class="block2-qty-btn"
-												onclick="changeQty(this, 1)">+</button>
+												onclick="changeQty(this, 1, '${product.productId}')">+</button>
 									</div>
 								</div>
 
@@ -544,11 +611,70 @@
 
 	});
 
-	function changeQty(btn, delta) {
+	function changeQty(btn, delta, productId) {
 		var numEl = btn.parentNode.querySelector('.block2-qty-num');
-		var val = parseInt(numEl.textContent) + delta;
-		if (val < 0) val = 0;
-		numEl.textContent = val;
+		var currentVal = parseInt(numEl.textContent);
+		var val = currentVal + delta;
+		if (val < 0) return;
+
+		var buttons = btn.parentNode.parentNode.querySelectorAll('button');
+		buttons.forEach(function(b) { b.disabled = true; });
+
+		$.ajax({
+			url: 'cart',
+			type: 'POST',
+			data: { productId: productId, delta: delta },
+			success: function(response) {
+				if (response.status === 'success') {
+					numEl.textContent = val;
+					$('.icon-header-noti').attr('data-notify', response.totalCartItems);
+
+					var productName = $(btn).closest('.block2').find('.js-name-b2').text().trim();
+					if (delta > 0) {
+						showToast('Added to cart', productName, 'success');
+					} else if (val === 0) {
+						showToast('Removed from cart', productName, 'remove');
+					} else {
+						showToast('Cart updated', productName, 'success');
+					}
+				} else {
+					showToast('Error', response.message, 'error');
+				}
+			},
+			error: function() {
+				showToast('Error', 'Could not connect to server', 'error');
+			},
+			complete: function() {
+				buttons.forEach(function(b) { b.disabled = false; });
+			}
+		});
+	}
+
+	$('body').append('<div id="toast-container"></div>');
+
+	function showToast(title, message, type) {
+		var icons = {
+			success: 'zmdi-check-circle',
+			remove:  'zmdi-minus-circle',
+			error:   'zmdi-alert-circle'
+		};
+
+		var toast = $(
+				'<div class="toast-item ' + type + '">' +
+				'<i class="toast-icon zmdi ' + icons[type] + '"></i>' +
+				'<div class="toast-body">' +
+				'<div class="toast-title">' + title + '</div>' +
+				'<div class="toast-msg">' + message + '</div>' +
+				'</div>' +
+				'</div>'
+		);
+
+		$('#toast-container').append(toast);
+
+		setTimeout(function() {
+			toast.css('animation', 'toastOut 0.3s ease forwards');
+			setTimeout(function() { toast.remove(); }, 300);
+		}, 3000);
 	}
 </script>
 
