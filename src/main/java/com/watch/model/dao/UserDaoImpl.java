@@ -1,13 +1,17 @@
 package com.watch.model.dao;
 
+import com.watch.model.entities.User;
+import jakarta.persistence.EntityManager;
+
 public class UserDaoImpl implements UserDao {
 
-    private static final UserDaoImpl instance = new UserDaoImpl();
+    private final EntityManager em;
 
-    private UserDaoImpl() {
+    public UserDaoImpl(EntityManager em) {
+        this.em = em;
     }
-
-    public static UserDaoImpl getInstance() {
-        return instance;
+    //for testing only
+    public User findById(int userId){
+        return em.find(User.class, userId);
     }
 }

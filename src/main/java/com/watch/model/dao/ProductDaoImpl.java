@@ -1,121 +1,80 @@
 package com.watch.model.dao;
 
-
 import com.watch.model.entities.Product;
 import com.watch.model.enums.Age;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
-import com.watch.util.EntityManagerFactorySingleton;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 
 import java.util.List;
+import java.util.Set;
 
 public class ProductDaoImpl implements ProductDao {
 
-    private EntityManager getEm() {
-        return EntityManagerFactorySingleton.getInstance().createEntityManager();
+    private final EntityManager em;
+
+    public ProductDaoImpl(EntityManager em) {
+        this.em = em;
     }
 
     @Override
     public List<Product> getAllProducts() {
-        EntityManager em = getEm();
-        try {
-            return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        return em.createQuery("SELECT p FROM Product p", Product.class)
+                .getResultList();
     }
 
     @Override
     public Product getProductById(int id) {
-        EntityManager em = getEm();
-        try {
-            return em.find(Product.class, id);
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        return em.find(Product.class, id);
     }
 
     @Override
     public boolean addProduct(Product product) {
-        EntityManager em = getEm();
-        try {
-            em.getTransaction().begin();
-            em.persist(product);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            return false;
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        em.persist(product);
+        return true;
     }
 
     @Override
     public boolean updateProduct(Product product) {
-        EntityManager em = getEm();
-        try {
-            em.getTransaction().begin();
-            em.merge(product);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            return false;
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        em.merge(product);
+        return true;
     }
 
     @Override
     public boolean deleteProduct(int id) {
-        EntityManager em = getEm();
-        try {
-            em.getTransaction().begin();
-            Product product = em.find(Product.class, id);
-            if (product == null) return false;
-            em.remove(product);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            return false;
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        Product product = em.find(Product.class, id);
+        if (product == null) return false;
+        em.remove(product);
+        return true;
     }
 
     @Override
     public List<Product> getProductsByCategory(Category category) {
-        EntityManager em = getEm();
-        try {
-            return em.createQuery("SELECT p FROM Product p WHERE p.category = :category", Product.class)
-                    .setParameter("category", category).getResultList();
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        return em.createQuery("SELECT p FROM Product p WHERE p.category = :category", Product.class)
+                .setParameter("category", category)
+                .getResultList();
     }
 
     @Override
     public List<Product> getProductsByGender(Gender gender) {
-        EntityManager em = getEm();
-        try {
-            return em.createQuery("SELECT p FROM Product p WHERE p.gender = :gender", Product.class)
-                    .setParameter("gender", gender).getResultList();
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        return em.createQuery("SELECT p FROM Product p WHERE p.gender = :gender", Product.class)
+                .setParameter("gender", gender)
+                .getResultList();
     }
 
     @Override
     public List<Product> getProductsByAge(Age age) {
-        EntityManager em = getEm();
-        try {
-            return em.createQuery("SELECT p FROM Product p WHERE p.age = :age", Product.class)
-                    .setParameter("age", age).getResultList();
-        } finally {
-            if (em.isOpen()) em.close();
-        }
+        return em.createQuery("SELECT p FROM Product p WHERE p.age = :age", Product.class)
+                .setParameter("age", age)
+                .getResultList();
+    }
+
+    @Override
+    public List<Product> findProductsByIds(Set<Integer> ids) {
+        return em.createQuery("SELECT p FROM Product p WHERE p.productId IN :ids", Product.class)
+                .setParameter("ids", ids)
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                .getResultList();
     }
 }
