@@ -98,6 +98,24 @@
 										<a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 											<i class="zmdi zmdi-account-circle"></i>
 										</a>
+										<c:choose>
+											<c:when test="${not empty sessionScope.userDto}">
+												<span class="stext-106 cl2 p-l-22 p-r-11">
+													Welcome, ${sessionScope.userDto.name}
+												</span>
+												<c:if test="${sessionScope.userDto.role == 'ADMIN'}">
+													<a href="admin-products.jsp" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">Admin Panel</a>
+												</c:if>
+												<a href="logout" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+													Sign Out
+												</a>
+											</c:when>
+											<c:otherwise>
+												<a href="sign-in.html" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+													Sign In
+												</a>
+											</c:otherwise>
+										</c:choose>
 									</div>
 								</nav>
 							</div>
@@ -137,6 +155,18 @@
 								<li><a href="shop">Shop</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
+								<c:choose>
+									<c:when test="${not empty sessionScope.userDto}">
+										<li><span class="stext-106 cl2" style="padding: 10px 20px;">Welcome, ${sessionScope.userDto.name}</span></li>
+										<c:if test="${sessionScope.userDto.role == 'ADMIN'}">
+											<li><a href="admin-products.jsp">Admin Panel</a></li>
+										</c:if>
+										<li><a href="logout">Sign Out</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="sign-in.html">Sign In</a></li>
+									</c:otherwise>
+								</c:choose>
 							</ul>
 						</div>
 

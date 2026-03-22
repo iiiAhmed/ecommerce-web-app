@@ -31,12 +31,12 @@ public class LoginServlet extends HttpServlet {
 
         if (user != null) {
             HttpSession session = req.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("userRole", user.getRole().name().toLowerCase());
+            com.watch.model.dto.UserDto userDto = new com.watch.model.dto.UserDto(user.getUserId(), user.getName(), user.getRole());
+            session.setAttribute("userDto", userDto);
 
             // Role-based redirect
             if (user.getRole() == Role.ADMIN) {
-                resp.sendRedirect("admin-products.html");
+                resp.sendRedirect("admin-products.jsp");
             } else {
                 resp.sendRedirect("index.jsp");
             }
