@@ -1,5 +1,7 @@
 package com.watch.controller;
 
+import com.watch.model.services.CartService;
+import jakarta.persistence.EntityManager;
 import com.watch.model.entities.User;
 import com.watch.model.enums.Role;
 import com.watch.model.services.UserService;
@@ -11,6 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -34,10 +39,21 @@ public class LoginServlet extends HttpServlet {
             com.watch.model.dto.UserDto userDto = new com.watch.model.dto.UserDto(user.getUserId(), user.getName(), user.getRole());
             session.setAttribute("userDto", userDto);
 
+
+
             // Role-based redirect
             if (user.getRole() == Role.ADMIN) {
                 resp.sendRedirect("admin-products.jsp");
             } else {
+                CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
+                Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+                if (cart == null) {
+                    cart = new HashMap<>();
+                    session.setAttribute("cart", cart);
+                }
+                cartService.loadDbCartIntoSession(id, cart);
+                session.setAttribute("cart", cart);
+
                 resp.sendRedirect("index.jsp");
             }
         } else {

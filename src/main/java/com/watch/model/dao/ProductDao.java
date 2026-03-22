@@ -6,6 +6,7 @@ import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductDao {
 
@@ -17,6 +18,7 @@ public interface ProductDao {
     List<Product> getProductsByCategory(Category category);
     List<Product> getProductsByGender(Gender gender);
     List<Product> getProductsByAge(Age age);
+    public List<Product> findProductsByIds(Set<Integer> ids);
 
 
-    }
+}
