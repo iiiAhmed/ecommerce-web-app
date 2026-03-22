@@ -1,4 +1,4 @@
-package com.watch.controller;
+package com.watch.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
