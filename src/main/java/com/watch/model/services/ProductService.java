@@ -6,12 +6,19 @@ import com.watch.model.entities.Product;
 import com.watch.model.enums.Age;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public class ProductService {
 
-    private final ProductDao productDao = new ProductDaoImpl();
+    private final EntityManager em;
+    private final ProductDao productDao;
+
+    public ProductService(EntityManager em) {
+        this.em = em;
+        this.productDao = new ProductDaoImpl(em);
+    }
 
     public List<Product> getAllProducts() {
         return productDao.getAllProducts();

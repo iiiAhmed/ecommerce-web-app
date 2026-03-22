@@ -3,7 +3,9 @@ package com.watch.controller;
 
 
 import com.watch.model.entities.Product;
+import com.watch.model.services.CartService;
 import com.watch.model.services.ProductService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,10 +20,11 @@ import java.util.Map;
 
 @WebServlet("/shop")
 public class ProductServlet extends HttpServlet {
-    private final ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        ProductService productService = new ProductService((EntityManager) req.getAttribute("em"));
 
         List<Product> products = productService.getAllProducts();
 
