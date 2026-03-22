@@ -29,6 +29,70 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<!--===============================================================================================-->
+	<style>
+		/* ── Interests Checkbox Grid ───────────────────────────────────── */
+        .interests-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 0 4px;
+        }
+        .interest-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 18px;
+            border: 2px solid #e5e5e5;
+            border-radius: 30px;
+            background: #fafafa;
+            transition: all 0.25s ease;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            user-select: none;
+        }
+        .interest-label input[type="checkbox"] {
+            display: none;
+        }
+        /* The tick box shown inside the pill */
+        .interest-label .check-icon {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            transition: background 0.2s, border-color 0.2s;
+            font-size: 13px;
+            font-weight: 900;
+            color: transparent;  /* hide tick by default */
+            line-height: 1;
+        }
+        /* When checkbox is checked — fill box and show tick */
+        .interest-label input:checked ~ .check-icon {
+            background: #717fe0;
+            border-color: #717fe0;
+            color: #ffffff;      /* white tick visible */
+        }
+        .interest-label input:checked ~ .check-icon::after {
+            content: '\2714'; /* ✔ heavy checkmark */
+        }
+        /* Pill border + text color when checked */
+        .interest-label:has(input:checked) {
+            border-color: #717fe0;
+            background: #eef0ff;
+            color: #717fe0;
+        }
+        .interest-label:hover {
+            border-color: #717fe0;
+            background: #f0f2ff;
+            color: #717fe0;
+        }
+	</style>
 </head>
 
 <body class="animsition">
@@ -214,30 +278,58 @@
 								placeholder="Shipping Address *" required></textarea>
 						</div>
 
+						<!-- Egyptian Phone Number -->
+						<div class="bor8 m-b-20 d-flex align-items-center">
+							<span class="stext-111 cl2 p-l-20 p-r-10" style="background-color: #f7f7f7; border-right: 1px solid #e6e6e6; height: 100%; display: flex; align-items: center;">
+								+20
+							</span>
+							<input class="stext-111 cl2 plh3 size-116 p-l-10 p-r-30" type="tel" id="phone"
+								name="phone" placeholder="10 digits (e.g. 1012345678) *"
+								pattern="[0-9]{10}" maxlength="10" required style="border: none; outline: none; flex-grow: 1;">
+						</div>
+						<div class="m-b-20">
+							<span id="phoneFeedback" class="stext-115 p-l-20 p-t-5"
+								style="display:none; color: red; font-size:12px;"></span>
+						</div>
+
 						<!-- Interests: Category checkboxes -->
 						<div class="m-b-30">
 							<p class="stext-111 cl2 p-b-10"><b>Interests *</b> (select at least one)</p>
-							<div class="flex-w p-l-10">
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="LUXURY"> Luxury
+							<div class="interests-grid">
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="LUXURY">
+									<span class="check-icon"></span>
+									<span>Luxury</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="SPORT"> Sport
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="SPORT">
+									<span class="check-icon"></span>
+									<span>Sport</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="CASUAL"> Casual
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="CASUAL">
+									<span class="check-icon"></span>
+									<span>Casual</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="CLASSIC"> Classic
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="CLASSIC">
+									<span class="check-icon"></span>
+									<span>Classic</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="DIGITAL"> Digital
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="DIGITAL">
+									<span class="check-icon"></span>
+									<span>Digital</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="SMART"> Smart
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="SMART">
+									<span class="check-icon"></span>
+									<span>Smart</span>
 								</label>
-								<label class="stext-111 cl2 p-r-20 p-b-8" style="cursor:pointer;">
-									<input type="checkbox" name="interests" value="DIVING"> Diving
+								<label class="interest-label">
+									<input type="checkbox" name="interests" value="DIVING">
+									<span class="check-icon"></span>
+									<span>Diving</span>
 								</label>
 							</div>
 							<span id="interestsFeedback" class="stext-115 p-l-10" style="display:none; color:red;"></span>
@@ -343,6 +435,9 @@
 			if (params.get('error') === 'email_taken') {
 				$('#signupMessage').text('This email is already registered. Please use a different one.')
 					.css('color', 'red').show();
+			} else if (params.get('error') === 'invalid_phone') {
+				$('#signupMessage').text('Invalid phone number. Egyptian numbers must start with +20 followed by 10 digits.')
+					.css('color', 'red').show();
 			}
 		});
 
@@ -436,6 +531,19 @@
 				alert('Please select at least one interest.');
 				e.preventDefault();
 				return false;
+			}
+
+			// Egyptian phone: exactly 10 digits
+			var phone = $('#phone').val().trim();
+			var phoneFeedback = $('#phoneFeedback');
+			var egyptianPhoneRegex = /^[0-9]{10}$/;
+			if (!egyptianPhoneRegex.test(phone)) {
+				phoneFeedback.text('Phone must be exactly 10 digits (e.g. 1012345678)').show();
+				alert('Phone must be exactly 10 digits.');
+				e.preventDefault();
+				return false;
+			} else {
+				phoneFeedback.hide();
 			}
 
 			return true; // allow form submission

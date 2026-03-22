@@ -18,18 +18,25 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String birthday = req.getParameter("birthday");
-        String job = req.getParameter("job");
+        String name          = req.getParameter("name");
+        String email         = req.getParameter("email");
+        String password      = req.getParameter("password");
+        String birthday      = req.getParameter("birthday");
+        String job           = req.getParameter("job");
         String creditLimitStr = req.getParameter("credit_limit");
-        String address = req.getParameter("address");
-        String[] interests = req.getParameterValues("interests");
+        String address       = req.getParameter("address");
+        String phone         = req.getParameter("phone");
+        String[] interests   = req.getParameterValues("interests");
 
         // Server-side check: email already taken
         if (userService.isEmailTaken(email)) {
             resp.sendRedirect("sign-up.html?error=email_taken");
+            return;
+        }
+
+        // Server-side Egyptian phone validation: exactly 10 digits (the +20 is fixed text in UI, not sent)
+        if (phone == null || !phone.trim().matches("^[0-9]{10}$")) {
+            resp.sendRedirect("sign-up.html?error=invalid_phone");
             return;
         }
 
@@ -41,6 +48,7 @@ public class RegisterServlet extends HttpServlet {
         user.setJob(job);
         user.setCreditLimit(Double.parseDouble(creditLimitStr));
         user.setAddress(address);
+        user.setPhone(phone.trim());
 
         if (interests != null && interests.length > 0) {
             user.setInterests(String.join(",", interests));

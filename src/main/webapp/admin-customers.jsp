@@ -26,7 +26,7 @@
 
             <div class="wrap-menu-desktop how-shadow1">
                 <nav class="limiter-menu-desktop container">
-                    <a href="index.html" class="logo">
+                    <a href="index.jsp" class="logo">
                         <img src="images/icons/logo-01.png" alt="IMG-LOGO">
                     </a>
 
@@ -34,13 +34,14 @@
                         <ul class="main-menu">
                             <li><a href="admin-product">Manage Products</a></li>
                             <li class="active-menu"><a href="admin-customers.jsp">Review Customers</a></li>
-                            <li><a href="index.html" target="_blank">View Store</a></li>
+                            <li><a href="index.jsp" target="_blank">View Store</a></li>
                         </ul>
                     </div>
 
                     <!-- Admin Identity -->
                     <div class="wrap-icon-header flex-w flex-r-m">
-                        <span class="stext-106 cl2 p-r-15" style="font-weight: 500;">Welcome, Admin</span>
+                        <span class="stext-106 cl2 p-r-15" style="font-weight: 500;">Welcome,
+                            ${sessionScope.userDto.name}</span>
                         <a href="#" onclick="logout(); return false;" class="stext-106 hov-cl1 trans-04"
                             style="color: #e74c3c;">Logout</a>
                     </div>

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -39,18 +40,11 @@ public class OrderDetailsServlet extends HttpServlet {
                 return;
             }
 
-            // // TODO: Uncomment when login is complete
-            // HttpSession session = req.getSession(false);
-            // User user = session != null ? (User) session.getAttribute("user") : null;
-            // if (user == null || user.getUserId() != order.getUser().getUserId()) {
-            //      resp.sendRedirect("profile");
-            //      return;
-            // }
-
-            // TODO: remove when auth implemented
-            if (order.getUser().getUserId() != 2) {
-                resp.sendRedirect("profile");
-                return;
+            HttpSession session = req.getSession(false);
+            com.watch.model.dto.UserDto userDto = session != null ? (com.watch.model.dto.UserDto) session.getAttribute("userDto") : null;
+            if (userDto == null || userDto.getId() != order.getUser().getUserId()) {
+                 resp.sendRedirect("profile");
+                 return;
             }
 
             req.setAttribute("order", order);
