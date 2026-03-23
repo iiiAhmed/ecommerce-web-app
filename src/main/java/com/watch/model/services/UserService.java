@@ -44,4 +44,10 @@ public class UserService {
     public boolean isEmailTaken(String email) {
         return userDao.findByEmail(email) != null;
     }
+
+    public List<User> getCustomers() {
+        return userDao.getAllUsers().stream()
+                .filter(u -> u.getRole() != Role.ADMIN)
+                .collect(java.util.stream.Collectors.toList());
+    }
 }
