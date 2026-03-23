@@ -1,35 +1,35 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <title>Admin - Manage Products</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="images/icons/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-</head>
+    <head>
+        <title>Admin - Manage Products</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="images/icons/favicon.png" />
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
+        <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+        <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+        <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+        <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+        <link rel="stylesheet" type="text/css" href="css/util.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
 
-<body class="animsition">
+    <body class="animsition">
 
-    <!-- Header -->
-    <header class="header-v4">
-        <div class="container-menu-desktop">
+        <!-- Header -->
+        <header class="header-v4">
+            <div class="container-menu-desktop">
 
-            <div class="wrap-menu-desktop how-shadow1">
-                <nav class="limiter-menu-desktop container">
-                    <a href="index.html" class="logo">
-                        <img src="images/icons/logo-01.png" alt="IMG-LOGO">
-                    </a>
+                <div class="wrap-menu-desktop how-shadow1">
+                    <nav class="limiter-menu-desktop container">
+                        <a href="index.html" class="logo">
+                            <img src="images/icons/logo-01.png" alt="IMG-LOGO">
+                        </a>
 
                         <div class="menu-desktop">
                             <ul class="main-menu">
@@ -42,7 +42,7 @@
                         <!-- Admin Identity -->
                         <div class="wrap-icon-header flex-w flex-r-m">
                             <span class="stext-106 cl2 p-r-15" style="font-weight: 500;">Welcome,
-                                ${sessionScope.user.name}</span>
+                                ${sessionScope.userDto.name}</span>
                             <a href="#" onclick="logout(); return false;" class="stext-106 hov-cl1 trans-04"
                                 style="color: #e74c3c;">Logout</a>
                         </div>
