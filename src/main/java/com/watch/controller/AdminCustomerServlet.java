@@ -30,16 +30,18 @@ public class AdminCustomerServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if ("profile".equals(action)) {
-            handleProfileAjax(req, resp);
+            getUserDataJSON(req, resp);
         } else {
             // Default: load customer list page
-            List<User> customers = userService.getCustomers();
+            List<com.watch.model.dto.CustomerDto> customers = userService.getCustomers();
             req.setAttribute("customers", customers);
-            req.getRequestDispatcher("/admin-customers.jsp").forward(req, resp);
+            req.getRequestDispatcher("/admin-" +
+                    "customers.jsp").forward(req, resp);
         }
     }
 
-    private void handleProfileAjax(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    // json
+    private void getUserDataJSON(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         PrintWriter out = resp.getWriter();
