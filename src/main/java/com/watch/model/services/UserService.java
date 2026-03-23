@@ -45,9 +45,10 @@ public class UserService {
         return userDao.findByEmail(email) != null;
     }
 
-    public List<User> getCustomers() {
+    public List<com.watch.model.dto.CustomerDto> getCustomers() {
         return userDao.getAllUsers().stream()
                 .filter(u -> u.getRole() != Role.ADMIN)
+                .map(u -> new com.watch.model.dto.CustomerDto(u.getUserId(), u.getName(), u.getEmail()))
                 .collect(java.util.stream.Collectors.toList());
     }
 }
