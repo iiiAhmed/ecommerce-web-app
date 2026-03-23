@@ -74,37 +74,25 @@
                         <tr class="table_head">
                             <th class="column-1">Name</th>
                             <th class="column-2">Email</th>
-                            <th class="column-3">Job / Address</th>
-                            <th class="column-4">Credit Limit</th>
-                            <th class="column-5">Actions</th>
+                            <th class="column-3">Actions</th>
                         </tr>
 
                         <c:forEach items="${customers}" var="customer">
-                            <tr class="table_row" id="cust-${customer.userId}">
+                            <tr class="table_row" id="cust-${customer.id}">
                                 <td class="column-1 text-dark" style="font-weight: 500;">
                                     <c:out value="${customer.name}"/>
                                 </td>
                                 <td class="column-2"><c:out value="${customer.email}"/></td>
                                 <td class="column-3">
-                                    <c:out value="${customer.job}"/><br>
-                                    <small class="text-muted"><c:out value="${customer.address}"/></small>
-                                </td>
-                                <td class="column-4">
-                                    <span class="badge ${customer.creditLimit > 1000 ? 'badge-success' : 'badge-warning'} p-lr-10 p-tb-5">
-                                        $ <fmt:formatNumber value="${customer.creditLimit}" type="number"
-                                            minFractionDigits="2" maxFractionDigits="2"/>
-                                    </span>
-                                </td>
-                                <td class="column-5">
                                     <button class="stext-106 cl6 hov1 bor3 trans-04 p-lr-15 p-tb-5 m-r-10 text-primary"
-                                        onclick="reviewCustomer(${customer.userId})">View Profile & Orders</button>
+                                        onclick="reviewCustomer(${customer.id})">View Profile & Orders</button>
                                 </td>
                             </tr>
                         </c:forEach>
 
                         <c:if test="${empty customers}">
                             <tr class="table_row">
-                                <td colspan="5" class="text-center p-t-20 p-b-20 stext-111 cl6">
+                                <td colspan="3" class="text-center p-t-20 p-b-20 stext-111 cl6">
                                     No registered customers found.
                                 </td>
                             </tr>
