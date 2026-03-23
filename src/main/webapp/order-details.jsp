@@ -146,14 +146,23 @@
             </h2>
         </section>
 
-        <!-- Content page -->
-        <section class="bg0 p-t-40 p-b-116">
-            <div class="container">
-                <div class="flex-w flex-sb-m p-b-20">
-                    <a href="profile" class="stext-107 cl2 hov-cl1 trans-04">
-                        <i class="zmdi zmdi-long-arrow-left m-r-10"></i> Return to Profile
-                    </a>
-                </div>
+    <!-- Content page -->
+    <section class="bg0 p-t-40 p-b-116">
+        <div class="container">
+            <div class="flex-w flex-sb-m p-b-20">
+                <c:choose>
+                    <c:when test="${from == 'admin'}">
+                        <a href="admin-customer" class="stext-107 cl2 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-long-arrow-left m-r-10"></i> Return to Customer Management
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="profile" class="stext-107 cl2 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-long-arrow-left m-r-10"></i> Return to Profile
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
                 <div class="bor10 p-lr-40 p-t-30 p-b-40">
                     <div class="flex-w flex-sb-m p-b-30">

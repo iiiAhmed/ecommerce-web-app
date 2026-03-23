@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +25,6 @@
     <!-- Header -->
     <header class="header-v4">
         <div class="container-menu-desktop">
-
             <div class="wrap-menu-desktop how-shadow1">
                 <nav class="limiter-menu-desktop container">
                     <a href="index.jsp" class="logo">
@@ -33,7 +34,7 @@
                     <div class="menu-desktop">
                         <ul class="main-menu">
                             <li><a href="admin-product">Manage Products</a></li>
-                            <li class="active-menu"><a href="admin-customers.jsp">Review Customers</a></li>
+                            <li class="active-menu"><a href="admin-customer">Review Customers</a></li>
                             <li><a href="index.jsp" target="_blank">View Store</a></li>
                         </ul>
                     </div>
@@ -65,7 +66,7 @@
             <div class="bg0 bor10 p-t-30 p-b-40 p-lr-40 p-lr-15-sm">
 
                 <div class="flex-w flex-sb-m p-b-30">
-                    <h4 class="mtext-109 cl2">All Registered Users</h4>
+                    <h4 class="mtext-109 cl2">All Registered Customers</h4>
                 </div>
 
                 <div class="wrap-table-shopping-cart">
@@ -78,33 +79,36 @@
                             <th class="column-5">Actions</th>
                         </tr>
 
-                        <tr class="table_row" id="cust-1">
-                            <td class="column-1 text-dark" style="font-weight: 500;">John Doe</td>
-                            <td class="column-2">john.doe@example.com</td>
-                            <td class="column-3">Software Engineer<br><small class="text-muted">123 Fake Street, Tech
-                                    City</small></td>
-                            <td class="column-4">
-                                <span class="badge badge-success p-lr-10 p-tb-5">$ 5,000.00</span>
-                            </td>
-                            <td class="column-5">
-                                <button class="stext-106 cl6 hov1 bor3 trans-04 p-lr-15 p-tb-5 m-r-10 text-primary"
-                                    onclick="reviewCustomer(1)">View Profile & Orders</button>
-                            </td>
-                        </tr>
+                        <c:forEach items="${customers}" var="customer">
+                            <tr class="table_row" id="cust-${customer.userId}">
+                                <td class="column-1 text-dark" style="font-weight: 500;">
+                                    <c:out value="${customer.name}"/>
+                                </td>
+                                <td class="column-2"><c:out value="${customer.email}"/></td>
+                                <td class="column-3">
+                                    <c:out value="${customer.job}"/><br>
+                                    <small class="text-muted"><c:out value="${customer.address}"/></small>
+                                </td>
+                                <td class="column-4">
+                                    <span class="badge ${customer.creditLimit > 1000 ? 'badge-success' : 'badge-warning'} p-lr-10 p-tb-5">
+                                        $ <fmt:formatNumber value="${customer.creditLimit}" type="number"
+                                            minFractionDigits="2" maxFractionDigits="2"/>
+                                    </span>
+                                </td>
+                                <td class="column-5">
+                                    <button class="stext-106 cl6 hov1 bor3 trans-04 p-lr-15 p-tb-5 m-r-10 text-primary"
+                                        onclick="reviewCustomer(${customer.userId})">View Profile & Orders</button>
+                                </td>
+                            </tr>
+                        </c:forEach>
 
-                        <tr class="table_row" id="cust-2">
-                            <td class="column-1 text-dark" style="font-weight: 500;">Jane Smith</td>
-                            <td class="column-2">jane.smith@example.com</td>
-                            <td class="column-3">Graphic Designer<br><small class="text-muted">456 Art Ave, Design
-                                    Town</small></td>
-                            <td class="column-4">
-                                <span class="badge badge-warning p-lr-10 p-tb-5">$ 250.00</span>
-                            </td>
-                            <td class="column-5">
-                                <button class="stext-106 cl6 hov1 bor3 trans-04 p-lr-15 p-tb-5 m-r-10 text-primary"
-                                    onclick="reviewCustomer(2)">View Profile & Orders</button>
-                            </td>
-                        </tr>
+                        <c:if test="${empty customers}">
+                            <tr class="table_row">
+                                <td colspan="5" class="text-center p-t-20 p-b-20 stext-111 cl6">
+                                    No registered customers found.
+                                </td>
+                            </tr>
+                        </c:if>
                     </table>
                 </div>
 
@@ -128,21 +132,28 @@
                             Customer Profile
                         </h4>
 
-                        <div class="p-b-30">
-                            <strong>Name:</strong> <span id="cName">John Doe</span><br>
-                            <strong>Email:</strong> <span id="cEmail">john.doe@example.com</span><br>
-                            <strong>Birthday:</strong> <span id="cBday">1995-05-15</span><br>
-                            <strong>Job:</strong> <span id="cJob">Software Engineer</span><br>
-                            <strong>Address:</strong> <span id="cAddr">123 Fake Street, NYC</span><br>
-                            <strong>Interests:</strong> <span id="cInt">Tech, E-Commerce</span><br>
+                        <!-- Loading indicator -->
+                        <div id="profileLoading" class="txt-center p-tb-30" style="display: none;">
+                            <span class="stext-111 cl6">Loading profile...</span>
+                        </div>
+
+                        <!-- Profile data -->
+                        <div id="profileData" class="p-b-30">
+                            <strong>Name:</strong> <span id="cName"></span><br>
+                            <strong>Email:</strong> <span id="cEmail"></span><br>
+                            <strong>Birthday:</strong> <span id="cBday"></span><br>
+                            <strong>Phone:</strong> <span id="cPhone"></span><br>
+                            <strong>Job:</strong> <span id="cJob"></span><br>
+                            <strong>Address:</strong> <span id="cAddr"></span><br>
+                            <strong>Interests:</strong> <span id="cInt"></span><br>
                             <strong>Credit Limit:</strong> <span id="cCred" class="text-success"
-                                style="font-weight: bold;">$5,000.00</span>
+                                style="font-weight: bold;"></span>
                         </div>
 
                         <hr>
 
                         <h4 class="mtext-105 cl2 txt-center p-b-20 p-t-20">
-                            Order History (Bonus Feature)
+                            Order History
                         </h4>
 
                         <div class="wrap-table-shopping-cart">
@@ -151,20 +162,11 @@
                                     <th class="column-1">Order #</th>
                                     <th class="column-2">Date</th>
                                     <th class="column-3">Total Amount</th>
-                                    <th class="column-4">Status</th>
+                                    <th class="column-4">Details</th>
                                 </tr>
-                                <tr class="table_row">
-                                    <td class="column-1">#ORD-1092</td>
-                                    <td class="column-2">2023-10-12</td>
-                                    <td class="column-3">$ 58.00</td>
-                                    <td class="column-4"><span class="badge badge-success">Delivered</span></td>
-                                </tr>
-                                <tr class="table_row">
-                                    <td class="column-1">#ORD-1045</td>
-                                    <td class="column-2">2023-09-05</td>
-                                    <td class="column-3">$ 120.00</td>
-                                    <td class="column-4"><span class="badge badge-success">Delivered</span></td>
-                                </tr>
+                                <tbody id="orderHistoryBody">
+                                    <!-- Populated by AJAX -->
+                                </tbody>
                             </table>
                         </div>
 
@@ -185,22 +187,70 @@
         });
 
         function reviewCustomer(id) {
-            // Mock fetching data
-            if (id === 1) {
-                $('#cName').text('John Doe');
-                $('#cEmail').text('john.doe@example.com');
-                $('#cCred').text('$5,000.00');
-            } else {
-                $('#cName').text('Jane Smith');
-                $('#cEmail').text('jane.smith@example.com');
-                $('#cCred').text('$250.00').removeClass('text-success').addClass('text-warning');
-            }
+            // Clear previous data & show loading
+            $('#profileData span').text('');
+            $('#orderHistoryBody').empty();
+            $('#profileLoading').show();
+            $('#profileData').hide();
             $('.js-modal-customer').addClass('show-modal1');
+
+            $.ajax({
+                url: 'admin-customer',
+                type: 'GET',
+                data: { action: 'profile', id: id },
+                dataType: 'json',
+                success: function (data) {
+                    $('#profileLoading').hide();
+                    $('#profileData').show();
+
+                    // Populate profile fields
+                    $('#cName').text(data.name || '-');
+                    $('#cEmail').text(data.email || '-');
+                    $('#cBday').text(data.birthday || '-');
+                    $('#cPhone').text(data.phone || '-');
+                    $('#cJob').text(data.job || '-');
+                    $('#cAddr').text(data.address || '-');
+                    $('#cInt').text(data.interests || '-');
+                    $('#cCred').text('$' + parseFloat(data.creditLimit).toFixed(2));
+
+                    // Color credit limit
+                    if (data.creditLimit > 1000) {
+                        $('#cCred').removeClass('text-warning').addClass('text-success');
+                    } else {
+                        $('#cCred').removeClass('text-success').addClass('text-warning');
+                    }
+
+                    // Populate order history
+                    if (data.orders && data.orders.length > 0) {
+                        data.orders.forEach(function (order) {
+                            $('#orderHistoryBody').append(
+                                '<tr class="table_row">' +
+                                '<td class="column-1">#ORD-' + order.orderId + '</td>' +
+                                '<td class="column-2">' + order.date + '</td>' +
+                                '<td class="column-3">$ ' + parseFloat(order.totalAmount).toFixed(2) + '</td>' +
+                                '<td class="column-4"><a href="orderDetails?id=' + order.orderId + '&from=admin" target="_blank" class="stext-106 text-primary hov-cl1 trans-04">View Details</a></td>' +
+                                '</tr>'
+                            );
+                        });
+                    } else {
+                        $('#orderHistoryBody').append(
+                            '<tr class="table_row"><td colspan="4" class="text-center stext-111 cl6 p-tb-15">' +
+                            'No orders found for this customer.</td></tr>'
+                        );
+                    }
+
+                    $('#modalCustomerTitle').text('Profile: ' + data.name);
+                },
+                error: function () {
+                    $('#profileLoading').hide();
+                    $('#profileData').show();
+                    $('#cName').text('Error loading profile');
+                }
+            });
         }
 
         function logout() {
-            sessionStorage.removeItem('userRole');
-            window.location.href = 'sign-in.html';
+            window.location.href = 'logout';
         }
     </script>
 </body>
