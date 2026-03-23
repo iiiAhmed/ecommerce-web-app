@@ -61,7 +61,7 @@
 								</li>
 
 								<li>
-									<a href="store.jsp">Shop</a>
+									<a href="shop">Shop</a>
 								</li>
 
 

@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
                     cart = new HashMap<>();
                     session.setAttribute("cart", cart);
                 }
-                cartService.loadDbCartIntoSession(id, cart);
+                cartService.loadDbCartIntoSession(userDto.getId(), cart);
                 session.setAttribute("cart", cart);
 
                 resp.sendRedirect("index.jsp");

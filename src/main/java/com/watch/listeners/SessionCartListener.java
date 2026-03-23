@@ -1,5 +1,6 @@
 package com.watch.listeners;
 
+import com.watch.model.dto.UserDto;
 import com.watch.model.services.CartService;
 import com.watch.util.EntityManagerFactorySingleton;
 import jakarta.persistence.EntityManager;
@@ -15,15 +16,15 @@ public class SessionCartListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         HttpSession session = se.getSession();
-        Integer userId = (Integer) session.getAttribute("user_id");
+        UserDto userDto = (UserDto) session.getAttribute("userDto");
         Map<Integer, Integer> sessionCart = (Map<Integer, Integer>) session.getAttribute("cart");
 
 
-        if (userId != null && sessionCart != null && !sessionCart.isEmpty()) {
+        if (userDto != null && sessionCart != null && !sessionCart.isEmpty()) {
             EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
             try {
                 em.getTransaction().begin();
-                new CartService(em).saveSessionCartToDb(userId, sessionCart);
+                new CartService(em).saveSessionCartToDb(userDto.getId(), sessionCart);
                 em.getTransaction().commit();
             } catch (Exception e) {
                 if (em.getTransaction().isActive())

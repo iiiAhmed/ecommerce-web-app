@@ -5,6 +5,7 @@ import com.watch.model.enums.Age;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import com.watch.model.services.ProductService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,10 +29,12 @@ import java.util.List;
         maxRequestSize = FileUploadUtil.MAX_IMAGE_SIZE_BYTES * 2
 )
 public class AdminProductServlet extends HttpServlet {
-    private final ProductService productService = new ProductService();
 
+    private ProductService productService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        productService = new ProductService((EntityManager) req.getAttribute("em"));
+
         List<Product> products = productService.getAllProducts();
         req.setAttribute("products", products);
         req.setAttribute("categories", Category.values());
@@ -42,6 +45,7 @@ public class AdminProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        productService = new ProductService((EntityManager) req.getAttribute("em"));
         String action = req.getParameter("action");
         if (action == null) action = "add";
 

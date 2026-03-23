@@ -1,6 +1,7 @@
 package com.watch.controller;
 
 import com.watch.model.dto.CartItemDTO;
+import com.watch.model.dto.UserDto;
 import com.watch.model.entities.User;
 import com.watch.model.services.CartService;
 import jakarta.persistence.EntityManager;
@@ -24,7 +25,8 @@ public class CartPageServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         EntityManager em = (EntityManager) req.getAttribute("em");
-        Integer userId = (Integer) session.getAttribute("user_id");
+        UserDto userDto = (UserDto) session.getAttribute("userDto");
+
         Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
         CartService cartService = new CartService(em);
 
@@ -33,11 +35,11 @@ public class CartPageServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
-        if (userId != null) {
+        if (userDto != null) {
             List<CartItemDTO> cartItems = cartService.buildCartDTOs(cart);
             double subtotal = cartItems.stream().mapToDouble(CartItemDTO::getTotalPrice).sum();
 
-            var user = em.find(User.class, userId);
+            User user = em.find(User.class, userDto.getId());
             double creditLimit = user.getCreditLimit();
 
             req.setAttribute("cartItems",   cartItems);
@@ -57,8 +59,8 @@ public class CartPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Integer userId = (Integer) session.getAttribute("user_id");
-        if (userId == null) {
+        UserDto userDto = (UserDto) session.getAttribute("userDto");
+        if (userDto == null) {
             resp.sendRedirect("sign-in.html");
             return;
         }
@@ -73,7 +75,7 @@ public class CartPageServlet extends HttpServlet {
 
         EntityManager em = (EntityManager) req.getAttribute("em");
         try {
-            new CartService(em).checkout(userId, cart);
+            new CartService(em).checkout(userDto.getId(), cart);
             session.setAttribute("cart", cart);
             resp.sendRedirect("shopping-cart?success=true");
         } catch (IllegalStateException e) {

@@ -162,7 +162,7 @@
                     <div class="menu-desktop">
                         <ul class="main-menu">
                             <li><a href="index.jsp">Home</a></li>
-                            <li><a href="store.jsp">Shop</a></li>
+                            <li><a href="shop">Shop</a></li>
                             <li><a href="about.html">About</a></li>
                             <li><a href="contact.html">Contact</a></li>
                         </ul>

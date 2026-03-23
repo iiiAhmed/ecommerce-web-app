@@ -20,7 +20,7 @@ public class CartService {
     public CartService(EntityManager em) {
         this.em = em;
         this.cartItemDao = new CartItemDaoImpl(em);
-        this.userDao = new UserDaoImpl(em);
+        this.userDao = new UserDaoImpl();
         this.productDao = new ProductDaoImpl(em);
     }
 
@@ -95,7 +95,7 @@ public class CartService {
     }
 
     public void checkout(int userId, Map<Integer, Integer> cart) {
-        User user = userDao.findById(userId);
+        User user = userDao.getUserById(userId);
         if (user == null)
             throw new IllegalStateException("User not found.");
 
