@@ -34,7 +34,8 @@ public class AdminProductServlet extends HttpServlet {
     private ProductService productService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        productService = new ProductService((EntityManager) req.getAttribute("em"));
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        productService = new ProductService(em);
 
         List<Product> products = productService.getAllProducts();
         req.setAttribute("products", products);
@@ -46,7 +47,8 @@ public class AdminProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        productService = new ProductService((EntityManager) req.getAttribute("em"));
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        productService = new ProductService(em);
         String action = req.getParameter("action");
         if (action == null) action = "add";
 

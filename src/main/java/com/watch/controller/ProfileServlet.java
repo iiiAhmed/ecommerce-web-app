@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import jakarta.persistence.EntityManager;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -19,13 +21,9 @@ public class ProfileServlet extends HttpServlet {
     private OrderService orderService;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        orderService = new OrderService();
-    }
-
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        orderService = new OrderService(em);
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userDto") == null) {
