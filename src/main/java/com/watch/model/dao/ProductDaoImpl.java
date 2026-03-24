@@ -2,11 +2,18 @@ package com.watch.model.dao;
 
 import com.watch.model.entities.Product;
 import com.watch.model.enums.Age;
+import com.watch.model.enums.Brand;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -76,5 +83,85 @@ public class ProductDaoImpl implements ProductDao {
                 .setParameter("ids", ids)
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .getResultList();
+    }
+
+    @Override
+    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice,int page, int size) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        Root<Product> p = cq.from(Product.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (categories != null && categories.length > 0) {
+            List<Category> categoryEnums = Arrays.stream(categories).map(Category::valueOf).toList();
+            predicates.add(p.get("category").in(categoryEnums));
+        }
+
+        if (brands != null && brands.length > 0) {
+            List<Brand> brandEnums = Arrays.stream(brands).map(Brand::valueOf).toList();
+
+            predicates.add(p.get("brand").in(brandEnums));
+        }
+
+        if (gender != null && !gender.isEmpty()) {
+            predicates.add(cb.equal(p.get("gender"), Gender.valueOf(gender)));
+        }
+
+//        if (age != null && !age.isEmpty()) {
+//            predicates.add(cb.equal(p.get("age"), Age.valueOf(age)));
+//        }
+
+        if (minPrice != null && minPrice >= 0) {
+            predicates.add(cb.ge(p.get("price"), minPrice));
+        }
+
+        if (maxPrice != null && maxPrice >= 0) {
+            predicates.add(cb.le(p.get("price"), maxPrice));
+        }
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        cq.orderBy(cb.asc(p.get("price")));
+        return em.createQuery(cq).setFirstResult((page-1)*size).setMaxResults(size).getResultList();
+    }
+    @Override
+    public long countProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Product> p = cq.from(Product.class);
+
+        cq.select(cb.count(p));
+
+        List<Predicate> predicates = new ArrayList<>();
+        if (categories != null && categories.length > 0) {
+            List<Category> categoryEnums = Arrays.stream(categories).map(Category::valueOf).toList();
+            predicates.add(p.get("category").in(categoryEnums));
+        }
+
+        if (brands != null && brands.length > 0) {
+            List<Brand> brandEnums = Arrays.stream(brands).map(Brand::valueOf).toList();
+
+            predicates.add(p.get("brand").in(brandEnums));
+        }
+
+        if (gender != null && !gender.isEmpty()) {
+            predicates.add(cb.equal(p.get("gender"), Gender.valueOf(gender)));
+        }
+
+
+        if (minPrice != null && minPrice >= 0) {
+            predicates.add(cb.ge(p.get("price"), minPrice));
+        }
+
+        if (maxPrice != null && maxPrice >= 0) {
+            predicates.add(cb.le(p.get("price"), maxPrice));
+        }
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        return em.createQuery(cq).getSingleResult();
     }
 }

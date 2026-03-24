@@ -33,24 +33,20 @@ public class CartServlet extends HttpServlet {
         }
         Map<String, Object> response = new HashMap<>();
 
-        try {
             int productId = Integer.parseInt(req.getParameter("productId"));
             int delta = Integer.parseInt(req.getParameter("delta"));
 
             CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
             cartService.updateCartSession(cart, productId, delta);
 
+            int updatedQty = cart.getOrDefault(productId, 0);
+
             response.put("status", "success");
             response.put("totalCartItems", cartService.getCartCountSession(cart));
-        } catch (IllegalArgumentException e) {
-            response.put("status", "error");
-            response.put("message", e.getMessage());
-        } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", "Something went wrong");
-        }
+            response.put("updatedQty", updatedQty);
 
-        resp.getWriter().print(gson.toJson(response));
+
+            resp.getWriter().print(gson.toJson(response));
     }
 
 }

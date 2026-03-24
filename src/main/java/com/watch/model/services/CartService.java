@@ -2,10 +2,10 @@ package com.watch.model.services;
 
 import com.watch.model.dao.*;
 import com.watch.model.dto.CartItemDTO;
-import com.watch.model.entities.CartItem;
-import com.watch.model.entities.Product;
-import com.watch.model.entities.User;
+import com.watch.model.entities.*;
 import jakarta.persistence.EntityManager;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +34,10 @@ public class CartService {
 
         if (newQty <= 0) {
             sessionCart.remove(productId);
-        } else if (newQty > product.getQuantity()) {
-            throw new IllegalArgumentException("Only " + product.getQuantity() + " in stock for " + product.getName());
-        } else {
-            sessionCart.put(productId, newQty);
+            return;
         }
+        int available = product.getQuantity();
+        sessionCart.put(productId, Math.min(newQty, available));
     }
 
     public void saveSessionCartToDb(int userId, Map<Integer, Integer> sessionCart) {
@@ -118,13 +117,30 @@ public class CartService {
             throw new IllegalStateException(
                     "Insufficient credit. Your total is $" + String.format("%.2f", total) + " but your available credit is $" +
                             String.format("%.2f", user.getCreditLimit()) + ".");
-
+//
+//        Order order = new Order();
+//        List<OrderItem> orderItems = new ArrayList<>();
         for (Product product : products) {
             int cartQty = cart.get(product.getProductId());
             product.setQuantity(product.getQuantity() - cartQty);
-        }
+//            OrderItem orderItem = new OrderItem(cartQty, product, order);
+//            orderItems.add(orderItem);
 
+        }
+        System.out.println(user.getCreditLimit());
+        System.out.println(total);
         user.setCreditLimit(user.getCreditLimit() - total);
+        System.out.println(user.getCreditLimit());
+//        order.setUser(user);
+//        order.setItems(orderItems);
+//        order.setTotalAmount(total);
+//        order.setOrderedAt(LocalDateTime.now());
+//
+//        OrderService orderService = new OrderService();
+//        orderService.addOrder(order);
+
+
+
         cart.clear();
     }
 }

@@ -233,11 +233,12 @@
 		var row     = $(btn).closest('.table_row');
 		var input   = row.find('.num-product');
 		var current = parseInt(input.val());
-		var newQty  = current + delta;
+		var expectedQty = current + delta;
 
-		console.log('[changeQty] current=' + current + ' delta=' + delta + ' newQty=' + newQty);
-
-		if (newQty < 0) { btn.disabled = false; return; }
+		if (expectedQty < 0) {
+			btn.disabled = false;
+			return;
+		}
 
 		var price = parseFloat(row.data('price'));
 
@@ -246,35 +247,48 @@
 			type: 'POST',
 			dataType: 'json',
 			data: { productId: productId, delta: delta },
+
 			success: function(res) {
-				console.log('[changeQty] server response:', JSON.stringify(res));
 				if (res.status === 'success') {
-					if (newQty === 0) {
+
+					let actualQty = res.updatedQty;
+
+					if (actualQty === 0) {
 						row.fadeOut(300, function() {
 							$(this).remove();
 							recalculate();
 							checkEmpty();
 						});
+
 					} else {
-						input.val(newQty);
-						row.find('.item-total').text('$' + (price * newQty).toFixed(2));
+						input.val(actualQty);
+						row.find('.item-total')
+								.text('$' + (price * actualQty).toFixed(2));
+
 						recalculate();
 					}
-					$('.icon-header-noti').attr('data-notify', res.totalCartItems);
+
+					$('.icon-header-noti')
+							.attr('data-notify', res.totalCartItems);
+
+					if (actualQty < expectedQty) {
+						showCartError('Quantity adjusted to available stock');
+					}
+
 				} else {
 					showCartError(res.message);
 				}
 			},
-			error: function(xhr, status, err) {
-				console.log('[changeQty] AJAX error:', status, err);
+
+			error: function() {
 				showCartError('Could not connect to server. Please try again.');
 			},
+
 			complete: function() {
 				btn.disabled = false;
 			}
 		});
 	}
-
 	function removeItem(btn, productId) {
 		var row = $(btn).closest('.table_row');
 		var qty = parseInt(row.find('.num-product').val());

@@ -9,6 +9,67 @@
 	<title>Shop - Sync Store</title>
 	<jsp:include page="includes/head.jsp" />
 	<style>
+		/* 🔥 FILTER SIDEBAR */
+		.filter-card {
+			background: #fff;
+			border-radius: 12px;
+			padding: 20px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+		}
+
+		.filter-title {
+			font-size: 16px;
+			font-weight: 600;
+			margin-bottom: 12px;
+			color: #333;
+		}
+
+		.filter-group {
+			margin-bottom: 20px;
+		}
+
+		.filter-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 8px;
+			cursor: pointer;
+			font-size: 14px;
+			color: #555;
+		}
+
+		.filter-item input {
+			accent-color: #111;
+			cursor: pointer;
+		}
+
+		.filter-item:hover {
+			color: #000;
+		}
+
+		.filter-divider {
+			height: 1px;
+			background: #eee;
+			margin: 15px 0;
+		}
+
+		.filter-price input {
+			margin-bottom: 8px;
+		}
+
+		.filter-btn {
+			background: #111;
+			color: #fff;
+			border-radius: 6px;
+			padding: 10px;
+			width: 100%;
+			border: none;
+			transition: 0.3s;
+		}
+
+		.filter-btn:hover {
+			background: #333;
+		}
 		.block2-pic {
 			width: 100%;
 			height: 280px;
@@ -150,94 +211,76 @@
 <!-- Product -->
 <div class="bg0 m-t-23 p-b-140">
 	<div class="container">
-		<div class="flex-w flex-sb-m p-b-52">
+		<div class="row">
 
-			<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-					All Products
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".male">
-					Men
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".female">
-					Women
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".sport">
-					Sport
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".luxury">
-					Luxury
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".classic">
-					Classic
-				</button>
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".casual">
-					Casual
-				</button>
-			</div>
+			<!-- FILTER SIDEBAR -->
+			<div class="col-md-3 p-b-30">
+				<div class="filter-card">
 
-			<div class="flex-w flex-c-m m-tb-10">
-				<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-					<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-					<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-					Filter
-				</div>
-				<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
-					<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
-					<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-					Search
-				</div>
-			</div>
+					<form method="get" action="shop">
 
-			<!-- Search product -->
-			<div class="dis-none panel-search w-full p-t-10 p-b-15">
-				<div class="bor8 dis-flex p-l-15">
-					<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
-						   placeholder="Search">
-				</div>
-			</div>
+						<!-- CATEGORY -->
+						<div class="filter-group">
+							<div class="filter-title">Category</div>
 
-			<!-- Filter panel -->
-			<div class="dis-none panel-filter w-full p-t-10">
-				<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
-					<div class="filter-col1 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">Sort By</div>
-						<ul>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">Default</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">Popularity</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04 filter-link-active">Newness</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">Price: Low to High</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">Price: High to Low</a></li>
-						</ul>
-					</div>
-
-					<div class="filter-col2 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">Price</div>
-						<ul>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04 filter-link-active">All</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">$0.00 - $500.00</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">$500.00 - $2000.00</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">$2000.00 - $5000.00</a></li>
-							<li class="p-b-6"><a href="#" class="filter-link stext-106 trans-04">$5000.00+</a></li>
-						</ul>
-					</div>
-
-					<div class="filter-col3 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">Tags</div>
-						<div class="flex-w p-t-4 m-r--5">
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">Sport</a>
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">Luxury</a>
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">Classic</a>
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">Casual</a>
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">Smart</a>
+							<c:forEach var="cat" items="${categories}">
+								<label class="filter-item">
+									<input type="checkbox" name="category" value="${cat.name()}"
+										${selectedCategories.contains(cat.name()) ? 'checked' : ''}>
+										${cat.displayName}
+								</label>
+							</c:forEach>
 						</div>
-					</div>
+
+						<div class="filter-divider"></div>
+
+						<!-- BRAND -->
+						<div class="filter-group">
+							<div class="filter-title">Brand</div>
+
+							<c:forEach var="brand" items="${brands}">
+								<label class="filter-item">
+									<input type="checkbox" name="brand" value="${brand.name()}"
+										${selectedBrands.contains(brand.name()) ? 'checked' : ''}>
+										${brand.displayName}
+								</label>
+							</c:forEach>
+						</div>
+
+						<div class="filter-divider"></div>
+
+						<!-- GENDER -->
+						<div class="filter-group">
+							<div class="filter-title">Gender</div>
+
+							<c:forEach var="g" items="${genders}">
+								<label class="filter-item">
+									<input type="radio" name="gender" value="${g.name()}"
+										${param.gender == g.name() ? 'checked' : ''}>
+										${g.displayName}
+								</label>
+							</c:forEach>
+						</div>
+
+						<div class="filter-divider"></div>
+
+						<!-- PRICE -->
+						<div class="filter-group filter-price">
+							<div class="filter-title">Price</div>
+
+							<input type="number" name="minPrice" value="${param.minPrice}"
+								   placeholder="Min price" class="form-control">
+
+							<input type="number" name="maxPrice" value="${param.maxPrice}"
+								   placeholder="Max price" class="form-control">
+						</div>
+
+						<button type="submit" class="filter-btn">Search</button>
+
+					</form>
 				</div>
 			</div>
-		</div>
+			<div class="col-md-9">
 
 		<div class="row isotope-grid">
 			<c:choose>
@@ -309,12 +352,57 @@
 			</c:choose>
 		</div>
 
-		<!-- Load more -->
-		<div class="flex-c-m flex-w w-full p-t-45">
-			<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-				Load More
-			</a>
-		</div>
+		<!-- Pages -->
+				<c:set var="queryParams" value="" />
+
+				<c:forEach var="c" items="${paramValues.category}">
+					<c:set var="queryParams" value="${queryParams}&category=${c}" />
+				</c:forEach>
+
+				<c:forEach var="b" items="${paramValues.brand}">
+					<c:set var="queryParams" value="${queryParams}&brand=${b}" />
+				</c:forEach>
+
+				<c:if test="${param.gender != null}">
+					<c:set var="queryParams" value="${queryParams}&gender=${param.gender}" />
+				</c:if>
+
+				<c:if test="${param.minPrice != null}">
+					<c:set var="queryParams" value="${queryParams}&minPrice=${param.minPrice}" />
+				</c:if>
+
+				<c:if test="${param.maxPrice != null}">
+					<c:set var="queryParams" value="${queryParams}&maxPrice=${param.maxPrice}" />
+				</c:if>
+				<div class="flex-c-m flex-w w-full p-t-45">
+
+					<!-- PREVIOUS -->
+					<c:if test="${currentPage > 1}">
+						<a href="shop?page=${currentPage - 1}${queryParams}"
+						   class="btn btn-light m-1">
+							← Prev
+						</a>
+					</c:if>
+
+					<!-- PAGE NUMBERS -->
+					<c:forEach begin="1" end="${totalPages}" var="i">
+						<a href="shop?page=${i}${queryParams}"
+						   class="btn ${i == currentPage ? 'btn-dark' : 'btn-light'} m-1">
+								${i}
+						</a>
+					</c:forEach>
+
+					<!-- NEXT -->
+					<c:if test="${currentPage < totalPages}">
+						<a href="shop?page=${currentPage + 1}${queryParams}"
+						   class="btn btn-light m-1">
+							Next →
+						</a>
+					</c:if>
+
+				</div>
+	</div>
+</div>
 	</div>
 </div>
 
@@ -382,8 +470,6 @@
 	function changeQty(btn, delta, productId) {
 		var numEl = btn.parentNode.querySelector('.block2-qty-num');
 		var currentVal = parseInt(numEl.textContent);
-		var val = currentVal + delta;
-		if (val < 0) return;
 
 		var buttons = btn.parentNode.parentNode.querySelectorAll('button');
 		buttons.forEach(function(b) { b.disabled = true; });
@@ -394,14 +480,25 @@
 			data: { productId: productId, delta: delta },
 			success: function(response) {
 				if (response.status === 'success') {
-					numEl.textContent = val;
+
+					let expectedQty = currentVal + delta;
+					let actualQty = response.updatedQty;
+
+					numEl.textContent = actualQty;
+
 					$('.icon-header-noti').attr('data-notify', response.totalCartItems);
 
 					var productName = $(btn).closest('.block2').find('.js-name-b2').text().trim();
-					if (delta > 0) {
-						showToast('Added to cart', productName, 'success');
-					} else if (val === 0) {
+
+					if (actualQty === 0) {
 						showToast('Removed from cart', productName, 'remove');
+
+					} else if (actualQty < expectedQty) {
+						showToast('Stock limit reached', 'Adjusted to available quantity', 'error');
+
+					} else if (delta > 0) {
+						showToast('Added to cart', productName, 'success');
+
 					} else {
 						showToast('Cart updated', productName, 'success');
 					}
@@ -417,9 +514,11 @@
 			}
 		});
 	}
-
 	$('body').append('<div id="toast-container"></div>');
 
+	// $('input').on('change', function () {
+	// 	$(this).closest('form').submit();
+	// });
 	function showToast(title, message, type) {
 		var icons = {
 			success: 'zmdi-check-circle',
