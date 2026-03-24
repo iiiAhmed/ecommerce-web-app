@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import jakarta.persistence.EntityManager;
+
 import java.io.IOException;
 
 @WebServlet("/orderDetails")
@@ -17,13 +19,10 @@ public class OrderDetailsServlet extends HttpServlet {
     private OrderService orderService;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        orderService = new OrderService();
-    }
-
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        orderService = new OrderService(em);
+        
         String idParam = req.getParameter("id");
 
         if (idParam == null || idParam.trim().isEmpty()) {
