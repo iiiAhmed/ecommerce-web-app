@@ -153,7 +153,7 @@
                             <li class="p-b-10"><a href="profile" class="stext-107 cl2 hov-cl1 trans-04"
                                     style="font-weight: bold; color: #717fe0;">Profile Data</a></li>
                             <li class="p-b-10"><a href="#order-history" class="stext-107 cl2 hov-cl1 trans-04">Order History</a></li>
-                            <li class="p-b-10"><a href="shopping-cart.html" class="stext-107 cl2 hov-cl1 trans-04">My Cart</a></li>
+                            <li class="p-b-10"><a href="shopping-cart.jsp" class="stext-107 cl2 hov-cl1 trans-04">My Cart</a></li>
                             <li class="p-t-20"><a href="#" onclick="logout(); return false;"
                                     class="stext-107 cl2 hov-cl1 trans-04 text-danger">Sign Out</a></li>
                         </ul>

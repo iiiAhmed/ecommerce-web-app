@@ -27,7 +27,7 @@
 
                 <div class="wrap-menu-desktop how-shadow1">
                     <nav class="limiter-menu-desktop container">
-                        <a href="index.html" class="logo">
+                        <a href="index.jsp" class="logo">
                             <img src="images/icons/logo-01.png" alt="IMG-LOGO">
                         </a>
 
