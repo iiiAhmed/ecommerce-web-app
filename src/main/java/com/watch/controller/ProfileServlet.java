@@ -29,7 +29,7 @@ public class ProfileServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userDto") == null) {
-            resp.sendRedirect("sign-in.html");
+            resp.sendRedirect("sign-in.jsp");
             return;
         }
         com.watch.model.dto.UserDto userDto = (com.watch.model.dto.UserDto) session.getAttribute("userDto");

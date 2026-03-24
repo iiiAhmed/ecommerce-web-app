@@ -44,7 +44,7 @@ public class OrderDetailsServlet extends HttpServlet {
             com.watch.model.dto.UserDto userDto = session != null ? (com.watch.model.dto.UserDto) session.getAttribute("userDto") : null;
 
             if (userDto == null) {
-                resp.sendRedirect("sign-in.html");
+                resp.sendRedirect("sign-in.jsp");
                 return;
             }
 

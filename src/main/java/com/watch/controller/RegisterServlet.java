@@ -30,13 +30,13 @@ public class RegisterServlet extends HttpServlet {
 
         // Server-side check: email already taken
         if (userService.isEmailTaken(email)) {
-            resp.sendRedirect("sign-up.html?error=email_taken");
+            resp.sendRedirect("sign-up.jsp?error=email_taken");
             return;
         }
 
         // Server-side Egyptian phone validation: exactly 10 digits (the +20 is fixed text in UI, not sent)
         if (phone == null || !phone.trim().matches("^[0-9]{10}$")) {
-            resp.sendRedirect("sign-up.html?error=invalid_phone");
+            resp.sendRedirect("sign-up.jsp?error=invalid_phone");
             return;
         }
 
@@ -55,6 +55,6 @@ public class RegisterServlet extends HttpServlet {
         }
 
         userService.register(user);
-        resp.sendRedirect("sign-in.html?registered=true");
+        resp.sendRedirect("sign-in.jsp?registered=true");
     }
 }
