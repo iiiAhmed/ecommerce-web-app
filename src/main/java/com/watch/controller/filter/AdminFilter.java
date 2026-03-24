@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = { "/admin-products.jsp", "/admin-customers.jsp" })
+@WebFilter(urlPatterns = { "/admin-products.jsp", "/admin-customers.jsp", "/admin-product", "/admin-customer" })
 public class AdminFilter implements Filter {
 
     @Override

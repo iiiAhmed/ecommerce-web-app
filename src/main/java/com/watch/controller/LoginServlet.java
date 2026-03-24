@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 
             // Role-based redirect
             if (user.getRole() == Role.ADMIN) {
-                resp.sendRedirect("admin-products.jsp");
+                resp.sendRedirect("admin-product");
             } else {
                 CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
                 Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");

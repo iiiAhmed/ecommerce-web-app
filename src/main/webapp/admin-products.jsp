@@ -27,14 +27,14 @@
 
                 <div class="wrap-menu-desktop how-shadow1">
                     <nav class="limiter-menu-desktop container">
-                        <a href="index.jsp" class="logo">
+                        <a href="index.html" class="logo">
                             <img src="images/icons/logo-01.png" alt="IMG-LOGO">
                         </a>
 
                         <div class="menu-desktop">
                             <ul class="main-menu">
-                                <li class="active-menu"><a href="admin-products.html">Manage Products</a></li>
-                                <li><a href="admin-customers.jsp">Review Customers</a></li>
+                                <li class="active-menu"><a href="admin-product">Manage Products</a></li>
+                                <li><a href="admin-customer">Review Customers</a></li>
                                 <li><a href="index.jsp" target="_blank">View Store</a></li>
                             </ul>
                         </div>

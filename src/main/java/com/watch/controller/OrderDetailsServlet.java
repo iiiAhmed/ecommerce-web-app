@@ -42,10 +42,22 @@ public class OrderDetailsServlet extends HttpServlet {
 
             HttpSession session = req.getSession(false);
             com.watch.model.dto.UserDto userDto = session != null ? (com.watch.model.dto.UserDto) session.getAttribute("userDto") : null;
-            if (userDto == null || userDto.getId() != order.getUser().getUserId()) {
-                 resp.sendRedirect("profile");
-                 return;
+
+            if (userDto == null) {
+                resp.sendRedirect("sign-in.html");
+                return;
             }
+
+            // Admins can view any order; regular users can only view their own
+            boolean isAdmin = com.watch.model.enums.Role.ADMIN == userDto.getRole();
+            boolean isOwner = userDto.getId() == order.getUser().getUserId();
+
+            if (!isAdmin && !isOwner) {
+                resp.sendRedirect("profile");
+                return;
+            }
+
+            req.setAttribute("from", req.getParameter("from"));
 
             req.setAttribute("order", order);
             req.getRequestDispatcher("order-details.jsp").forward(req, resp);
