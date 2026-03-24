@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import jakarta.persistence.EntityManager;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
@@ -22,11 +24,15 @@ import java.util.List;
 @WebServlet("/admin-customer")
 public class AdminCustomerServlet extends HttpServlet {
 
-    private final UserService userService = new UserService();
-    private final OrderService orderService = new OrderService();
+    private UserService userService;
+    private OrderService orderService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        userService = new UserService(); // TODO (passing entity manager)
+        orderService = new OrderService(em);
+
         String action = req.getParameter("action");
 
         if ("profile".equals(action)) {
