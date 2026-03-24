@@ -45,13 +45,13 @@
 							<img src="images/member-01.jpg" alt="Team Member">
 						</div>
 					</div>
-					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Member Name</h5>
+					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Ahmed Abdelrahman</h5>
 					<span class="stext-107 cl7" style="letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px;">
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
+						<a href="https://www.linkedin.com/in/ahmed-abelrahman/" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
+						<a href="https://github.com/iiiAhmed" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
 					</div>
 				</div>
 
@@ -62,13 +62,13 @@
 							<img src="images/member-02.jpg" alt="Team Member">
 						</div>
 					</div>
-					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Member Name</h5>
+					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Ahmed Ayman</h5>
 					<span class="stext-107 cl7" style="letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px;">
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
+						<a href="https://www.linkedin.com/in/ahmedayman13/" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
+						<a href="https://github.com/AhmedAymanMo" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
 					</div>
 				</div>
 
@@ -76,7 +76,7 @@
 				<div class="col-md-4 col-lg-3 p-b-30 txt-center team-member">
 					<div class="team-photo-wrap m-lr-auto">
 						<div class="team-photo">
-							<img src="images/member-03.jpg" alt="Team Member">
+							<img src="images/member-03.jpg" alt="Eslam Mohamed">
 						</div>
 					</div>
 					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Member Name</h5>
@@ -84,8 +84,8 @@
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
-						<a href="#" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
+						<a href="https://www.linkedin.com/in/eslammansourwork/" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-linkedin"></i></a>
+						<a href="https://github.com/eslammagdy101" class="fs-16 cl7 hov-cl1 trans-04 m-lr-8"><i class="fa fa-github"></i></a>
 					</div>
 				</div>
 
