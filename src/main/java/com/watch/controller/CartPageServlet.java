@@ -51,7 +51,7 @@ public class CartPageServlet extends HttpServlet {
 
         }
         else{
-            resp.sendRedirect("sign-in.html");
+            resp.sendRedirect("sign-in.jsp");
         }
     }
 
@@ -61,7 +61,7 @@ public class CartPageServlet extends HttpServlet {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("userDto");
         if (userDto == null) {
-            resp.sendRedirect("sign-in.html");
+            resp.sendRedirect("sign-in.jsp");
             return;
         }
 

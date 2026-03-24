@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("sign-in.html");
+        resp.sendRedirect("sign-in.jsp");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class LoginServlet extends HttpServlet {
                 resp.sendRedirect("index.jsp");
             }
         } else {
-            resp.sendRedirect("sign-in.html?error=invalid");
+            resp.sendRedirect("sign-in.jsp?error=invalid");
         }
     }
 }

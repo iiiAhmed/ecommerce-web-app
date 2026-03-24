@@ -55,6 +55,6 @@ public class RegisterServlet extends HttpServlet {
         }
 
         userService.register(user);
-        resp.sendRedirect("sign-in.html?registered=true");
+        resp.sendRedirect("sign-in.jsp?registered=true");
     }
 }
