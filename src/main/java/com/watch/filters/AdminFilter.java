@@ -1,4 +1,4 @@
-package com.watch.controller.filter;
+package com.watch.filters;
 
 import com.watch.model.dto.UserDto;
 import com.watch.model.enums.Role;
