@@ -1010,8 +1010,7 @@
 					</h4>
 
 					<p class="stext-107 cl7 size-201">
-						Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us
-						on (+1) 96 716 6879
+						Any questions? Let us know in store at Smart Village building B148 - 28 Km by Cairo / Alexandria Desert road- 6 October
 					</p>
 
 					<div class="p-t-27">
