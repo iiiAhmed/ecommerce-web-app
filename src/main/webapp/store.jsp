@@ -9,72 +9,6 @@
 	<title>Shop - Sync Store</title>
 	<jsp:include page="includes/head.jsp" />
 	<style>
-		/* 🔥 FILTER SIDEBAR */
-		.filter-card {
-			background: #fff;
-			border-radius: 12px;
-			padding: 20px;
-			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-		}
-
-		.filter-title {
-			font-size: 16px;
-			font-weight: 600;
-			margin-bottom: 12px;
-			color: #333;
-		}
-
-		.filter-group {
-			margin-bottom: 20px;
-		}
-
-		.filter-item {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			margin-bottom: 8px;
-			cursor: pointer;
-			font-size: 14px;
-			color: #555;
-		}
-
-		.filter-item input {
-			accent-color: #111;
-			cursor: pointer;
-		}
-
-		.filter-item:hover {
-			color: #000;
-		}
-
-		.filter-divider {
-			height: 1px;
-			background: #eee;
-			margin: 15px 0;
-		}
-
-		.filter-price input {
-			margin-bottom: 8px;
-		}
-
-		.filter-btn {
-			background: #111;
-			color: #fff;
-			border-radius: 6px;
-			padding: 10px;
-			width: 100%;
-			border: none;
-			transition: 0.3s;
-		}
-
-		.filter-btn:hover {
-			background: #333;
-		}
-		.block2-pic {
-			width: 100%;
-			height: 280px;
-			overflow: hidden;
-		}
 
 		.block2-pic img {
 			width: 100%;
@@ -163,6 +97,74 @@
 		@keyframes toastOut {
 			from { opacity: 1; transform: translateX(0); }
 			to   { opacity: 0; transform: translateX(40px); }
+		}
+
+		/* Filter */
+
+		.filter-card {
+			background: #fff;
+			border-radius: 12px;
+			padding: 20px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+		}
+
+		.filter-title {
+			font-size: 16px;
+			font-weight: 600;
+			margin-bottom: 12px;
+			color: #333;
+		}
+
+		.filter-group {
+			margin-bottom: 20px;
+		}
+
+		.filter-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 8px;
+			cursor: pointer;
+			font-size: 14px;
+			color: #555;
+		}
+
+		.filter-item input {
+			accent-color: #111;
+			cursor: pointer;
+		}
+
+		.filter-item:hover {
+			color: #000;
+		}
+
+		.filter-divider {
+			height: 1px;
+			background: #eee;
+			margin: 15px 0;
+		}
+
+		.filter-price input {
+			margin-bottom: 8px;
+		}
+
+		.filter-btn {
+			background: #111;
+			color: #fff;
+			border-radius: 6px;
+			padding: 10px;
+			width: 100%;
+			border: none;
+			transition: 0.3s;
+		}
+
+		.filter-btn:hover {
+			background: #333;
+		}
+		.block2-pic {
+			width: 100%;
+			height: 280px;
+			overflow: hidden;
 		}
 	</style>
 </head>

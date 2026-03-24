@@ -1,6 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%-- param: activeMenu (home, shop, about, contact) --%>
 
+<c:if test="${empty cartCount}">
+    <c:set var="cartCount" value="0" />
+    <c:if test="${not empty sessionScope.cart}">
+        <c:forEach var="item" items="${sessionScope.cart}">
+            <c:set var="cartCount" value="${cartCount + item.value}" />
+        </c:forEach>
+    </c:if>
+</c:if>
+
 <!-- Header -->
 <header class="header-v4">
     <!-- Header desktop -->
