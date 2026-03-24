@@ -7,13 +7,20 @@ import com.watch.model.dao.OrderItemDaoImpl;
 import com.watch.model.entities.Order;
 import com.watch.model.entities.OrderItem;
 
+import jakarta.persistence.EntityManager;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderService {
 
-    private final OrderDao orderDao = new OrderDaoImpl();
-    private final OrderItemDao orderItemDao = new OrderItemDaoImpl();
+    private final OrderDao orderDao;
+    private final OrderItemDao orderItemDao;
+
+    public OrderService(EntityManager em) {
+        this.orderDao = new OrderDaoImpl(em);
+        this.orderItemDao = new OrderItemDaoImpl(em);
+    }
 
     // ==================== Order Methods ====================
 
