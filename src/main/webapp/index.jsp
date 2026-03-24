@@ -5,6 +5,14 @@
 <head>
 	<title>Sync Store - Premium Watches</title>
 	<jsp:include page="includes/head.jsp" />
+	<c:if test="${empty cartCount}">
+		<c:set var="cartCount" value="0" />
+		<c:if test="${not empty sessionScope.cart}">
+			<c:forEach var="item" items="${sessionScope.cart}">
+				<c:set var="cartCount" value="${cartCount + item.value}" />
+			</c:forEach>
+		</c:if>
+	</c:if>
 </head>
 
 <body class="animsition">
