@@ -3,6 +3,7 @@ package com.watch.controller;
 import com.watch.model.dto.UserDto;
 import com.watch.model.entities.User;
 import com.watch.model.services.UserService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -142,7 +143,8 @@ public class UpdateProfileServlet extends HttpServlet {
         req.setAttribute("user", user);
         req.setAttribute("errorMsg", errorMsg);
         // Re-populate orders so the page renders correctly
-        com.watch.model.services.OrderService orderService = new com.watch.model.services.OrderService();
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        com.watch.model.services.OrderService orderService = new com.watch.model.services.OrderService(em);
         req.setAttribute("orders", orderService.getOrdersByUser(user.getUserId()));
         req.getRequestDispatcher("profile.jsp").forward(req, resp);
     }
