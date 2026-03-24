@@ -19,7 +19,8 @@ public interface ProductDao {
     List<Product> getProductsByGender(Gender gender);
     List<Product> getProductsByAge(Age age);
     List<Product> findProductsByIds(Set<Integer> ids);
-    List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice);
+    List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice,int page, int size);
+    long countProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice);
 
 
 }

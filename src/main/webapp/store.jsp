@@ -493,12 +493,55 @@
 			</c:choose>
 		</div>
 
-		<!-- Load more -->
-		<div class="flex-c-m flex-w w-full p-t-45">
-			<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-				Load More
-			</a>
-		</div>
+		<!-- Pages -->
+				<c:set var="queryParams" value="" />
+
+				<c:forEach var="c" items="${paramValues.category}">
+					<c:set var="queryParams" value="${queryParams}&category=${c}" />
+				</c:forEach>
+
+				<c:forEach var="b" items="${paramValues.brand}">
+					<c:set var="queryParams" value="${queryParams}&brand=${b}" />
+				</c:forEach>
+
+				<c:if test="${param.gender != null}">
+					<c:set var="queryParams" value="${queryParams}&gender=${param.gender}" />
+				</c:if>
+
+				<c:if test="${param.minPrice != null}">
+					<c:set var="queryParams" value="${queryParams}&minPrice=${param.minPrice}" />
+				</c:if>
+
+				<c:if test="${param.maxPrice != null}">
+					<c:set var="queryParams" value="${queryParams}&maxPrice=${param.maxPrice}" />
+				</c:if>
+				<div class="flex-c-m flex-w w-full p-t-45">
+
+					<!-- PREVIOUS -->
+					<c:if test="${currentPage > 1}">
+						<a href="shop?page=${currentPage - 1}${queryParams}"
+						   class="btn btn-light m-1">
+							← Prev
+						</a>
+					</c:if>
+
+					<!-- PAGE NUMBERS -->
+					<c:forEach begin="1" end="${totalPages}" var="i">
+						<a href="shop?page=${i}${queryParams}"
+						   class="btn ${i == currentPage ? 'btn-dark' : 'btn-light'} m-1">
+								${i}
+						</a>
+					</c:forEach>
+
+					<!-- NEXT -->
+					<c:if test="${currentPage < totalPages}">
+						<a href="shop?page=${currentPage + 1}${queryParams}"
+						   class="btn btn-light m-1">
+							Next →
+						</a>
+					</c:if>
+
+				</div>
 	</div>
 </div>
 	</div>

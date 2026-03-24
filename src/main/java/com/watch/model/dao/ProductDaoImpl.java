@@ -86,7 +86,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice) {
+    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice,int page, int size) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -124,6 +124,44 @@ public class ProductDaoImpl implements ProductDao {
         cq.where(predicates.toArray(new Predicate[0]));
 
         cq.orderBy(cb.asc(p.get("price")));
-        return em.createQuery(cq).getResultList();
+        return em.createQuery(cq).setFirstResult((page-1)*size).setMaxResults(size).getResultList();
+    }
+    @Override
+    public long countProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Product> p = cq.from(Product.class);
+
+        cq.select(cb.count(p));
+
+        List<Predicate> predicates = new ArrayList<>();
+        if (categories != null && categories.length > 0) {
+            List<Category> categoryEnums = Arrays.stream(categories).map(Category::valueOf).toList();
+            predicates.add(p.get("category").in(categoryEnums));
+        }
+
+        if (brands != null && brands.length > 0) {
+            List<Brand> brandEnums = Arrays.stream(brands).map(Brand::valueOf).toList();
+
+            predicates.add(p.get("brand").in(brandEnums));
+        }
+
+        if (gender != null && !gender.isEmpty()) {
+            predicates.add(cb.equal(p.get("gender"), Gender.valueOf(gender)));
+        }
+
+
+        if (minPrice != null && minPrice >= 0) {
+            predicates.add(cb.ge(p.get("price"), minPrice));
+        }
+
+        if (maxPrice != null && maxPrice >= 0) {
+            predicates.add(cb.le(p.get("price"), maxPrice));
+        }
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        return em.createQuery(cq).getSingleResult();
     }
 }

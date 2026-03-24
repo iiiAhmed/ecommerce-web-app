@@ -42,9 +42,24 @@ public class ProductServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        List<Product> products = productService.filterProducts(categories, brands, gender, minPrice, maxPrice);
+        int page = 1;
+        int size = 12;
+
+        try {
+            if (req.getParameter("page") != null) {
+                page = Integer.parseInt(req.getParameter("page"));
+            }
+        } catch (Exception e) {
+            page = 1;
+        }
+
+        List<Product> products = productService.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size);
+        long totalProducts = productService.countProducts(categories, brands, gender, minPrice, maxPrice);
+
+        int totalPages = (int) Math.ceil((double) totalProducts / size);
 
         HttpSession session = req.getSession();
         Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
@@ -63,8 +78,14 @@ public class ProductServlet extends HttpServlet {
         req.setAttribute("brands", List.of(Brand.values()));
         req.setAttribute("genders", List.of(Gender.values()));
 
-        req.setAttribute("selectedCategories", categories != null ? Arrays.asList(categories) : Collections.emptyList());
-        req.setAttribute("selectedBrands", brands != null ? Arrays.asList(brands) : Collections.emptyList());
+        req.setAttribute("selectedCategories", categories != null ? new HashSet<>(Arrays.asList(categories)) : Collections.emptySet());
+        req.setAttribute("selectedBrands", brands != null ? new HashSet<>(Arrays.asList(brands)) : Collections.emptySet());
+        req.setAttribute("selectedGender", gender);
+        req.setAttribute("selectedMinPrice", minPrice);
+        req.setAttribute("selectedMaxPrice", maxPrice);
+
+        req.setAttribute("currentPage", page);
+        req.setAttribute("totalPages", totalPages);
 
         req.getRequestDispatcher("/store.jsp").forward(req, resp);
     }
