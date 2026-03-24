@@ -2,6 +2,7 @@ package com.watch.controller;
 
 import com.watch.model.entities.Product;
 import com.watch.model.enums.Age;
+import com.watch.model.enums.Brand;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import com.watch.model.services.ProductService;
@@ -121,7 +122,10 @@ public class AdminProductServlet extends HttpServlet {
             product.setProductId(Integer.parseInt(idStr));
         }
         product.setName(name.trim());
-        product.setBrand(req.getParameter("brand") != null ? req.getParameter("brand").trim() : "");
+        String brandParam = req.getParameter("brand");
+        if (brandParam != null && !brandParam.isEmpty()) {
+            product.setBrand(Brand.valueOf(brandParam));
+        }
         product.setDescription(req.getParameter("description") != null ? req.getParameter("description").trim() : "");
         product.setPrice(Double.parseDouble(priceParam));
         product.setQuantity(Integer.parseInt(qtyParam));

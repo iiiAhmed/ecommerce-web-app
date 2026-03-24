@@ -1,6 +1,7 @@
 package com.watch.model.entities;
 
 import com.watch.model.enums.Age;
+import com.watch.model.enums.Brand;
 import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import jakarta.persistence.*;
@@ -17,8 +18,9 @@ public class Product {
     @Column(name = "name", nullable = false, length = 150)
     private String name;
 
-    @Column(name = "brand", length = 100)
-    private String brand;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "brand", nullable = false, length = 50)
+    private Brand brand;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -63,11 +65,11 @@ public class Product {
         this.name = name;
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(Brand brand) {
         this.brand = brand;
     }
 
