@@ -117,27 +117,27 @@ public class CartService {
             throw new IllegalStateException(
                     "Insufficient credit. Your total is $" + String.format("%.2f", total) + " but your available credit is $" +
                             String.format("%.2f", user.getCreditLimit()) + ".");
-//
-//        Order order = new Order();
-//        List<OrderItem> orderItems = new ArrayList<>();
+
+        Order order = new Order();
+        List<OrderItem> orderItems = new ArrayList<>();
         for (Product product : products) {
             int cartQty = cart.get(product.getProductId());
             product.setQuantity(product.getQuantity() - cartQty);
-//            OrderItem orderItem = new OrderItem(cartQty, product, order);
-//            orderItems.add(orderItem);
+            OrderItem orderItem = new OrderItem(cartQty, product, order);
+            orderItems.add(orderItem);
 
         }
         System.out.println(user.getCreditLimit());
         System.out.println(total);
         user.setCreditLimit(user.getCreditLimit() - total);
         System.out.println(user.getCreditLimit());
-//        order.setUser(user);
-//        order.setItems(orderItems);
-//        order.setTotalAmount(total);
-//        order.setOrderedAt(LocalDateTime.now());
-//
-//        OrderService orderService = new OrderService();
-//        orderService.addOrder(order);
+        order.setUser(user);
+        order.setItems(orderItems);
+        order.setTotalAmount(total);
+        order.setOrderedAt(LocalDateTime.now());
+
+        OrderService orderService = new OrderService(em);
+        orderService.addOrder(order);
 
 
 
