@@ -21,10 +21,11 @@ import java.util.stream.Collectors;
 @WebServlet("/update-profile")
 public class UpdateProfileServlet extends HttpServlet {
 
-    private final UserService userService = new UserService();
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        UserService userService = new UserService(em);
+
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userDto") == null) {
             resp.sendRedirect("sign-in.jsp");
