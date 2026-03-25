@@ -20,8 +20,6 @@ import java.util.Map;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    private final UserService userService = new UserService();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("sign-in.jsp");
@@ -29,6 +27,9 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EntityManager em = (EntityManager) req.getAttribute("em");
+        UserService userService = new UserService(em);
+
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 

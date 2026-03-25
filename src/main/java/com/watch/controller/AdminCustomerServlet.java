@@ -30,7 +30,7 @@ public class AdminCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         EntityManager em = (EntityManager) req.getAttribute("em");
-        userService = new UserService(); // TODO (passing entity manager)
+        userService = new UserService(em);
         orderService = new OrderService(em);
 
         String action = req.getParameter("action");
