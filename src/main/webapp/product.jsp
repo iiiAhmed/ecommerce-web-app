@@ -223,7 +223,12 @@
 				success: function(response) {
 					if (response.status === 'success') {
 						$('.icon-header-noti').attr('data-notify', response.totalCartItems);
-						showToast('Added to cart', productName, 'success');
+
+						if (response.updatedQty < quantity) {
+							showToast('Stock limit reached', 'Adjusted to available quantity', 'error');
+						} else {
+							showToast('Added to cart', productName, 'success');
+						}
 					} else {
 						showToast('Error', response.message || 'Could not add to cart', 'error');
 					}
