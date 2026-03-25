@@ -32,8 +32,8 @@ public class ProfileServlet extends HttpServlet {
         }
         com.watch.model.dto.UserDto userDto = (com.watch.model.dto.UserDto) session.getAttribute("userDto");
         int userId = userDto.getId();
-        
-        com.watch.model.services.UserService userService = new com.watch.model.services.UserService();
+
+        com.watch.model.services.UserService userService = new com.watch.model.services.UserService(em);
         User user = userService.getUserById(userId);
 
         req.setAttribute("user", user);

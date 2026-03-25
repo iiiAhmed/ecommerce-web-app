@@ -1,15 +1,23 @@
 package com.watch.model.services;
 
+import com.watch.model.dao.UserDao;
 import com.watch.model.dao.UserDaoImpl;
 import com.watch.model.entities.User;
 import com.watch.model.enums.Role;
 import com.watch.util.PasswordUtil;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public class UserService {
 
-    private final UserDaoImpl userDao = UserDaoImpl.getInstance();
+    private final EntityManager em;
+    private final UserDao userDao;
+
+    public UserService(EntityManager em) {
+        this.em = em;
+        this.userDao = new UserDaoImpl(em);
+    }
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();

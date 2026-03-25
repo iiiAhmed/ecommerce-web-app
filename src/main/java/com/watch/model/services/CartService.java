@@ -20,7 +20,7 @@ public class CartService {
     public CartService(EntityManager em) {
         this.em = em;
         this.cartItemDao = new CartItemDaoImpl(em);
-        this.userDao = new UserDaoImpl();
+        this.userDao = new UserDaoImpl(em);
         this.productDao = new ProductDaoImpl(em);
     }
 
