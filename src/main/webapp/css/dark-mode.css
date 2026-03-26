@@ -1,0 +1,302 @@
+/* Dark Mode Styles */
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --text-primary: #222222;
+    --text-secondary: #666666;
+    --text-muted: #888888;
+    --border-color: #e6e6e6;
+    --card-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-muted: #888888;
+    --border-color: #404040;
+    --card-bg: #242424;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply theme colors */
+[data-theme="dark"] body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .bg0 {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .bg1 {
+    background-color: #717fe0 !important;
+}
+
+[data-theme="dark"] .bg2 {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .bg3 {
+    background-color: #1c1c1c !important;
+}
+
+[data-theme="dark"] .cl0 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .cl2 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .cl3 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cl4 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .cl5 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cl6 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cl8 {
+    color: var(--text-muted) !important;
+}
+
+/* Header */
+[data-theme="dark"] .header-v4 .wrap-menu-desktop {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+[data-theme="dark"] .wrap-header-mobile {
+    background-color: var(--card-bg);
+}
+
+/* Menu */
+[data-theme="dark"] .menu-mobile {
+    background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] .main-menu > li > a {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .main-menu > li:hover > a,
+[data-theme="dark"] .main-menu > li.active-menu > a {
+    color: #717fe0;
+}
+
+/* Cards & Blocks */
+[data-theme="dark"] .block2 {
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .block2-pic {
+    background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] .filter-card {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+/* Forms & Inputs */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .form-control {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: #717fe0;
+}
+
+/* Buttons */
+[data-theme="dark"] .filter-btn {
+    background: #717fe0;
+}
+
+[data-theme="dark"] .filter-btn:hover {
+    background: #5968d4;
+}
+
+[data-theme="dark"] .btn-light {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .btn-light:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-dark {
+    background-color: #717fe0;
+    border-color: #717fe0;
+}
+
+/* Cart Sidebar */
+[data-theme="dark"] .wrap-header-cart {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .header-cart {
+    background-color: var(--card-bg);
+}
+
+/* Footer */
+[data-theme="dark"] footer {
+    background-color: var(--card-bg);
+}
+
+/* Breadcrumb */
+[data-theme="dark"] .bread-crumb a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .bread-crumb a:hover {
+    color: #717fe0;
+}
+
+/* Modal */
+[data-theme="dark"] .modal-search-header {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="dark"] .container-search-header {
+    background-color: var(--card-bg);
+}
+
+/* Tables */
+[data-theme="dark"] table {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .table {
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .table thead th {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .table td {
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--bg-secondary);
+}
+
+/* Product Detail */
+[data-theme="dark"] .sec-product-detail {
+    background-color: var(--bg-primary);
+}
+
+/* Borders */
+[data-theme="dark"] .bor1,
+[data-theme="dark"] .bor2,
+[data-theme="dark"] .bor10,
+[data-theme="dark"] .bor12 {
+    border-color: var(--border-color) !important;
+}
+
+/* Shadows */
+[data-theme="dark"] .how-shadow1 {
+    box-shadow: 0 3px 20px 0px var(--shadow-color);
+}
+
+/* Toast */
+[data-theme="dark"] .toast-item {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .toast-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .toast-msg {
+    color: var(--text-secondary);
+}
+
+/* Filter items */
+[data-theme="dark"] .filter-item {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-item:hover {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-divider {
+    background: var(--border-color);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 15px;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.theme-toggle i {
+    font-size: 20px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .theme-toggle i {
+    color: #ffd700;
+}
+
+/* Sign in/Sign up pages */
+[data-theme="dark"] .limiter {
+    background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .container-login100 {
+    background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .wrap-login100 {
+    background-color: var(--card-bg);
+}
