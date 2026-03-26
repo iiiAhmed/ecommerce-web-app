@@ -163,25 +163,18 @@
 								<div class="flex-w flex-r-m p-b-10">
 									<div class="size-204 flex-w flex-m respon6-next">
 										<div class="wrap-num-product flex-w m-r-20 m-tb-10">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="changeQty(this, -1, '${product.productId}')">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
+											<c:set var="qtyInCart" value="${cartQuantities[product.productId]}"/>
 											<input class="mtext-104 cl3 txt-center num-product" type="number"
-												name="num-product" value="1" min="1" max="${product.quantity}">
+												name="num-product" value="${empty qtyInCart ? 0 : qtyInCart}" readonly>
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="changeQty(this, 1, '${product.productId}')">
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
-
-										<button
-											class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04"
-											data-product-id="${product.productId}"
-											data-product-name="${product.name}"
-											onclick="addToCart(${product.productId}, '${product.name}', ${product.price}, ${product.quantity})">
-											Add to cart
-										</button>
 									</div>
 								</div>
 							</c:if>
@@ -205,59 +198,53 @@
 	<script>
 		$('body').append('<div id="toast-container"></div>');
 
-		function addToCart(productId, productName, price, maxQuantity) {
-			var quantity = parseInt($('.num-product').val());
+		function changeQty(btn, delta, productId) {
+			var numEl = btn.parentNode.querySelector('.num-product');
+			var currentVal = parseInt(numEl.value);
 
-			if (quantity <= 0 || quantity > maxQuantity) {
-				showToast('Invalid quantity', 'Please select a valid quantity', 'error');
-				return;
-			}
-
-			var $btn = $(event.target);
-			$btn.prop('disabled', true);
+			var buttons = btn.parentNode.querySelectorAll('div[class^="btn-num-product"]');
+			buttons.forEach(function(b) { b.style.pointerEvents = 'none'; });
 
 			$.ajax({
 				url: 'cart',
 				type: 'POST',
-				data: { productId: productId, delta: quantity },
+				data: { productId: productId, delta: delta },
 				success: function(response) {
 					if (response.status === 'success') {
+
+						let expectedQty = currentVal + delta;
+						let actualQty = response.updatedQty;
+
+						numEl.value = actualQty;
+
 						$('.icon-header-noti').attr('data-notify', response.totalCartItems);
 
-						if (response.updatedQty < quantity) {
+						var productName = document.querySelector('h4.mtext-105').textContent.trim();
+
+						if (actualQty === 0) {
+							showToast('Removed from cart', productName, 'remove');
+
+						} else if (actualQty < expectedQty) {
 							showToast('Stock limit reached', 'Adjusted to available quantity', 'error');
-						} else {
+
+						} else if (delta > 0) {
 							showToast('Added to cart', productName, 'success');
+
+						} else {
+							showToast('Cart updated', productName, 'success');
 						}
 					} else {
-						showToast('Error', response.message || 'Could not add to cart', 'error');
+						showToast('Error', response.message, 'error');
 					}
 				},
 				error: function() {
 					showToast('Error', 'Could not connect to server', 'error');
 				},
 				complete: function() {
-					$btn.prop('disabled', false);
+					buttons.forEach(function(b) { b.style.pointerEvents = 'auto'; });
 				}
 			});
 		}
-
-		$('.btn-num-product-down').on('click', function() {
-			var input = $('.num-product');
-			var currentValue = parseInt(input.val());
-			if (currentValue > 1) {
-				input.val(currentValue - 1);
-			}
-		});
-
-		$('.btn-num-product-up').on('click', function() {
-			var input = $('.num-product');
-			var currentValue = parseInt(input.val());
-			var maxValue = parseInt(input.attr('max'));
-			if (currentValue < maxValue) {
-				input.val(currentValue + 1);
-			}
-		});
 
 		function showToast(title, message, type) {
 			var icons = {
