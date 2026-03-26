@@ -74,6 +74,30 @@
 			from { opacity: 1; transform: translateX(0); }
 			to   { opacity: 0; transform: translateX(40px); }
 		}
+		.product-image {
+			width: 100%;
+			max-height: 400px;
+			object-fit: contain;
+			border-radius: 10px;
+			background: #f8f8f8;
+		}
+		.product-description-section {
+			border-top: 1px solid #eee;
+			margin-top: 40px;
+			padding-top: 30px;
+		}
+
+		.product-description-section h4 {
+			font-size: 20px;
+			font-weight: 600;
+		}
+
+		.product-description-section .stext-102 {
+			line-height: 1.8;
+			font-size: 14px;
+			color: #555;
+			max-width: 800px;
+		}
 	</style>
 </head>
 
@@ -112,7 +136,7 @@
 						<div class="wrap-pic-w pos-relative">
 							<c:choose>
 								<c:when test="${not empty product.imageUrl}">
-									<img src="${product.imageUrl}" alt="${product.name}" style="width: 100%; height: auto;">
+									<img src="${product.imageUrl}" alt="${product.name}" class="product-image">
 								</c:when>
 								<c:otherwise>
 									<img src="images/product-detail-01.jpg" alt="${product.name}" style="width: 100%; height: auto;">
@@ -132,16 +156,6 @@
 							$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/>
 						</span>
 
-						<p class="stext-102 cl3 p-t-23">
-							<c:choose>
-								<c:when test="${not empty product.description}">
-									${product.description}
-								</c:when>
-								<c:otherwise>
-									Premium quality ${product.brand} watch for ${product.gender}. Part of our ${product.category} collection.
-								</c:otherwise>
-							</c:choose>
-						</p>
 
 						<div class="p-t-23">
 							<p class="stext-102 cl3"><strong>Brand:</strong> ${product.brand}</p>
@@ -150,10 +164,10 @@
 							<p class="stext-102 cl3"><strong>Age:</strong> ${product.age}</p>
 							<c:choose>
 								<c:when test="${product.quantity > 0}">
-									<p class="stext-102 cl3"><strong>Stock:</strong> <span style="color: #28a745;">${product.quantity} available</span></p>
+									<p class="stext-102 cl3" style="color: #28a745;">In stock</p>
 								</c:when>
 								<c:otherwise>
-									<p class="stext-102 cl3"><strong>Stock:</strong> <span style="color: #dc3545;">Out of stock</span></p>
+									<p class="stext-102 cl3" style="color: #dc3545;">Out of stock</p>
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -181,6 +195,25 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="product-description-section p-t-50">
+
+				<h4 class="mtext-105 cl2 p-b-16">
+					Product Description
+				</h4>
+
+				<div class="stext-102 cl3">
+					<c:choose>
+						<c:when test="${not empty product.description}">
+							${product.description}
+						</c:when>
+						<c:otherwise>
+							Premium quality ${product.brand} watch for ${product.gender}.
+							Part of our ${product.category} collection.
+						</c:otherwise>
+					</c:choose>
+				</div>
+
 			</div>
 
 		</div>
