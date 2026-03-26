@@ -66,6 +66,10 @@
 							<i class="zmdi zmdi-account-circle"></i>
 						</a>
 
+						<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+							<i class="zmdi zmdi-brightness-2"></i>
+						</button>
+
 						<c:choose>
 							<c:when test="${not empty sessionScope.userDto}">
 								<span class="stext-106 cl2 p-l-22 p-r-11">
@@ -111,6 +115,9 @@
 				<a href="profile" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
 					<i class="zmdi zmdi-account-circle"></i>
 				</a>
+				<button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
+					<i class="zmdi zmdi-brightness-2"></i>
+				</button>D
 			</div>
 
 			<!-- Button show menu -->
