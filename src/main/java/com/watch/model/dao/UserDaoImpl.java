@@ -37,33 +37,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean createUser(User user) {
-        try {
-            em.persist(user);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.persist(user);
+        return true;
     }
 
     @Override
     public boolean updateUser(User user) {
-        try {
-            em.merge(user);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.merge(user);
+        return true;
     }
 
     @Override
     public boolean deleteUser(int id) {
-        try {
-            User user = em.find(User.class, id);
-            if (user == null) return false;
-            em.remove(user);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        User user = em.find(User.class, id);
+        if (user == null) return false;
+        em.remove(user);
+        return true;
     }
 }

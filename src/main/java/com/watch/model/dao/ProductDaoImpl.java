@@ -52,6 +52,23 @@ public class ProductDaoImpl implements ProductDao {
     public boolean deleteProduct(int id) {
         Product product = em.find(Product.class, id);
         if (product == null) return false;
+
+        Long orderRefs = em.createQuery(
+                "SELECT COUNT(oi) FROM OrderItem oi WHERE oi.product.productId = :pid", Long.class)
+                .setParameter("pid", id)
+                .getSingleResult();
+        if (orderRefs > 0) {
+            throw new IllegalStateException("Cannot delete product: it is referenced by " + orderRefs + " order item(s).");
+        }
+
+        Long cartRefs = em.createQuery(
+                "SELECT COUNT(ci) FROM CartItem ci WHERE ci.product.productId = :pid", Long.class)
+                .setParameter("pid", id)
+                .getSingleResult();
+        if (cartRefs > 0) {
+            throw new IllegalStateException("Cannot delete product: it is in " + cartRefs + " user cart(s).");
+        }
+
         em.remove(product);
         return true;
     }

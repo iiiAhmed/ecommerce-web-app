@@ -21,6 +21,7 @@ public class EntityManagerFilter implements Filter {
         } catch (Exception e) {
             if (em.getTransaction().isActive())
                 em.getTransaction().rollback();
+            throw new ServletException(e);
         } finally {
             if (em.isOpen()) em.close();
         }

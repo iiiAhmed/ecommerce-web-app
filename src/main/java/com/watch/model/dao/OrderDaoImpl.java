@@ -36,33 +36,21 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean addOrder(Order order) {
-        try {
-            em.persist(order);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.persist(order);
+        return true;
     }
 
     @Override
     public boolean updateOrder(Order order) {
-        try {
-            em.merge(order);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.merge(order);
+        return true;
     }
 
     @Override
     public boolean deleteOrder(int id) {
-        try {
-            Order order = em.find(Order.class, id);
-            if (order == null) return false;
-            em.remove(order);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        Order order = em.find(Order.class, id);
+        if (order == null) return false;
+        em.remove(order);
+        return true;
     }
 }

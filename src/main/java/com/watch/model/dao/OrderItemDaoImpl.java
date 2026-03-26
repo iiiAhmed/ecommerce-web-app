@@ -27,33 +27,21 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public boolean addOrderItem(OrderItem item) {
-        try {
-            em.persist(item);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.persist(item);
+        return true;
     }
 
     @Override
     public boolean updateOrderItem(OrderItem item) {
-        try {
-            em.merge(item);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        em.merge(item);
+        return true;
     }
 
     @Override
     public boolean deleteOrderItem(int id) {
-        try {
-            OrderItem item = em.find(OrderItem.class, id);
-            if (item == null) return false;
-            em.remove(item);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        OrderItem item = em.find(OrderItem.class, id);
+        if (item == null) return false;
+        em.remove(item);
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import com.watch.model.dao.*;
 import com.watch.model.dto.CartItemDTO;
 import com.watch.model.entities.*;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,14 +15,14 @@ public class CartService {
 
     private final EntityManager em;
     private final CartItemDao cartItemDao;
-
-    private final UserDao userDao;
     private final ProductDao productDao;
+    private final OrderDao orderDao;
+
     public CartService(EntityManager em) {
         this.em = em;
         this.cartItemDao = new CartItemDaoImpl(em);
-        this.userDao = new UserDaoImpl(em);
         this.productDao = new ProductDaoImpl(em);
+        this.orderDao = new OrderDaoImpl(em);
     }
 
     public void updateCartSession(Map<Integer, Integer> sessionCart, int productId, int delta) {
@@ -94,7 +95,8 @@ public class CartService {
     }
 
     public void checkout(int userId, Map<Integer, Integer> cart) {
-        User user = userDao.getUserById(userId);
+        // locking user for preventing multiple checkout with same balance
+        User user = em.find(User.class, userId, LockModeType.PESSIMISTIC_WRITE);
         if (user == null)
             throw new IllegalStateException("User not found.");
 
@@ -125,21 +127,15 @@ public class CartService {
             product.setQuantity(product.getQuantity() - cartQty);
             OrderItem orderItem = new OrderItem(cartQty, product, order);
             orderItems.add(orderItem);
-
         }
-        System.out.println(user.getCreditLimit());
-        System.out.println(total);
+
         user.setCreditLimit(user.getCreditLimit() - total);
-        System.out.println(user.getCreditLimit());
         order.setUser(user);
         order.setItems(orderItems);
         order.setTotalAmount(total);
         order.setOrderedAt(LocalDateTime.now());
 
-        OrderService orderService = new OrderService(em);
-        orderService.addOrder(order);
-
-
+        orderDao.addOrder(order);
 
         cart.clear();
     }
