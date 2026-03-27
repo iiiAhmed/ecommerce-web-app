@@ -74,6 +74,30 @@
 			from { opacity: 1; transform: translateX(0); }
 			to   { opacity: 0; transform: translateX(40px); }
 		}
+		.product-image {
+			width: 100%;
+			max-height: 400px;
+			object-fit: contain;
+			border-radius: 10px;
+			background: #f8f8f8;
+		}
+		.product-description-section {
+			border-top: 1px solid #eee;
+			margin-top: 40px;
+			padding-top: 30px;
+		}
+
+		.product-description-section h4 {
+			font-size: 20px;
+			font-weight: 600;
+		}
+
+		.product-description-section .stext-102 {
+			line-height: 1.8;
+			font-size: 14px;
+			color: #555;
+			max-width: 800px;
+		}
 	</style>
 </head>
 
@@ -112,7 +136,7 @@
 						<div class="wrap-pic-w pos-relative">
 							<c:choose>
 								<c:when test="${not empty product.imageUrl}">
-									<img src="${product.imageUrl}" alt="${product.name}" style="width: 100%; height: auto;">
+									<img src="${product.imageUrl}" alt="${product.name}" class="product-image">
 								</c:when>
 								<c:otherwise>
 									<img src="images/product-detail-01.jpg" alt="${product.name}" style="width: 100%; height: auto;">
@@ -132,16 +156,6 @@
 							$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/>
 						</span>
 
-						<p class="stext-102 cl3 p-t-23">
-							<c:choose>
-								<c:when test="${not empty product.description}">
-									${product.description}
-								</c:when>
-								<c:otherwise>
-									Premium quality ${product.brand} watch for ${product.gender}. Part of our ${product.category} collection.
-								</c:otherwise>
-							</c:choose>
-						</p>
 
 						<div class="p-t-23">
 							<p class="stext-102 cl3"><strong>Brand:</strong> ${product.brand}</p>
@@ -150,10 +164,10 @@
 							<p class="stext-102 cl3"><strong>Age:</strong> ${product.age}</p>
 							<c:choose>
 								<c:when test="${product.quantity > 0}">
-									<p class="stext-102 cl3"><strong>Stock:</strong> <span style="color: #28a745;">${product.quantity} available</span></p>
+									<p class="stext-102 cl3" style="color: #28a745;">In stock</p>
 								</c:when>
 								<c:otherwise>
-									<p class="stext-102 cl3"><strong>Stock:</strong> <span style="color: #dc3545;">Out of stock</span></p>
+									<p class="stext-102 cl3" style="color: #dc3545;">Out of stock</p>
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -163,31 +177,43 @@
 								<div class="flex-w flex-r-m p-b-10">
 									<div class="size-204 flex-w flex-m respon6-next">
 										<div class="wrap-num-product flex-w m-r-20 m-tb-10">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="changeQty(this, -1, '${product.productId}')">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
+											<c:set var="qtyInCart" value="${cartQuantities[product.productId]}"/>
 											<input class="mtext-104 cl3 txt-center num-product" type="number"
-												name="num-product" value="1" min="1" max="${product.quantity}">
+												name="num-product" value="${empty qtyInCart ? 0 : qtyInCart}" readonly>
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="changeQty(this, 1, '${product.productId}')">
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
-
-										<button
-											class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04"
-											data-product-id="${product.productId}"
-											data-product-name="${product.name}"
-											onclick="addToCart(${product.productId}, '${product.name}', ${product.price}, ${product.quantity})">
-											Add to cart
-										</button>
 									</div>
 								</div>
 							</c:if>
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="product-description-section p-t-50">
+
+				<h4 class="mtext-105 cl2 p-b-16">
+					Product Description
+				</h4>
+
+				<div class="stext-102 cl3">
+					<c:choose>
+						<c:when test="${not empty product.description}">
+							${product.description}
+						</c:when>
+						<c:otherwise>
+							Premium quality ${product.brand} watch for ${product.gender}.
+							Part of our ${product.category} collection.
+						</c:otherwise>
+					</c:choose>
+				</div>
+
 			</div>
 
 		</div>
@@ -205,59 +231,53 @@
 	<script>
 		$('body').append('<div id="toast-container"></div>');
 
-		function addToCart(productId, productName, price, maxQuantity) {
-			var quantity = parseInt($('.num-product').val());
+		function changeQty(btn, delta, productId) {
+			var numEl = btn.parentNode.querySelector('.num-product');
+			var currentVal = parseInt(numEl.value);
 
-			if (quantity <= 0 || quantity > maxQuantity) {
-				showToast('Invalid quantity', 'Please select a valid quantity', 'error');
-				return;
-			}
-
-			var $btn = $(event.target);
-			$btn.prop('disabled', true);
+			var buttons = btn.parentNode.querySelectorAll('div[class^="btn-num-product"]');
+			buttons.forEach(function(b) { b.style.pointerEvents = 'none'; });
 
 			$.ajax({
 				url: 'cart',
 				type: 'POST',
-				data: { productId: productId, delta: quantity },
+				data: { productId: productId, delta: delta },
 				success: function(response) {
 					if (response.status === 'success') {
+
+						let expectedQty = currentVal + delta;
+						let actualQty = response.updatedQty;
+
+						numEl.value = actualQty;
+
 						$('.icon-header-noti').attr('data-notify', response.totalCartItems);
 
-						if (response.updatedQty < quantity) {
+						var productName = document.querySelector('h4.mtext-105').textContent.trim();
+
+						if (actualQty === 0) {
+							showToast('Removed from cart', productName, 'remove');
+
+						} else if (actualQty < expectedQty) {
 							showToast('Stock limit reached', 'Adjusted to available quantity', 'error');
-						} else {
+
+						} else if (delta > 0) {
 							showToast('Added to cart', productName, 'success');
+
+						} else {
+							showToast('Cart updated', productName, 'success');
 						}
 					} else {
-						showToast('Error', response.message || 'Could not add to cart', 'error');
+						showToast('Error', response.message, 'error');
 					}
 				},
 				error: function() {
 					showToast('Error', 'Could not connect to server', 'error');
 				},
 				complete: function() {
-					$btn.prop('disabled', false);
+					buttons.forEach(function(b) { b.style.pointerEvents = 'auto'; });
 				}
 			});
 		}
-
-		$('.btn-num-product-down').on('click', function() {
-			var input = $('.num-product');
-			var currentValue = parseInt(input.val());
-			if (currentValue > 1) {
-				input.val(currentValue - 1);
-			}
-		});
-
-		$('.btn-num-product-up').on('click', function() {
-			var input = $('.num-product');
-			var currentValue = parseInt(input.val());
-			var maxValue = parseInt(input.attr('max'));
-			if (currentValue < maxValue) {
-				input.val(currentValue + 1);
-			}
-		});
 
 		function showToast(title, message, type) {
 			var icons = {
