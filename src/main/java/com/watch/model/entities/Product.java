@@ -6,6 +6,10 @@ import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -31,8 +35,17 @@ public class Product {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "image_url", length = 100)
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @OrderColumn(name = "image_order")
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false, length = 10)
@@ -47,6 +60,17 @@ public class Product {
     private Category category;
 
     public Product() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public int getProductId() {
@@ -96,15 +120,45 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
+    /// TODO: backward compatible getter
     public String getImageUrl() {
-        return imageUrl;
+        return (images != null && !images.isEmpty()) ? images.get(0) : null;
     }
-
+    /// TODO: delete later
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        if (images == null) {
+            images = new ArrayList<>();
+        }
+        if (images.isEmpty()) {
+            images.add(imageUrl);
+        } else {
+            String oldFirst = images.set(0, imageUrl);
+            images.add(oldFirst);
+        }
+    }
+    public List<String> getImages() {
+        return images;
     }
 
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
     public Gender getGender() {
         return gender;
     }
