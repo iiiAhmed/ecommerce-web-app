@@ -99,68 +99,161 @@
 			to   { opacity: 0; transform: translateX(40px); }
 		}
 
-		/* Filter */
+		/* Filter Sidebar */
 
 		.filter-card {
 			background: #fff;
-			border-radius: 12px;
-			padding: 20px;
-			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+			border-radius: 14px;
+			padding: 24px 22px;
+			box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+			border: 1px solid #f0f0f0;
 		}
 
 		.filter-title {
-			font-size: 16px;
-			font-weight: 600;
-			margin-bottom: 12px;
-			color: #333;
+			font-size: 13px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			margin-bottom: 14px;
+			color: #222;
+			position: relative;
+			padding-bottom: 8px;
+		}
+
+		.filter-title::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 28px;
+			height: 2px;
+			background: #111;
+			border-radius: 2px;
 		}
 
 		.filter-group {
-			margin-bottom: 20px;
+			margin-bottom: 6px;
 		}
 
 		.filter-item {
 			display: flex;
 			align-items: center;
-			gap: 8px;
-			margin-bottom: 8px;
+			gap: 10px;
+			margin-bottom: 2px;
 			cursor: pointer;
-			font-size: 14px;
-			color: #555;
-		}
-
-		.filter-item input {
-			accent-color: #111;
-			cursor: pointer;
+			font-size: 13.5px;
+			color: #666;
+			padding: 6px 8px;
+			border-radius: 6px;
+			transition: all 0.2s ease;
 		}
 
 		.filter-item:hover {
-			color: #000;
+			background: #f8f8f8;
+			color: #111;
+		}
+
+		.filter-item input[type="checkbox"],
+		.filter-item input[type="radio"] {
+			width: 16px;
+			height: 16px;
+			accent-color: #111;
+			cursor: pointer;
+			flex-shrink: 0;
 		}
 
 		.filter-divider {
 			height: 1px;
-			background: #eee;
-			margin: 15px 0;
+			background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+			margin: 16px 0;
 		}
 
 		.filter-price input {
-			margin-bottom: 8px;
+			margin-bottom: 10px;
+			border: 1px solid #e0e0e0;
+			border-radius: 8px;
+			padding: 9px 12px;
+			font-size: 13px;
+			transition: border-color 0.2s ease;
+		}
+
+		.filter-price input:focus {
+			border-color: #111;
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
 		}
 
 		.filter-btn {
 			background: #111;
 			color: #fff;
-			border-radius: 6px;
-			padding: 10px;
+			border-radius: 8px;
+			padding: 11px;
 			width: 100%;
 			border: none;
-			transition: 0.3s;
+			font-size: 13px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			cursor: pointer;
+			transition: all 0.25s ease;
 		}
 
 		.filter-btn:hover {
 			background: #333;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 		}
+
+		.filter-btn:active {
+			transform: translateY(0);
+		}
+
+
+		.sort-bar-label span {
+			color: #222;
+			font-weight: 700;
+		}
+
+		.sort-bar-select {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
+
+		.sort-bar-select label {
+			font-size: 13px;
+			font-weight: 600;
+			color: #444;
+		}
+
+		.sort-bar-select select {
+			appearance: none;
+			-webkit-appearance: none;
+
+			background: #f7f7f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center;
+
+			border: 1px solid #e0e0e0;
+			border-radius: 6px;
+
+			padding: 6px 30px 6px 10px;
+			font-size: 13px;
+
+			cursor: pointer;
+			width: auto;
+			max-width: 100%;
+		}
+
+		.sort-bar-select select:hover {
+			border-color: #bbb;
+		}
+
+		.sort-bar-select select:focus {
+			outline: none;
+			border-color: #111;
+			box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+		}
+
 		.block2-pic {
 			width: 100%;
 			height: 280px;
@@ -284,6 +377,36 @@
 			</div>
 			<div class="col-md-9">
 
+			<!-- SORT BAR -->
+
+				<div class="sort-bar-select">
+					<label>Sort by:</label>
+					<form id="sortForm" method="get" action="shop" style="margin:0;">
+						<c:forEach var="c" items="${paramValues.category}">
+							<input type="hidden" name="category" value="${c}">
+						</c:forEach>
+						<c:forEach var="b" items="${paramValues.brand}">
+							<input type="hidden" name="brand" value="${b}">
+						</c:forEach>
+						<c:if test="${param.gender != null}">
+							<input type="hidden" name="gender" value="${param.gender}">
+						</c:if>
+						<c:if test="${param.minPrice != null}">
+							<input type="hidden" name="minPrice" value="${param.minPrice}">
+						</c:if>
+						<c:if test="${param.maxPrice != null}">
+							<input type="hidden" name="maxPrice" value="${param.maxPrice}">
+						</c:if>
+
+						<select name="sortBy" id="sortBySelect" onchange="document.getElementById('sortForm').submit();">
+							<option value="newest" ${param.sortBy == 'newest' || empty param.sortBy ? 'selected' : ''}>Default (Newest)</option>
+							<option value="price_asc" ${param.sortBy == 'price_asc' ? 'selected' : ''}>Price: Low to High</option>
+							<option value="price_desc" ${param.sortBy == 'price_desc' ? 'selected' : ''}>Price: High to Low</option>
+							<option value="best_sellers" ${param.sortBy == 'best_sellers' ? 'selected' : ''}>Best Sellers</option>
+						</select>
+					</form>
+				</div>
+
 		<div class="row isotope-grid">
 			<c:choose>
 				<c:when test="${not empty products}">
@@ -375,6 +498,10 @@
 
 				<c:if test="${param.maxPrice != null}">
 					<c:set var="queryParams" value="${queryParams}&maxPrice=${param.maxPrice}" />
+				</c:if>
+
+				<c:if test="${param.sortBy != null}">
+					<c:set var="queryParams" value="${queryParams}&sortBy=${param.sortBy}" />
 				</c:if>
 				<div class="flex-c-m flex-w w-full p-t-45">
 
