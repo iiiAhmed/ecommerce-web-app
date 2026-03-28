@@ -1,5 +1,6 @@
 package com.watch.model.dao;
 
+import com.watch.model.entities.OrderItem;
 import com.watch.model.entities.Product;
 import com.watch.model.enums.Age;
 import com.watch.model.enums.Brand;
@@ -7,10 +8,7 @@ import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,7 +101,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice,int page, int size) {
+    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice, int page, int size, String sortBy) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -118,7 +116,6 @@ public class ProductDaoImpl implements ProductDao {
 
         if (brands != null && brands.length > 0) {
             List<Brand> brandEnums = Arrays.stream(brands).map(Brand::valueOf).toList();
-
             predicates.add(p.get("brand").in(brandEnums));
         }
 
@@ -140,8 +137,31 @@ public class ProductDaoImpl implements ProductDao {
 
         cq.where(predicates.toArray(new Predicate[0]));
 
-        cq.orderBy(cb.asc(p.get("price")));
-        return em.createQuery(cq).setFirstResult((page-1)*size).setMaxResults(size).getResultList();
+        // sorting
+        if (sortBy == null) sortBy = "newest";
+
+        switch (sortBy) {
+            case "price_asc":
+                cq.orderBy(cb.asc(p.get("price")));
+                break;
+            case "price_desc":
+                cq.orderBy(cb.desc(p.get("price")));
+                break;
+            case "best_sellers":
+                // Subquery: SUM of OrderItem quantities per product
+                Subquery<Long> sq = cq.subquery(Long.class);
+                Root<OrderItem> oi = sq.from(OrderItem.class);
+                sq.select(cb.coalesce(cb.sum(oi.get("quantity")), 0L));
+                sq.where(cb.equal(oi.get("product"), p));
+                cq.orderBy(cb.desc(sq), cb.desc(p.get("createdAt")));
+                break;
+            case "newest":
+            default:
+                cq.orderBy(cb.desc(p.get("createdAt")));
+                break;
+        }
+
+        return em.createQuery(cq).setFirstResult((page - 1) * size).setMaxResults(size).getResultList();
     }
     @Override
     public long countProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice) {
