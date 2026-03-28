@@ -25,6 +25,7 @@ public class ProductServlet extends HttpServlet {
         String[] categories = req.getParameterValues("category");
         String[] brands = req.getParameterValues("brand");
         String gender = req.getParameter("gender");
+        String sortBy = req.getParameter("sortBy");
 
         Double minPrice = null;
         Double maxPrice = null;
@@ -56,7 +57,7 @@ public class ProductServlet extends HttpServlet {
             page = 1;
         }
 
-        List<Product> products = productService.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size);
+        List<Product> products = productService.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size, sortBy);
         long totalProducts = productService.countProducts(categories, brands, gender, minPrice, maxPrice);
 
         int totalPages = (int) Math.ceil((double) totalProducts / size);
@@ -83,6 +84,7 @@ public class ProductServlet extends HttpServlet {
         req.setAttribute("selectedGender", gender);
         req.setAttribute("selectedMinPrice", minPrice);
         req.setAttribute("selectedMaxPrice", maxPrice);
+        req.setAttribute("selectedSort", sortBy);
 
         req.setAttribute("currentPage", page);
         req.setAttribute("totalPages", totalPages);

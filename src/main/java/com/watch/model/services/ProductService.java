@@ -60,8 +60,8 @@ public class ProductService {
         return productDao.deleteProduct(id);
     }
 
-    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice,int page, int size) {
-        return productDao.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size);
+    public List<Product> filterProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice, int page, int size, String sortBy) {
+        return productDao.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size, sortBy);
     }
     public long countProducts(String[] categories, String[] brands, String gender, Double minPrice, Double maxPrice) {
         return productDao.countProducts(categories, brands, gender, minPrice, maxPrice);
