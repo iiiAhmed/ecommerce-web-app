@@ -37,8 +37,9 @@ public class Product {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @OrderColumn(name = "image_order")
     @Column(name = "image_url")
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
