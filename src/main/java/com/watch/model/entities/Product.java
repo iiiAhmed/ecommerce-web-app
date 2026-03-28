@@ -7,6 +7,7 @@ import com.watch.model.enums.Gender;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -118,13 +119,21 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    /// TODO
+    /// TODO: backward compatible getter
     public String getImageUrl() {
-        return images.getFirst();
+        return (images != null && !images.isEmpty()) ? images.get(0) : null;
     }
-    ///  TODO delete later
+    /// TODO: delete later
     public void setImageUrl(String imageUrl) {
-        images.addFirst(imageUrl);
+        if (images == null) {
+            images = new ArrayList<>();
+        }
+        if (images.isEmpty()) {
+            images.add(imageUrl);
+        } else {
+            String oldFirst = images.set(0, imageUrl);
+            images.add(oldFirst);
+        }
     }
     public List<String> getImages() {
         return images;
