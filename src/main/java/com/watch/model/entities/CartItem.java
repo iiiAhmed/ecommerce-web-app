@@ -3,6 +3,8 @@ package com.watch.model.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "cart_items", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "product_id"}))
@@ -24,7 +26,24 @@ public class CartItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     public CartItem() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public CartItem(User user, Product product, int quantity) {
@@ -63,5 +82,21 @@ public class CartItem {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

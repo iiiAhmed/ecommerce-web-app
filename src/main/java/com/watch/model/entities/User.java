@@ -4,6 +4,7 @@ import com.watch.model.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -45,6 +46,12 @@ public class User {
     @Column(name = "role", nullable = false, length = 10)
     private Role role;
 
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
@@ -52,6 +59,17 @@ public class User {
     private List<CartItem> cartItems;
 
     public User() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public int getUserId() {
@@ -140,6 +158,22 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<Order> getOrders() {
