@@ -43,10 +43,12 @@ public class UpdateProfileServlet extends HttpServlet {
         String phone       = req.getParameter("phone");
         String[] interestsArr = req.getParameterValues("interests");
         String newCreditStr   = req.getParameter("newCredit");
+        String currentPassword = req.getParameter("currentPassword");
 
         // ── Determine which form was submitted ────────────────────────────────
-        boolean isProfileForm = (name != null); // profile details form sends 'name'
-        boolean isCreditForm  = !isProfileForm && (newCreditStr != null && !newCreditStr.trim().isEmpty());
+        boolean isProfileForm  = (name != null);
+        boolean isCreditForm   = !isProfileForm && (newCreditStr != null && !newCreditStr.trim().isEmpty());
+        boolean isPasswordForm = !isProfileForm && !isCreditForm && (currentPassword != null);
 
         if (isProfileForm) {
             // ── Server-side validation for profile details ──────────────────────
@@ -121,6 +123,41 @@ public class UpdateProfileServlet extends HttpServlet {
                 forwardWithError(req, resp, user, "Invalid credit limit value.");
                 return;
             }
+
+        } else if (isPasswordForm) {
+            // ── Password change ─────────────────────────────────────────────────
+            String newPassword = req.getParameter("newPassword");
+            String confirmNewPassword = req.getParameter("confirmNewPassword");
+
+            // Verify current password
+            if (!userService.verifyPassword(userDto.getId(), currentPassword)) {
+                forwardWithError(req, resp, user, "Current password is incorrect.");
+                return;
+            }
+
+            // New password validation
+            if (newPassword == null || newPassword.length() < 6) {
+                forwardWithError(req, resp, user, "New password must be at least 6 characters.");
+                return;
+            }
+
+            if (!newPassword.equals(confirmNewPassword)) {
+                forwardWithError(req, resp, user, "New passwords do not match.");
+                return;
+            }
+
+            if (newPassword.equals(currentPassword)) {
+                forwardWithError(req, resp, user, "New password must be different from current password.");
+                return;
+            }
+
+            // Update password
+            userService.changePassword(userDto.getId(), newPassword);
+
+            session.setAttribute("flashSuccess", "Password updated successfully!");
+            resp.sendRedirect("profile");
+            return;
+
         } else {
             // Nothing meaningful submitted
             resp.sendRedirect("profile");
