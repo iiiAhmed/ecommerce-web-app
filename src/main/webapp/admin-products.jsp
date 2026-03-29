@@ -35,6 +35,9 @@
                             <ul class="main-menu">
                                 <li class="active-menu"><a href="admin-product">Manage Products</a></li>
                                 <li><a href="admin-customer">Review Customers</a></li>
+                                <c:if test="${sessionScope.userDto.role == 'SUPER_ADMIN'}">
+                                    <li><a href="admin-user">Manage Admins</a></li>
+                                </c:if>
                                 <li><a href="index.jsp" target="_blank">View Store</a></li>
                             </ul>
                         </div>

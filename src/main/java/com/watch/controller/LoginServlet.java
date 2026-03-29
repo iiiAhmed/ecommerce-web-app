@@ -37,13 +37,13 @@ public class LoginServlet extends HttpServlet {
 
         if (user != null) {
             HttpSession session = req.getSession();
-            com.watch.model.dto.UserDto userDto = new com.watch.model.dto.UserDto(user.getUserId(), user.getName(), user.getRole());
+            com.watch.model.dto.UserDto userDto = new com.watch.model.dto.UserDto(user.getUserId(), user.getName(), user.getRole(), user.isMustChangePassword());
             session.setAttribute("userDto", userDto);
 
 
 
             // Role-based redirect
-            if (user.getRole() == Role.ADMIN) {
+            if (user.getRole() == Role.ADMIN || user.getRole() == Role.SUPER_ADMIN) {
                 resp.sendRedirect("admin-product");
             } else {
                 CartService cartService = new CartService((EntityManager) req.getAttribute("em"));

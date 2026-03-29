@@ -126,6 +126,65 @@
             margin-bottom: 16px;
             font-size: 13px;
         }
+
+        /* ── Password Change Section ──────────────────────────────────── */
+        .pw-section-icon {
+            color: #717fe0;
+            font-size: 18px;
+            margin-right: 8px;
+        }
+        .pw-field-wrap {
+            position: relative;
+        }
+        .pw-field-wrap .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            font-size: 14px;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .pw-field-wrap .toggle-pw:hover { color: #717fe0; }
+        .strength-bar-wrap {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        .strength-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .pw-checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+        .pw-checklist li {
+            font-size: 13px;
+            padding: 3px 0;
+            color: #999;
+            transition: color 0.2s ease;
+        }
+        .pw-checklist li.pass { color: #27ae60; }
+        .pw-checklist li .icon {
+            display: inline-block;
+            width: 18px;
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -152,6 +211,7 @@
                         <ul>
                             <li class="p-b-10"><a href="profile" class="stext-107 cl2 hov-cl1 trans-04"
                                     style="font-weight: bold; color: #717fe0;">Profile Data</a></li>
+                            <li class="p-b-10"><a href="#change-password" class="stext-107 cl2 hov-cl1 trans-04">Change Password</a></li>
                             <li class="p-b-10"><a href="#order-history" class="stext-107 cl2 hov-cl1 trans-04">Order History</a></li>
                             <li class="p-b-10"><a href="shopping-cart.jsp" class="stext-107 cl2 hov-cl1 trans-04">My Cart</a></li>
                             <li class="p-t-20"><a href="#" onclick="logout(); return false;"
@@ -307,6 +367,78 @@
 
                         <hr class="m-tb-40">
 
+                        <%-- ── Change Password Section ──────────────────────────────── --%>
+                        <div id="change-password">
+                            <form id="passwordForm" method="POST" action="update-profile" onsubmit="return validatePasswordForm()">
+                                <h4 class="mtext-105 cl2 p-b-20">
+                                    <i class="fa fa-lock pw-section-icon"></i> Change Password
+                                </h4>
+
+                                <div id="js-pw-error" class="js-error-banner"></div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 p-b-16">
+                                        <p class="field-label">Current Password <span class="text-danger">*</span></p>
+                                        <div class="bor8 pw-field-wrap">
+                                            <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-45"
+                                                   type="password" name="currentPassword" id="currentPassword"
+                                                   placeholder="Enter your current password" required>
+                                            <button type="button" class="toggle-pw" onclick="togglePwVis('currentPassword', this)">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 p-b-16">
+                                        <p class="field-label">New Password <span class="text-danger">*</span></p>
+                                        <div class="bor8 pw-field-wrap">
+                                            <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-45"
+                                                   type="password" name="newPassword" id="profileNewPw"
+                                                   placeholder="Min 6 characters" required>
+                                            <button type="button" class="toggle-pw" onclick="togglePwVis('profileNewPw', this)">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 p-b-16">
+                                        <p class="field-label">Confirm New Password <span class="text-danger">*</span></p>
+                                        <div class="bor8 pw-field-wrap">
+                                            <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-45"
+                                                   type="password" name="confirmNewPassword" id="profileConfirmPw"
+                                                   placeholder="Repeat new password" required>
+                                            <button type="button" class="toggle-pw" onclick="togglePwVis('profileConfirmPw', this)">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Strength meter -->
+                                <div class="strength-bar-wrap">
+                                    <div class="strength-bar" id="profileStrengthBar"></div>
+                                </div>
+                                <span class="strength-label" id="profileStrengthLabel" style="color: #999;">Password Strength</span>
+
+                                <!-- Checklist -->
+                                <ul class="pw-checklist" id="profileChecklist">
+                                    <li id="pck-len"><span class="icon">&#10005;</span> At least 6 characters</li>
+                                    <li id="pck-upper"><span class="icon">&#10005;</span> Contains uppercase letter</li>
+                                    <li id="pck-num"><span class="icon">&#10005;</span> Contains a number</li>
+                                    <li id="pck-match"><span class="icon">&#10005;</span> Passwords match</li>
+                                </ul>
+
+                                <button type="submit" id="pwSubmitBtn"
+                                    class="flex-c-m stext-101 cl0 size-112 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer"
+                                    disabled style="opacity: 0.5; cursor: not-allowed; max-width: 220px;">
+                                    Update Password
+                                </button>
+                            </form>
+                        </div>
+
+                        <hr class="m-tb-40">
+
                         <%-- ── Order History ────────────────────────────────────────── --%>
                         <div id="order-history">
                             <h4 class="mtext-105 cl2 p-b-20">Order History</h4>
@@ -426,6 +558,132 @@
             banner.textContent = '⚠ ' + message;
             banner.style.display = 'block';
             banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ── Password toggle visibility ────────────────────────────────────────
+        function togglePwVis(fieldId, btn) {
+            var f = document.getElementById(fieldId);
+            var icon = btn.querySelector('i');
+            if (f.type === 'password') {
+                f.type = 'text';
+                icon.className = 'fa fa-eye-slash';
+            } else {
+                f.type = 'password';
+                icon.className = 'fa fa-eye';
+            }
+        }
+
+        // ── Password strength + checklist ─────────────────────────────────────
+        (function () {
+            var newPw = document.getElementById('profileNewPw');
+            var confirmPw = document.getElementById('profileConfirmPw');
+            var currentPw = document.getElementById('currentPassword');
+            var submitBtn = document.getElementById('pwSubmitBtn');
+
+            if (!newPw || !confirmPw || !currentPw) return;
+
+            newPw.addEventListener('input', evalPw);
+            confirmPw.addEventListener('input', evalPw);
+            currentPw.addEventListener('input', evalPw);
+
+            function evalPw() {
+                var pw = newPw.value;
+                var cpw = confirmPw.value;
+                var curPw = currentPw.value;
+
+                var hasLen = pw.length >= 6;
+                var hasUpper = /[A-Z]/.test(pw);
+                var hasNum = /[0-9]/.test(pw);
+                var doesMatch = pw.length > 0 && pw === cpw;
+
+                updatePwCheck('pck-len', hasLen);
+                updatePwCheck('pck-upper', hasUpper);
+                updatePwCheck('pck-num', hasNum);
+                updatePwCheck('pck-match', doesMatch);
+
+                // Strength bar
+                var score = 0;
+                if (pw.length >= 6) score++;
+                if (pw.length >= 10) score++;
+                if (hasUpper) score++;
+                if (hasNum) score++;
+                if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+                var bar = document.getElementById('profileStrengthBar');
+                var label = document.getElementById('profileStrengthLabel');
+
+                if (pw.length === 0) {
+                    bar.style.width = '0%';
+                    bar.style.backgroundColor = '#eee';
+                    label.textContent = 'Password Strength';
+                    label.style.color = '#999';
+                } else if (score <= 2) {
+                    bar.style.width = '33%';
+                    bar.style.backgroundColor = '#e74c3c';
+                    label.textContent = 'Weak';
+                    label.style.color = '#e74c3c';
+                } else if (score <= 3) {
+                    bar.style.width = '66%';
+                    bar.style.backgroundColor = '#f39c12';
+                    label.textContent = 'Medium';
+                    label.style.color = '#f39c12';
+                } else {
+                    bar.style.width = '100%';
+                    bar.style.backgroundColor = '#27ae60';
+                    label.textContent = 'Strong';
+                    label.style.color = '#27ae60';
+                }
+
+                // Enable/disable submit
+                if (hasLen && doesMatch && curPw.length > 0) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                }
+            }
+
+            function updatePwCheck(id, pass) {
+                var el = document.getElementById(id);
+                if (pass) {
+                    el.classList.add('pass');
+                    el.querySelector('.icon').innerHTML = '&#10003;';
+                } else {
+                    el.classList.remove('pass');
+                    el.querySelector('.icon').innerHTML = '&#10005;';
+                }
+            }
+        })();
+
+        // ── Client-side validation for password form ────────────────────────────
+        function validatePasswordForm() {
+            var errorBanner = document.getElementById('js-pw-error');
+            errorBanner.style.display = 'none';
+
+            var curPw = document.getElementById('currentPassword').value;
+            var newPw = document.getElementById('profileNewPw').value;
+            var confirmPw = document.getElementById('profileConfirmPw').value;
+
+            if (!curPw) {
+                showError(errorBanner, 'Current password is required.');
+                return false;
+            }
+            if (newPw.length < 6) {
+                showError(errorBanner, 'New password must be at least 6 characters.');
+                return false;
+            }
+            if (newPw !== confirmPw) {
+                showError(errorBanner, 'New passwords do not match.');
+                return false;
+            }
+            if (newPw === curPw) {
+                showError(errorBanner, 'New password must be different from current password.');
+                return false;
+            }
+            return true;
         }
 
         // ── Logout confirmation ────────────────────────────────────────────────
