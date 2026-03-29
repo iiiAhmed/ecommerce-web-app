@@ -6,11 +6,13 @@ public class UserDto {
     private int id;
     private String name;
     private Role role;
+    private boolean mustChangePassword;
 
-    public UserDto(int id, String name, Role role) {
+    public UserDto(int id, String name, Role role, boolean mustChangePassword) {
         this.id = id;
         this.name = name;
         this.role = role;
+        this.mustChangePassword = mustChangePassword;
     }
 
     public int getId() {
@@ -35,5 +37,13 @@ public class UserDto {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 }

@@ -1,6 +1,7 @@
 package com.watch.model.dao;
 
 import com.watch.model.entities.User;
+import com.watch.model.enums.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
@@ -29,6 +30,18 @@ public class UserDaoImpl implements UserDao {
         try {
             return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
                     .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public User findByRole(Role role) {
+        try {
+            return em.createQuery("SELECT u FROM User u WHERE u.role = :role", User.class)
+                    .setParameter("role", role)
+                    .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
