@@ -10,7 +10,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = { "/admin-products.jsp", "/admin-customers.jsp", "/admin-product", "/admin-customer" })
+@WebFilter(urlPatterns = {"/admin-products.jsp", "/admin-customers.jsp", "/admin-product", "/admin-customer",
+        "/admin-users.jsp", "/admin-user"})
 public class AdminFilter implements Filter {
 
     @Override
@@ -22,8 +23,8 @@ public class AdminFilter implements Filter {
 
         if (session != null && session.getAttribute("userDto") != null) {
             UserDto userDto = (UserDto) session.getAttribute("userDto");
-            if (userDto.getRole() == Role.ADMIN) {
-                // User is an admin, allow access
+            if (userDto.getRole() == Role.ADMIN || userDto.getRole() == Role.SUPER_ADMIN) {
+                // User is an admin or super admin, allow access
                 chain.doFilter(request, response);
                 return;
             }
