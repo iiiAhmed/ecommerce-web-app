@@ -5,67 +5,8 @@
 <head>
 	<title>Sign Up - Sync Store</title>
 	<jsp:include page="includes/head.jsp" />
-	<style>
-		/* ── Interests Checkbox Grid ───────────────────────────────────── */
-        .interests-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 12px 0 4px;
-        }
-        .interest-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 8px 18px;
-            border: 2px solid #e5e5e5;
-            border-radius: 30px;
-            background: #fafafa;
-            transition: all 0.25s ease;
-            font-size: 13px;
-            font-weight: 600;
-            color: #555;
-            user-select: none;
-        }
-        .interest-label input[type="checkbox"] {
-            display: none;
-        }
-        .interest-label .check-icon {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            transition: background 0.2s, border-color 0.2s;
-            font-size: 13px;
-            font-weight: 900;
-            color: transparent;
-            line-height: 1;
-        }
-        .interest-label input:checked ~ .check-icon {
-            background: #717fe0;
-            border-color: #717fe0;
-            color: #ffffff;
-        }
-        .interest-label input:checked ~ .check-icon::after {
-            content: '\2714';
-        }
-        .interest-label:has(input:checked) {
-            border-color: #717fe0;
-            background: #eef0ff;
-            color: #717fe0;
-        }
-        .interest-label:hover {
-            border-color: #717fe0;
-            background: #f0f2ff;
-            color: #717fe0;
-        }
-	</style>
+
+
 </head>
 
 <body class="animsition">
@@ -104,7 +45,7 @@
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="email" id="email"
 								name="email" placeholder="Email Address *" required>
 							<span id="emailFeedback" class="stext-115 cl1 p-l-20 p-t-5"
-								style="display:none; color: red;"></span>
+								class="feedback-hidden"></span>
 						</div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
@@ -134,16 +75,16 @@
 
 						<!-- Egyptian Phone Number -->
 						<div class="bor8 m-b-20 d-flex align-items-center">
-							<span class="stext-111 cl2 p-l-20 p-r-10" style="background-color: #f7f7f7; border-right: 1px solid #e6e6e6; height: 100%; display: flex; align-items: center;">
+							<span class="stext-111 cl2 p-l-20 p-r-10 phone-prefix">
 								+20
 							</span>
 							<input class="stext-111 cl2 plh3 size-116 p-l-10 p-r-30" type="tel" id="phone"
 								name="phone" placeholder="10 digits (e.g. 1012345678) *"
-								pattern="[0-9]{10}" maxlength="10" required style="border: none; outline: none; flex-grow: 1;">
+								pattern="[0-9]{10}" maxlength="10" required class="phone-input-bare">
 						</div>
 						<div class="m-b-20">
 							<span id="phoneFeedback" class="stext-115 p-l-20 p-t-5"
-								style="display:none; color: red; font-size:12px;"></span>
+								class="feedback-hidden"></span>
 						</div>
 
 						<!-- Interests -->
@@ -186,7 +127,7 @@
 									<span>Diving</span>
 								</label>
 							</div>
-							<span id="interestsFeedback" class="stext-115 p-l-10" style="display:none; color:red;"></span>
+							<span id="interestsFeedback" class="stext-115 p-l-10 feedback-hidden"></span>
 						</div>
 
 						<button type="submit"
@@ -245,25 +186,94 @@
 		});
 
 		function validateSignUp(e) {
+			// Clear previous errors
+			$('.field-error').text('').hide();
+			$('.bor8').removeClass('is-invalid');
+
+			var valid = true;
+
+			// Name
 			var name = $('#name').val().trim();
-			if (!/^[A-Za-z\s]+$/.test(name)) { alert('Name must contain only letters and spaces.'); e.preventDefault(); return false; }
+			if (!/^[A-Za-z\s]+$/.test(name)) {
+				showFieldError('#name', 'Name must contain only letters and spaces.');
+				valid = false;
+			}
+
+			// Email
 			var email = $('#email').val().trim();
-			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); e.preventDefault(); return false; }
+			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+				showFieldError('#email', 'Please enter a valid email address.');
+				valid = false;
+			}
 			var emailFeedback = $('#emailFeedback').text();
-			if (emailFeedback === 'This email is already registered.') { alert('Please use a different email address.'); e.preventDefault(); return false; }
+			if (emailFeedback === 'This email is already registered.') {
+				showFieldError('#email', 'This email is already taken. Please use a different one.');
+				valid = false;
+			}
+
+			// Password
 			var password = $('#password').val();
-			if (password.length < 6) { alert('Password must be at least 6 characters.'); e.preventDefault(); return false; }
+			if (password.length < 6) {
+				showFieldError('#password', 'Password must be at least 6 characters.');
+				valid = false;
+			}
+
+			// Birthday
 			var birthday = $('#birthday').val();
-			if (!birthday) { alert('Please enter your birthday.'); e.preventDefault(); return false; }
-			if (new Date(birthday) >= new Date()) { alert('Birthday must be a date in the past.'); e.preventDefault(); return false; }
+			if (!birthday) {
+				showFieldError('#birthday', 'Please enter your birthday.');
+				valid = false;
+			} else if (new Date(birthday) >= new Date()) {
+				showFieldError('#birthday', 'Birthday must be a date in the past.');
+				valid = false;
+			}
+
+			// Credit Limit
 			var creditLimit = parseFloat($('#credit_limit').val());
-			if (isNaN(creditLimit) || creditLimit < 100) { alert('Credit limit must be at least $100.'); e.preventDefault(); return false; }
+			if (isNaN(creditLimit) || creditLimit < 100) {
+				showFieldError('#credit_limit', 'Credit limit must be at least $100.');
+				valid = false;
+			}
+
+			// Interests
 			var checkedInterests = $('input[name="interests"]:checked');
-			if (checkedInterests.length === 0) { $('#interestsFeedback').text('Please select at least one interest.').show(); alert('Please select at least one interest.'); e.preventDefault(); return false; }
+			if (checkedInterests.length === 0) {
+				$('#interestsFeedback').text('Please select at least one interest.').show();
+				valid = false;
+			}
+
+			// Phone
 			var phone = $('#phone').val().trim();
-			var phoneFeedback = $('#phoneFeedback');
-			if (!/^[0-9]{10}$/.test(phone)) { phoneFeedback.text('Phone must be exactly 10 digits (e.g. 1012345678)').show(); alert('Phone must be exactly 10 digits.'); e.preventDefault(); return false; } else { phoneFeedback.hide(); }
+			if (!/^[0-9]{10}$/.test(phone)) {
+				$('#phoneFeedback').text('Phone must be exactly 10 digits (e.g. 1012345678)').show();
+				valid = false;
+			} else {
+				$('#phoneFeedback').hide();
+			}
+
+			if (!valid) {
+				e.preventDefault();
+				// Scroll to first error
+				var firstError = $('.is-invalid, .field-error:visible').first();
+				if (firstError.length) {
+					$('html, body').animate({ scrollTop: firstError.offset().top - 120 }, 300);
+				}
+				return false;
+			}
 			return true;
+		}
+
+		function showFieldError(fieldSelector, message) {
+			var field = $(fieldSelector);
+			field.closest('.bor8, .bor8.how-pos4-parent').addClass('is-invalid');
+			// Find or create error span after the field's parent
+			var parent = field.closest('.m-b-20, .m-b-30');
+			var errorSpan = parent.find('.field-error');
+			if (errorSpan.length === 0) {
+				errorSpan = $('<span class="field-error"></span>');
+				parent.append(errorSpan);
+			}
+			errorSpan.text(message).show();
 		}
 	</script>
 

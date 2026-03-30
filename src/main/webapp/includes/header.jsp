@@ -42,40 +42,59 @@
 
                 <!-- Icon header -->
                 <div class="wrap-icon-header flex-w flex-r-m">
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                        <i class="zmdi zmdi-search"></i>
-                    </div>
-
+                    <!-- Cart -->
                     <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
                         data-notify="${cartCount != null ? cartCount : 0}">
                         <i class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
-                    <a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-                        <i class="zmdi zmdi-account-circle"></i>
-                    </a>
-
+                    <!-- Theme Toggle -->
                     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                         <i class="zmdi zmdi-brightness-2"></i>
                     </button>
 
+                    <!-- Auth Section -->
                     <c:choose>
                         <c:when test="${not empty sessionScope.userDto}">
-                            <span class="stext-106 cl2 p-l-22 p-r-11">
-                                Welcome, ${sessionScope.userDto.name}
-                            </span>
-                            <c:if test="${sessionScope.userDto.role == 'ADMIN'}">
-                                <a href="admin-product"
-                                    class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">Admin Panel</a>
-                            </c:if>
-                            <a href="logout" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-                                Sign Out
-                            </a>
+                            <div class="user-dropdown-container p-l-22">
+                                <button class="icon-header-item cl2 hov-cl1 trans-04 flex-c-m user-dropdown-trigger">
+                                    <i class="zmdi zmdi-account-circle"></i>
+                                    <span class="m-l-5 fs-15">Account</span>
+                                    <i class="zmdi zmdi-caret-down fs-12 m-l-4"></i>
+                                </button>
+                                
+                                <div class="user-dropdown-menu">
+                                    <div class="dropdown-header">
+                                        Hi, ${sessionScope.userDto.name}
+                                    </div>
+                                    <a href="profile" class="dropdown-item">
+                                        <i class="zmdi zmdi-account"></i> My Profile
+                                    </a>
+                                    <a href="profile#order-history" class="dropdown-item">
+                                        <i class="zmdi zmdi-shopping-basket"></i> My Orders
+                                    </a>
+                                    <c:if test="${sessionScope.userDto.role.name() eq 'ADMIN' or sessionScope.userDto.role.name() eq 'SUPER_ADMIN'}">
+                                        <div class="dropdown-divider"></div>
+                                        <a href="admin-product" class="dropdown-item">
+                                            <i class="zmdi zmdi-settings"></i> Admin Panel
+                                        </a>
+                                    </c:if>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="logout" class="dropdown-item sign-out">
+                                        <i class="zmdi zmdi-run"></i> Sign Out
+                                    </a>
+                                </div>
+                            </div>
                         </c:when>
                         <c:otherwise>
-                            <a href="sign-in.jsp" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-                                Sign In
-                            </a>
+                            <div class="flex-w flex-c-m p-l-30 header-auth-group">
+                                <a href="sign-in.jsp" class="stext-106 cl2 hov-cl1 trans-04 p-r-15 header-signin-link">
+                                    Sign In
+                                </a>
+                                <a href="sign-up.jsp" class="header-signup-btn">
+                                    Sign Up
+                                </a>
+                            </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -92,19 +111,13 @@
 
         <!-- Icon header -->
         <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-            <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-                <i class="zmdi zmdi-search"></i>
-            </div>
-
+            <!-- Cart -->
             <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
                 data-notify="${cartCount != null ? cartCount : 0}">
                 <i class="zmdi zmdi-shopping-cart"></i>
             </div>
 
-            <a href="profile" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
-                <i class="zmdi zmdi-account-circle"></i>
-            </a>
-
+            <!-- Theme Toggle -->
             <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
                 <i class="zmdi zmdi-brightness-2"></i>
             </button>
@@ -127,32 +140,22 @@
             <li><a href="contact.jsp">Contact</a></li>
             <c:choose>
                 <c:when test="${not empty sessionScope.userDto}">
-                    <li><span class="stext-106 cl2" style="padding: 10px 20px;">Welcome, ${sessionScope.userDto.name}</span></li>
-                    <c:if test="${sessionScope.userDto.role == 'ADMIN'}">
+                    <li class="mobile-menu-divider"></li>
+                    <li><span class="stext-106 cl2 mobile-welcome-text"><i class="zmdi zmdi-account"></i> Hi, ${sessionScope.userDto.name}</span></li>
+                    <li><a href="profile">My Profile</a></li>
+                    <li><a href="profile#order-history">My Orders</a></li>
+                    <c:if test="${sessionScope.userDto.role.name() eq 'ADMIN' or sessionScope.userDto.role.name() eq 'SUPER_ADMIN'}">
                         <li><a href="admin-product">Admin Panel</a></li>
                     </c:if>
-                    <li><a href="logout">Sign Out</a></li>
+                    <li><a href="logout" class="mobile-sign-out">Sign Out</a></li>
                 </c:when>
                 <c:otherwise>
+                    <li class="mobile-menu-divider"></li>
                     <li><a href="sign-in.jsp">Sign In</a></li>
+                    <li><a href="sign-up.jsp" class="mobile-signup-link">Sign Up</a></li>
                 </c:otherwise>
             </c:choose>
         </ul>
     </div>
 
-    <!-- Modal Search -->
-    <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-        <div class="container-search-header">
-            <button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-                <img src="images/icons/icon-close2.png" alt="CLOSE">
-            </button>
-
-            <form class="wrap-search-header flex-w p-l-15">
-                <button class="flex-c-m trans-04">
-                    <i class="zmdi zmdi-search"></i>
-                </button>
-                <input class="plh3" type="text" name="search" placeholder="Search...">
-            </form>
-        </div>
-    </div>
 </header>

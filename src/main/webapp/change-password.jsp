@@ -5,103 +5,15 @@
 <head>
     <title>Set Your Password - Sync Store</title>
     <jsp:include page="includes/head.jsp" />
-    <style>
-        .pw-card {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .pw-warning {
-            background: #fff8e6;
-            border: 1px solid #f0d78c;
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: #856d0e;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .pw-warning i { font-size: 18px; }
-        .pw-error {
-            background: #fdf3f3;
-            border: 1px solid #f0b8b8;
-            color: #c0392b;
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-        .pw-field-wrap {
-            position: relative;
-            margin-bottom: 16px;
-        }
-        .pw-field-wrap .toggle-pw {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
-            font-size: 14px;
-            background: none;
-            border: none;
-            padding: 4px;
-        }
-        .pw-field-wrap .toggle-pw:hover { color: #717fe0; }
 
-        /* Strength meter */
-        .strength-bar-wrap {
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
-            margin-bottom: 6px;
-            overflow: hidden;
-        }
-        .strength-bar {
-            height: 100%;
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.3s ease, background-color 0.3s ease;
-        }
-        .strength-label {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 14px;
-            display: block;
-        }
 
-        /* Checklist */
-        .pw-checklist {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        .pw-checklist li {
-            font-size: 13px;
-            padding: 3px 0;
-            color: #999;
-            transition: color 0.2s ease;
-        }
-        .pw-checklist li.pass { color: #27ae60; }
-        .pw-checklist li .icon {
-            display: inline-block;
-            width: 18px;
-            font-weight: 700;
-        }
-
-        .field-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-    </style>
 </head>
 
 <body class="animsition">
+
+    <jsp:include page="includes/header.jsp">
+        <jsp:param name="activeMenu" value="" />
+    </jsp:include>
 
     <!-- Title page -->
     <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-01.jpg');">
@@ -141,7 +53,7 @@
                         <div class="strength-bar-wrap">
                             <div class="strength-bar" id="strengthBar"></div>
                         </div>
-                        <span class="strength-label" id="strengthLabel" style="color: #999;">Password Strength</span>
+                        <span class="strength-label" id="strengthLabel">Password Strength</span>
 
                         <!-- Checklist -->
                         <ul class="pw-checklist" id="checklist">
@@ -163,12 +75,12 @@
 
                         <button type="submit" id="submitBtn"
                             class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer"
-                            disabled style="opacity: 0.5; cursor: not-allowed;">
+                            disabled class="btn-disabled">
                             Set Password
                         </button>
 
                         <div class="p-t-20 txt-center">
-                            <a href="logout" class="stext-111 cl6 hov-cl1 trans-04" style="font-size: 13px;">
+                            <a href="logout" class="stext-111 cl6 hov-cl1 trans-04 link-small">
                                 <i class="fa fa-sign-out"></i> Sign out instead
                             </a>
                         </div>
@@ -178,6 +90,8 @@
             </div>
         </div>
     </section>
+
+    <jsp:include page="includes/footer.jsp" />
 
     <jsp:include page="includes/scripts.jsp" />
     <script>
