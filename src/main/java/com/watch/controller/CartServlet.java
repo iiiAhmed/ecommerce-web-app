@@ -34,8 +34,22 @@ public class CartServlet extends HttpServlet {
         }
         Map<String, Object> response = new HashMap<>();
 
-            int productId = Integer.parseInt(req.getParameter("productId"));
-            int delta = Integer.parseInt(req.getParameter("delta"));
+        try {
+
+
+            int productId;
+            int delta;
+
+            try {
+                productId = Integer.parseInt(req.getParameter("productId"));
+                delta = Integer.parseInt(req.getParameter("delta"));
+            } catch (Exception e) {
+                response.put("status", "error");
+                response.put("message", "Invalid format");
+                resp.getWriter().print(gson.toJson(response));
+                return;
+            }
+
 
             CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
             cartService.updateCartSession(cart, productId, delta);
@@ -45,8 +59,10 @@ public class CartServlet extends HttpServlet {
             response.put("status", "success");
             response.put("totalCartItems", cartService.getCartCountSession(cart));
             response.put("updatedQty", updatedQty);
-
-
+            } catch (Exception e) {
+                response.put("status", "error");
+                response.put("message", "An error occurred while updating cart");
+            }
 
             resp.getWriter().print(gson.toJson(response));
     }
