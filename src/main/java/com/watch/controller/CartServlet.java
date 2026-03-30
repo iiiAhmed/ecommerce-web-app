@@ -63,15 +63,24 @@ public class CartServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
-        CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
-        List<com.watch.model.dto.CartItemDTO> cartItems = cartService.buildCartDTOs(cart);
-        
-        double subtotal = cartItems.stream().mapToDouble(com.watch.model.dto.CartItemDTO::getTotalPrice).sum();
-
         Map<String, Object> response = new HashMap<>();
-        response.put("cartItems", cartItems);
-        response.put("cartTotal", subtotal);
-        response.put("totalCartItems", cartService.getCartCountSession(cart));
+
+        try {
+            CartService cartService = new CartService((EntityManager) req.getAttribute("em"));
+            List<com.watch.model.dto.CartItemDTO> cartItems = cartService.buildCartDTOs(cart);
+            
+            double subtotal = cartItems.stream().mapToDouble(com.watch.model.dto.CartItemDTO::getTotalPrice).sum();
+
+            response.put("cartItems", cartItems);
+            response.put("cartTotal", subtotal);
+            response.put("totalCartItems", cartService.getCartCountSession(cart));
+        } catch (Exception e) {
+            cart.clear();
+            session.setAttribute("cart", cart);
+            response.put("cartItems", new java.util.ArrayList<>());
+            response.put("cartTotal", 0.0);
+            response.put("totalCartItems", 0);
+        }
 
         resp.getWriter().print(gson.toJson(response));
     }

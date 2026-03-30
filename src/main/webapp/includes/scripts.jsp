@@ -133,8 +133,7 @@
 			},
 			error: function() {
 				$('#side-cart-loading').hide();
-				// Show a simple error message
-				$(`<li class="header-cart-item text-danger p-t-10">Failed to load cart.</li>`).insertBefore('#side-cart-loading');
+				$('#side-cart-empty-msg').show();
 			}
 		});
 	}
