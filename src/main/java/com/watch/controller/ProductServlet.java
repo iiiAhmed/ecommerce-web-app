@@ -34,33 +34,57 @@ public class ProductServlet extends HttpServlet {
             String min = req.getParameter("minPrice");
             String max = req.getParameter("maxPrice");
 
-            if (min != null && !min.isEmpty()) {
-                minPrice = Double.parseDouble(min);
+            if (min != null && !min.trim().isEmpty()) {
+                double parsedMin = Double.parseDouble(min.trim());
+                if (parsedMin < 0) {
+                    throw new IllegalArgumentException("Price cannot be negative");
+                }
+                if (parsedMin > 1000000) {
+                    throw new IllegalArgumentException("Price exceeds maximum limit");
+                }
+
+                minPrice = parsedMin;
             }
 
-            if (max != null && !max.isEmpty()) {
-                maxPrice = Double.parseDouble(max);
+            if (max != null && !max.trim().isEmpty()) {
+                double parsedMax = Double.parseDouble(max.trim());
+                if (parsedMax < 0) {
+                    throw new IllegalArgumentException("Price cannot be negative");
+                }
+                if (parsedMax > 1000000) {
+                    throw new IllegalArgumentException("Price exceeds maximum limit");
+                }
+
+                maxPrice = parsedMax;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            minPrice = null;
+            maxPrice = null;
         }
 
         int page = 1;
         int size = 12;
+        long totalProducts = productService.countProducts(categories, brands, gender, minPrice, maxPrice);
+        int totalPages = (int) Math.ceil((double) totalProducts / size);
 
         try {
             if (req.getParameter("page") != null) {
-                page = Integer.parseInt(req.getParameter("page"));
+                int parsedPage = Integer.parseInt(req.getParameter("page").trim());
+                if (parsedPage <= 0 ) {
+                    page = 1;
+                } else if(parsedPage > totalPages)
+                    page = totalPages;
+                else {
+                    page = parsedPage;
+                }
             }
         } catch (Exception e) {
             page = 1;
         }
 
         List<Product> products = productService.filterProducts(categories, brands, gender, minPrice, maxPrice, page, size, sortBy);
-        long totalProducts = productService.countProducts(categories, brands, gender, minPrice, maxPrice);
 
-        int totalPages = (int) Math.ceil((double) totalProducts / size);
 
         HttpSession session = req.getSession();
         Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");

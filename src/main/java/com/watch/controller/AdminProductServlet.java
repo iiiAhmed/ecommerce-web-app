@@ -7,6 +7,7 @@ import com.watch.model.enums.Category;
 import com.watch.model.enums.Gender;
 import com.watch.model.services.ProductService;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -70,6 +71,8 @@ public class AdminProductServlet extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             req.getSession().setAttribute("errorMessage", "Error: Price and Quantity must be valid numbers.");
+        } catch (OptimisticLockException e) {
+            req.getSession().setAttribute("errorMessage", "Error: The product was updated or purchased by someone else while you were editing it. Please refresh and try again.");
         } catch (Exception e) {
             req.getSession().setAttribute("errorMessage", "Error: " + e.getMessage());
         }
@@ -122,6 +125,10 @@ public class AdminProductServlet extends HttpServlet {
         String idStr = req.getParameter("productId");
         if (!isEmpty(idStr)) {
             product.setProductId(Integer.parseInt(idStr));
+        }
+        String versionStr = req.getParameter("version");
+        if (!isEmpty(versionStr)) {
+            product.setVersion(Integer.parseInt(versionStr));
         }
         product.setName(name.trim());
         String brandParam = req.getParameter("brand");

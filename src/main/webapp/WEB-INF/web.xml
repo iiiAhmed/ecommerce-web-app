@@ -10,4 +10,21 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- Block direct external access to these JSPs so users are forced to go through the Servlet controllers. -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Protected JSPs</web-resource-name>
+            <url-pattern>/admin-customers.jsp</url-pattern>
+            <url-pattern>/admin-products.jsp</url-pattern>
+            <url-pattern>/admin-users.jsp</url-pattern>
+            <url-pattern>/change-password.jsp</url-pattern>
+            <url-pattern>/order-details.jsp</url-pattern>
+            <url-pattern>/product.jsp</url-pattern>
+            <url-pattern>/profile.jsp</url-pattern>
+            <url-pattern>/shopping-cart.jsp</url-pattern>
+            <url-pattern>/store.jsp</url-pattern>
+        </web-resource-collection>
+        <auth-constraint />
+    </security-constraint>
+
 </web-app>
