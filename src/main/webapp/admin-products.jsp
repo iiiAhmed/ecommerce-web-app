@@ -105,8 +105,7 @@
                                 <tr class="table_row" id="prod-${product.productId}">
                                     <td class="column-1">
                                         <div class="how-itemcart1">
-                                            <img src="<c:out value='${not empty product.imageUrl ? product.imageUrl : \"
-                                                images/item-cart-01.jpg\"}' />" alt="IMG">
+                                            <img src="<c:out value='${not empty product.imageUrl ? product.imageUrl : \"images/item-cart-01.jpg\"}' />" alt="IMG">
                                         </div>
                                     </td>
                                     <td class="column-2">
@@ -160,7 +159,8 @@
                                 Add / Edit Product
                             </h4>
 
-                            <form id="productForm" action="admin-product" method="POST" enctype="multipart/form-data">
+                            <form id="productForm" action="admin-product" method="POST" enctype="multipart/form-data"
+                                  onsubmit="return validateProductForm()">
                                 <input type="hidden" id="pAction" name="action" value="add">
                                 <input type="hidden" id="pId" name="productId" value="">
                                 <input type="hidden" id="pCurrentImageUrl" name="imageUrl" value="">
@@ -168,7 +168,7 @@
                                 <div class="row">
                                     <div class="col-sm-6 bor8 m-b-20 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="pName"
-                                            name="name" placeholder="Product Name" required>
+                                            name="name" placeholder="Product Name" required maxlength="150">
                                     </div>
                                     <div class="col-sm-6 bor8 m-b-20 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="pBrand"
@@ -179,13 +179,13 @@
                                 <div class="row">
                                     <div class="col-sm-6 bor8 m-b-20 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="number"
-                                            id="pPrice" name="price" placeholder="Price ($)" required min="0"
-                                            step="0.01">
+                                            id="pPrice" name="price" placeholder="Price ($)" required min="0.01"
+                                               max="999999" step="0.01">
                                     </div>
                                     <div class="col-sm-6 bor8 m-b-20 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="number"
                                             id="pQuantity" name="quantity" placeholder="Quantity In Stock" required
-                                            min="0">
+                                            min="0" max="99999">
                                     </div>
                                 </div>
 
@@ -226,7 +226,7 @@
 
                                 <div class="bor8 m-b-30">
                                     <textarea class="stext-111 cl2 plh3 size-120 p-lr-20 p-tb-25" id="pDesc"
-                                        name="description" placeholder="Product Description" required></textarea>
+                                        name="description" placeholder="Product Description" required maxlength="2000"></textarea>
                                 </div>
 
                                 <button type="submit"
@@ -303,7 +303,26 @@
             function logout() {
                 window.location.href = 'logout';
             }
+
+            function validateProductForm() {
+                var name = $('#pName').val().trim();
+                if (name.length < 2) { alert('Product name must be at least 2 characters.'); return false; }
+                if (name.length > 150) { alert('Product name cannot exceed 150 characters.'); return false; }
+
+                var price = parseFloat($('#pPrice').val());
+                if (isNaN(price) || price <= 0) { alert('Price must be greater than $0.'); return false; }
+                if (price > 999999) { alert('Price cannot exceed $999,999.'); return false; }
+
+                var qty = parseInt($('#pQuantity').val());
+                if (isNaN(qty) || qty < 0) { alert('Quantity cannot be negative.'); return false; }
+                if (qty > 99999) { alert('Quantity cannot exceed 99,999.'); return false; }
+
+                var desc = $('#pDesc').val().trim();
+                if (desc.length > 2000) { alert('Description cannot exceed 2000 characters.'); return false; }
+
+                return true;
+            }
         </script>
     </body>
 
-    </html>
+</html>
