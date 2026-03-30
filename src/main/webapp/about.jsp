@@ -24,16 +24,16 @@
 
 
 	<!-- Meet the Team -->
-	<section class="bg0 p-t-45 p-b-100" style="background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);">
+	<section class="bg0 p-t-45 p-b-100 about-team-section">
 		<div class="container">
 			<div class="txt-center p-b-60">
-				<span class="stext-107 cl7" style="text-transform: uppercase; letter-spacing: 4px; font-size: 12px;">
+				<span class="stext-107 cl7 section-subtitle">
 					Who we are
 				</span>
 				<h3 class="ltext-103 cl2 p-t-12">
 					Meet the Creators
 				</h3>
-				<div style="width: 50px; height: 3px; background: #717fe0; margin: 18px auto 0; border-radius: 2px;"></div>
+				<div class="accent-bar"></div>
 			</div>
 
 			<div class="row justify-content-center" style="gap: 0;">
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Ahmed Abdelrahman</h5>
-					<span class="stext-107 cl7" style="letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px;">
+					<span class="stext-107 cl7 team-role">
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
@@ -63,7 +63,7 @@
 						</div>
 					</div>
 					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Ahmed Ayman</h5>
-					<span class="stext-107 cl7" style="letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px;">
+					<span class="stext-107 cl7 team-role">
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
@@ -79,8 +79,8 @@
 							<img src="images/member-03.jpg" alt="Eslam Mohamed">
 						</div>
 					</div>
-					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Member Name</h5>
-					<span class="stext-107 cl7" style="letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px;">
+					<h5 class="mtext-108 cl2 p-t-24 p-b-4">Eslam Mohamed</h5>
+					<span class="stext-107 cl7 team-role">
 						Co-Founder
 					</span>
 					<div class="team-social p-t-14">
@@ -93,61 +93,7 @@
 		</div>
 	</section>
 
-	<style>
-		.team-photo-wrap {
-			width: 180px;
-			height: 180px;
-			border-radius: 50%;
-			padding: 4px;
-			background: linear-gradient(135deg, #717fe0, #a8b1ff);
-			transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
-		}
 
-		.team-photo-wrap:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 18px 40px rgba(113, 127, 224, 0.25);
-		}
-
-		.team-photo {
-			width: 100%;
-			height: 100%;
-			border-radius: 50%;
-			overflow: hidden;
-			border: 3px solid #fff;
-		}
-
-		.team-photo img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 0.5s ease;
-		}
-
-		.team-photo-wrap:hover .team-photo img {
-			transform: scale(1.08);
-		}
-
-		.team-member {
-			transition: transform 0.3s ease;
-		}
-
-		.team-social a {
-			display: inline-flex;
-			width: 32px;
-			height: 32px;
-			align-items: center;
-			justify-content: center;
-			border-radius: 50%;
-			border: 1px solid #e5e5e5;
-			transition: all 0.3s ease;
-		}
-
-		.team-social a:hover {
-			background: #717fe0;
-			border-color: #717fe0;
-			color: #fff !important;
-		}
-	</style>
 
 
 	<!-- Content page -->
