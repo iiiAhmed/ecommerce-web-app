@@ -27,6 +27,67 @@ public class ProductServlet extends HttpServlet {
         String gender = req.getParameter("gender");
         String sortBy = req.getParameter("sortBy");
 
+        // Validate category enum values
+        if (categories != null && categories.length > 0) {
+            List<String> validCategories = new ArrayList<>();
+            for (String cat : categories) {
+                if (cat != null && !cat.trim().isEmpty()) {
+                    String trimmedCat = cat.trim();
+                    if (trimmedCat.length() > 50) {
+                        continue;
+                    }
+                    try {
+                        Category.valueOf(trimmedCat);
+                        validCategories.add(trimmedCat);
+                    } catch (IllegalArgumentException e) {
+                        // Invalid enum value
+                    }
+                }
+            }
+            categories = validCategories.isEmpty() ? null : validCategories.toArray(new String[0]);
+        }
+
+        // Validate brand enum values
+        if (brands != null && brands.length > 0) {
+            List<String> validBrands = new ArrayList<>();
+            for (String brand : brands) {
+                if (brand != null && !brand.trim().isEmpty()) {
+                    String trimmedBrand = brand.trim();
+                    if (trimmedBrand.length() > 50) {
+                        continue;
+                    }
+                    try {
+                        Brand.valueOf(trimmedBrand);
+                        validBrands.add(trimmedBrand);
+                    } catch (IllegalArgumentException e) {
+                        // Invalid enum value
+                    }
+                }
+            }
+            brands = validBrands.isEmpty() ? null : validBrands.toArray(new String[0]);
+        }
+
+        // Validate gender enum value
+        if (gender != null && !gender.trim().isEmpty()) {
+            gender = gender.trim();
+            if (gender.length() > 50) {
+                gender = null;
+            } else {
+                try {
+                    Gender.valueOf(gender);
+                } catch (IllegalArgumentException e) {
+                    // Invalid enum value - set to null
+                    gender = null;
+                }
+            }
+        }
+
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            sortBy = sortBy.trim();
+            if (sortBy.length() > 50) {
+                sortBy = null;
+            }
+        }
         Double minPrice = null;
         Double maxPrice = null;
 
