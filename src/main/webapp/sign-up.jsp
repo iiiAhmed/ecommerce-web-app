@@ -38,12 +38,12 @@
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="name" name="name"
-								placeholder="Full Name *" required>
+								   placeholder="Full Name *" required maxlength="100">
 						</div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="email" id="email"
-								name="email" placeholder="Email Address *" required>
+								   name="email" placeholder="Email Address *" required maxlength="100">
 							<span id="emailFeedback" class="stext-115 cl1 p-l-20 p-t-5"
 								class="feedback-hidden"></span>
 						</div>
@@ -60,17 +60,17 @@
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="text" id="job" name="job"
-								placeholder="Job Title *" required>
+								   placeholder="Job Title *" required maxlength="50">
 						</div>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
 							<input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="number" id="credit_limit"
-								name="credit_limit" placeholder="Credit Limit ($) * (min 100)" required min="100" step="0.01">
+								   name="credit_limit" placeholder="Credit Limit ($) * (100 - 99,999)" required min="100" max="99999" step="0.01">
 						</div>
 
 						<div class="bor8 m-b-20">
 							<textarea class="stext-111 cl2 plh3 size-120 p-lr-20 p-tb-25" id="address" name="address"
-								placeholder="Shipping Address *" required></textarea>
+									  placeholder="Shipping Address *" required maxlength="500"></textarea>
 						</div>
 
 						<!-- Egyptian Phone Number -->
@@ -201,7 +201,10 @@
 
 			// Email
 			var email = $('#email').val().trim();
-			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+			if (email.length > 100) {
+				showFieldError('#email', 'Email cannot exceed 100 characters.');
+				valid = false;
+			} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
 				showFieldError('#email', 'Please enter a valid email address.');
 				valid = false;
 			}
@@ -223,8 +226,33 @@
 			if (!birthday) {
 				showFieldError('#birthday', 'Please enter your birthday.');
 				valid = false;
-			} else if (new Date(birthday) >= new Date()) {
-				showFieldError('#birthday', 'Birthday must be a date in the past.');
+			} else {
+				var bDate = new Date(birthday);
+				var today = new Date();
+				today.setHours(0,0,0,0);
+				if (bDate >= today) {
+					showFieldError('#birthday', 'Birthday must be a date in the past.');
+					valid = false;
+				} else {
+					var age = today.getFullYear() - bDate.getFullYear();
+					var m = today.getMonth() - bDate.getMonth();
+					if (m < 0 || (m === 0 && today.getDate() < bDate.getDate())) age--;
+					if (age < 18) {
+						showFieldError('#birthday', 'You must be at least 18 years old.');
+						valid = false;
+					} else if (age > 120) {
+						showFieldError('#birthday', 'Please enter a realistic date of birth.');
+						valid = false;
+					}
+				}
+			}
+
+			var job = $('#job').val().trim();
+			if (job.length === 0) {
+				showFieldError('#job', 'Job title is required.');
+				valid = false;
+			} else if (job.length > 50) {
+				showFieldError('#job', 'Job title cannot exceed 50 characters.');
 				valid = false;
 			}
 
@@ -232,6 +260,18 @@
 			var creditLimit = parseFloat($('#credit_limit').val());
 			if (isNaN(creditLimit) || creditLimit < 100) {
 				showFieldError('#credit_limit', 'Credit limit must be at least $100.');
+				valid = false;
+			}else if (creditLimit > 99999) {
+				showFieldError('#credit_limit', 'Credit limit cannot exceed $99,999.');
+				valid = false;
+			}
+
+			var address = $('#address').val().trim();
+			if (address.length === 0) {
+				showFieldError('#address', 'Address is required.');
+				valid = false;
+			} else if (address.length > 500) {
+				showFieldError('#address', 'Address cannot exceed 500 characters.');
 				valid = false;
 			}
 
