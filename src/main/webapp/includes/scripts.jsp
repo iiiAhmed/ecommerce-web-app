@@ -103,15 +103,15 @@
 						let imageSrc = item.productImageUrl ? item.productImageUrl : 'images/product-01.jpg';
 						itemsHtml += `
 							<li class="header-cart-item flex-w flex-t m-b-12">
-								<div class="header-cart-item-img" onclick="removeSideCartItem(this, ${item.productId})">
-									<img src="${imageSrc}" alt="${item.productName}">
+								<div class="header-cart-item-img" onclick="removeSideCartItem(this, \${item.productId})">
+									<img src="\${imageSrc}" alt="\${item.productName}">
 								</div>
 								<div class="header-cart-item-txt p-t-8">
-									<a href="product?id=${item.productId}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-										${item.productName}
+									<a href="product?id=\${item.productId}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+										\${item.productName}
 									</a>
 									<span class="header-cart-item-info">
-										${item.quantity} x $${item.price.toFixed(2)}
+										\${item.quantity} x $\${item.price.toFixed(2)}
 									</span>
 								</div>
 							</li>
