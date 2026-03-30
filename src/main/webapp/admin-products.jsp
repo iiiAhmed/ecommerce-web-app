@@ -130,6 +130,7 @@
                                             data-desc="<c:out value='${product.description}'/>"
                                             data-gender="${product.gender}" data-age="${product.age}"
                                             data-category="${product.category}"
+                                            data-version="${product.version}"
                                             data-image="<c:out value='${product.imageUrl}'/>">Edit</button>
                                         <button
                                             class="stext-106 cl6 hov1 bor3 trans-04 p-lr-15 p-tb-5 text-danger js-remove-product"
@@ -163,6 +164,7 @@
                             <form id="productForm" action="admin-product" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" id="pAction" name="action" value="add">
                                 <input type="hidden" id="pId" name="productId" value="">
+                                <input type="hidden" id="pVersion" name="version" value="">
                                 <input type="hidden" id="pCurrentImageUrl" name="imageUrl" value="">
 
                                 <div class="row">
@@ -252,6 +254,7 @@
                 $('#productForm')[0].reset();
                 $('#pAction').val('add');
                 $('#pId').val('');
+                $('#pVersion').val('');
                 $('#pCurrentImageUrl').val('');
                 $('#pImageFile').prop('required', true);
                 $('.js-modal-product').addClass('show-modal1');
@@ -275,6 +278,7 @@
                 $('#pGender').val(btn.data('gender'));
                 $('#pAge').val(btn.data('age'));
                 $('#pCategory').val(btn.data('category'));
+                $('#pVersion').val(btn.data('version'));
                 $('#pCurrentImageUrl').val(btn.data('image'));
                 $('#pImageFile').prop('required', false);
                 $('.js-modal-product').addClass('show-modal1');

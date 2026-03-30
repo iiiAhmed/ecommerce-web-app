@@ -43,6 +43,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public boolean updateProduct(Product product) {
         em.merge(product);
+        em.flush();
         return true;
     }
 

@@ -14,6 +14,10 @@ import java.util.List;
 @Table(name = "products")
 public class Product {
 
+    @Version
+    @Column(name = "version")
+    private Integer version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -60,6 +64,14 @@ public class Product {
     private Category category;
 
     public Product() {
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @PrePersist
