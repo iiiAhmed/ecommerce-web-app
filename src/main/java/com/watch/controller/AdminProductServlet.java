@@ -121,6 +121,13 @@ public class AdminProductServlet extends HttpServlet {
             throw new Exception("Name, Price, Quantity, Category, Gender, and Age are all required.");
         }
 
+        if (name.trim().length() < 2) {
+            throw new Exception("Product name must be at least 2 characters.");
+        }
+        if (name.trim().length() > 150) {
+            throw new Exception("Product name cannot exceed 150 characters.");
+        }
+
         Product product = new Product();
         String idStr = req.getParameter("productId");
         if (!isEmpty(idStr)) {
@@ -135,9 +142,32 @@ public class AdminProductServlet extends HttpServlet {
         if (brandParam != null && !brandParam.isEmpty()) {
             product.setBrand(Brand.valueOf(brandParam));
         }
-        product.setDescription(req.getParameter("description") != null ? req.getParameter("description").trim() : "");
-        product.setPrice(Double.parseDouble(priceParam));
-        product.setQuantity(Integer.parseInt(qtyParam));
+
+        String description = req.getParameter("description") != null ? req.getParameter("description").trim() : "";
+        if (description.length() > 2000) {
+            throw new Exception("Description cannot exceed 2000 characters.");
+        }
+        product.setDescription(description);
+
+
+        double price = Double.parseDouble(priceParam);
+        if (price <= 0) {
+            throw new Exception("Price must be greater than $0.");
+        }
+        if (price > 999999) {
+            throw new Exception("Price cannot exceed $999,999.");
+        }
+        product.setPrice(price);
+
+        int quantity = Integer.parseInt(qtyParam);
+        if (quantity < 0) {
+            throw new Exception("Quantity cannot be negative.");
+        }
+        if (quantity > 99999) {
+            throw new Exception("Quantity cannot exceed 99,999.");
+        }
+        product.setQuantity(quantity);
+
         try {
             product.setGender(Gender.valueOf(genderParam));
             product.setAge(Age.valueOf(ageParam));

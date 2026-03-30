@@ -86,8 +86,18 @@ public class AdminUserServlet extends HttpServlet {
         name = name.trim();
         email = email.trim().toLowerCase();
 
+        if (name.length() > 100) {
+            resp.sendRedirect("admin-user?error=invalid");
+            return;
+        }
+
         // Email format
         if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            resp.sendRedirect("admin-user?error=invalid");
+            return;
+        }
+
+        if (email.length() > 100) {
             resp.sendRedirect("admin-user?error=invalid");
             return;
         }

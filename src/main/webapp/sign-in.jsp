@@ -27,7 +27,7 @@
         <div class="container">
             <div class="flex-w flex-tr justify-content-center">
                 <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-                    <form id="signInForm" method="POST" action="login">
+                    <form id="signInForm" method="POST" action="login" onsubmit="return validateLogin()">
                         <h4 class="mtext-105 cl2 txt-center p-b-30">
                             Sign In
                         </h4>
@@ -36,12 +36,12 @@
 
                         <div class="bor8 m-b-20 how-pos4-parent">
                             <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="email" id="loginEmail"
-                                name="email" placeholder="Email Address" required>
+                                   name="email" placeholder="Email Address" required maxlength="100">
                         </div>
 
                         <div class="bor8 m-b-30">
                             <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30" type="password" id="loginPassword"
-                                name="password" placeholder="Password" required>
+                                   name="password" placeholder="Password" required maxlength="100">
                         </div>
 
                         <button type="submit"
@@ -76,6 +76,26 @@
                     .css('color', 'green').show();
             }
         });
+
+        function validateLogin() {
+            var email = $('#loginEmail').val().trim();
+            var password = $('#loginPassword').val();
+            var msgDiv = $('#loginMessage');
+
+            if (!email) {
+                msgDiv.text('Please enter your email address.').css('color', 'red').show();
+                return false;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                msgDiv.text('Please enter a valid email address.').css('color', 'red').show();
+                return false;
+            }
+            if (!password) {
+                msgDiv.text('Please enter your password.').css('color', 'red').show();
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 
