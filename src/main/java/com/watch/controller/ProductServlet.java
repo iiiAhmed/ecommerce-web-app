@@ -88,6 +88,8 @@ public class ProductServlet extends HttpServlet {
 
         req.setAttribute("currentPage", page);
         req.setAttribute("totalPages", totalPages);
+        req.setAttribute("totalProducts", totalProducts);
+        req.setAttribute("pageSize", size);
 
         req.getRequestDispatcher("/store.jsp").forward(req, resp);
     }

@@ -5,177 +5,15 @@
 <head>
 	<title>Sync Store - Premium Watches</title>
 	<jsp:include page="includes/head.jsp" />
-	<c:if test="${empty cartCount}">
-		<c:set var="cartCount" value="0" />
-		<c:if test="${not empty sessionScope.cart}">
-			<c:forEach var="item" items="${sessionScope.cart}">
-				<c:set var="cartCount" value="${cartCount + item.value}" />
-			</c:forEach>
-		</c:if>
-	</c:if>
+
 </head>
 
 <body class="animsition">
 
 	<!-- Header -->
-	<header>
-		<!-- Header desktop -->
-		<div class="container-menu-desktop">
-
-			<div class="wrap-menu-desktop">
-				<nav class="limiter-menu-desktop container">
-
-					<!-- Logo desktop -->
-					<a href="index.jsp" class="logo">
-						<img src="images/icons/logo-01.png" alt="Sync Store">
-					</a>
-
-					<!-- Menu desktop -->
-					<div class="menu-desktop">
-						<ul class="main-menu">
-							<li class="active-menu">
-								<a href="index.jsp">Home</a>
-							</li>
-
-							<li>
-								<a href="shop">Shop</a>
-							</li>
-
-							<li>
-								<a href="about.jsp">About</a>
-							</li>
-
-							<li>
-								<a href="contact.jsp">Contact</a>
-							</li>
-						</ul>
-					</div>
-
-					<!-- Icon header -->
-					<div class="wrap-icon-header flex-w flex-r-m">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-							<i class="zmdi zmdi-search"></i>
-						</div>
-
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-							data-notify="${cartCount != null ? cartCount : 0}">
-							<i class="zmdi zmdi-shopping-cart"></i>
-						</div>
-
-						<a href="profile" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-							<i class="zmdi zmdi-account-circle"></i>
-						</a>
-
-						<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-							<i class="zmdi zmdi-brightness-2"></i>
-						</button>
-
-						<c:choose>
-							<c:when test="${not empty sessionScope.userDto}">
-								<span class="stext-106 cl2 p-l-22 p-r-11">
-									Welcome, ${sessionScope.userDto.name}
-								</span>
-								<c:if test="${sessionScope.userDto.role == 'ADMIN'}">
-									<a href="admin-product"
-										class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">Admin Panel</a>
-								</c:if>
-								<a href="logout" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-									Sign Out
-								</a>
-							</c:when>
-							<c:otherwise>
-								<a href="sign-in.jsp" class="stext-106 cl2 hov-cl1 trans-04 p-l-22 p-r-11">
-									Sign In
-								</a>
-							</c:otherwise>
-						</c:choose>
-					</div>
-				</nav>
-			</div>
-		</div>
-
-		<!-- Header Mobile -->
-		<div class="wrap-header-mobile">
-			<!-- Logo mobile -->
-			<div class="logo-mobile">
-				<a href="index.jsp"><img src="images/icons/logo-01.png" alt="Sync Store"></a>
-			</div>
-
-			<!-- Icon header -->
-			<div class="wrap-icon-header flex-w flex-r-m m-r-15">
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-					<i class="zmdi zmdi-search"></i>
-				</div>
-
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
-					data-notify="${cartCount != null ? cartCount : 0}">
-					<i class="zmdi zmdi-shopping-cart"></i>
-				</div>
-
-				<a href="profile" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
-					<i class="zmdi zmdi-account-circle"></i>
-				</a>
-				<button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
-					<i class="zmdi zmdi-brightness-2"></i>
-				</button>D
-			</div>
-
-			<!-- Button show menu -->
-			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-				<span class="hamburger-box">
-					<span class="hamburger-inner"></span>
-				</span>
-			</div>
-		</div>
-
-
-		<!-- Menu Mobile -->
-		<div class="menu-mobile">
-			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
-			</ul>
-
-			<ul class="main-menu-m">
-				<li><a href="index.jsp">Home</a></li>
-				<li><a href="shop">Shop</a></li>
-				<li><a href="about.jsp">About</a></li>
-				<li><a href="contact.jsp">Contact</a></li>
-				<c:choose>
-					<c:when test="${not empty sessionScope.userDto}">
-						<li><span class="stext-106 cl2" style="padding: 10px 20px;">Welcome, ${sessionScope.userDto.name}</span></li>
-						<c:if test="${sessionScope.userDto.role == 'ADMIN'}">
-							<li><a href="admin-product">Admin Panel</a></li>
-						</c:if>
-						<li><a href="logout">Sign Out</a></li>
-					</c:when>
-					<c:otherwise>
-						<li><a href="sign-in.jsp">Sign In</a></li>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</div>
-
-
-		<!-- Modal Search -->
-		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-			<div class="container-search-header">
-				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-					<img src="images/icons/icon-close2.png" alt="CLOSE">
-				</button>
-
-				<form class="wrap-search-header flex-w p-l-15">
-					<button class="flex-c-m trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
-				</form>
-			</div>
-		</div>
-	</header>
+	<jsp:include page="includes/header.jsp">
+		<jsp:param name="activeMenu" value="home" />
+	</jsp:include>
 
 	<jsp:include page="includes/cart-sidebar.jsp" />
 
@@ -274,7 +112,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="images/banner-01.jpg" alt="Luxury Watches">
 
-						<a href="shop"
+						<a href="shop?category=LUXURY"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
@@ -300,7 +138,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="images/banner-02.jpg" alt="Sport Watches">
 
-						<a href="shop"
+						<a href="shop?category=SPORT"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
@@ -326,7 +164,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="images/banner-03.jpg" alt="Classic Watches">
 
-						<a href="shop"
+						<a href="shop?category=CLASSIC"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
@@ -351,68 +189,56 @@
 	</div>
 
 
+	<!-- Trust Badges -->
+	<section class="trust-badges bg0 p-t-60 p-b-60">
+		<div class="container">
+			<div class="row">
+				<div class="col-6 col-md-3 p-b-20">
+					<div class="trust-badge">
+						<i class="fa fa-truck"></i>
+						<h5>Free Shipping</h5>
+						<p>On all orders over $100</p>
+					</div>
+				</div>
+				<div class="col-6 col-md-3 p-b-20">
+					<div class="trust-badge">
+						<i class="fa fa-lock"></i>
+						<h5>Secure Payment</h5>
+						<p>100% protected checkout</p>
+					</div>
+				</div>
+				<div class="col-6 col-md-3 p-b-20">
+					<div class="trust-badge">
+						<i class="fa fa-refresh"></i>
+						<h5>Easy Returns</h5>
+						<p>30-day return policy</p>
+					</div>
+				</div>
+				<div class="col-6 col-md-3 p-b-20">
+					<div class="trust-badge">
+						<i class="fa fa-shield"></i>
+						<h5>2-Year Warranty</h5>
+						<p>Manufacturer guarantee</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<jsp:include page="includes/footer.jsp" />
 
 
-	<!--===============================================================================================-->
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
-	<script>
-		$(".js-select2").each(function () {
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
-	</script>
-	<!--===============================================================================================-->
+	<jsp:include page="includes/scripts.jsp" />
+
+	<!-- Page-specific: Slider & Parallax -->
 	<script src="vendor/daterangepicker/moment.min.js"></script>
 	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
 	<script src="vendor/slick/slick.min.js"></script>
 	<script src="js/slick-custom.js"></script>
-	<!--===============================================================================================-->
 	<script src="vendor/parallax100/parallax100.js"></script>
 	<script>
 		$('.parallax100').parallax100();
 	</script>
-	<!--===============================================================================================-->
-	<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-	<script>
-		$('.gallery-lb').each(function () {
-			$(this).magnificPopup({
-				delegate: 'a',
-				type: 'image',
-				gallery: { enabled: true },
-				mainClass: 'mfp-fade'
-			});
-		});
-	</script>
-	<!--===============================================================================================-->
-	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-	<script>
-		$('.js-pscroll').each(function () {
-			$(this).css('position', 'relative');
-			$(this).css('overflow', 'hidden');
-			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
-			});
-
-			$(window).on('resize', function () {
-				ps.update();
-			})
-		});
-	</script>
-	<!--===============================================================================================-->
-	<script src="js/main.js"></script>
 
 </body>
 

@@ -72,19 +72,39 @@
                     Newsletter
                 </h4>
 
-                <form>
+                <form id="newsletterForm" onsubmit="return handleNewsletter(event)">
                     <div class="wrap-input1 w-full p-b-4">
-                        <input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
-                            placeholder="email@example.com">
+                        <input class="input1 bg-none plh1 stext-107 cl7" type="email" name="email"
+                            placeholder="email@example.com" required id="newsletterEmail">
                         <div class="focus-input1 trans-04"></div>
                     </div>
 
                     <div class="p-t-18">
-                        <button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
+                        <button type="submit" class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04" id="newsletterBtn">
                             Subscribe
                         </button>
                     </div>
+                    <p id="newsletterFeedback" class="newsletter-feedback"></p>
                 </form>
+                <script>
+                    function handleNewsletter(e) {
+                        e.preventDefault();
+                        var email = document.getElementById('newsletterEmail');
+                        var feedback = document.getElementById('newsletterFeedback');
+                        if (email.value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                            feedback.textContent = 'Thank you for subscribing!';
+                            feedback.style.color = '#27ae60';
+                            feedback.style.display = 'block';
+                            document.getElementById('newsletterForm').reset();
+                            setTimeout(function() { feedback.style.display = 'none'; }, 4000);
+                        } else {
+                            feedback.textContent = 'Please enter a valid email.';
+                            feedback.style.color = '#e74c3c';
+                            feedback.style.display = 'block';
+                        }
+                        return false;
+                    }
+                </script>
             </div>
         </div>
 

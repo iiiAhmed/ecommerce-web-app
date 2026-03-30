@@ -6,37 +6,6 @@
 <head>
 	<title>Shopping Cart - Sync Store</title>
 	<jsp:include page="includes/head.jsp" />
-	<style>
-		.table_row.removing {
-			opacity: 0.4;
-			pointer-events: none;
-			transition: opacity 0.2s;
-		}
-		.cart-error-msg {
-			margin-bottom: 20px;
-		}
-		.empty-cart-msg {
-			text-align: center;
-			padding: 60px 20px;
-		}
-		.empty-cart-msg i {
-			font-size: 60px;
-			color: #ccc;
-			display: block;
-			margin-bottom: 16px;
-		}
-		#btnCheckout:disabled {
-			opacity: 0.5;
-			cursor: not-allowed;
-			pointer-events: none;
-		}
-		.credit-danger {
-			color: #e74c3c !important;
-		}
-		.credit-warning {
-			color: #e67e22 !important;
-		}
-	</style>
 </head>
 <body class="animsition">
 
@@ -44,46 +13,45 @@
 	<jsp:param name="activeMenu" value="" />
 </jsp:include>
 
-<!-- breadcrumb -->
-<div class="container">
-	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-		<a href="index.jsp" class="stext-109 cl8 hov-cl1 trans-04">
-			Home <i class="fa fa-angle-right m-l-9 m-r-10"></i>
-		</a>
-		<span class="stext-109 cl4">Shopping Cart</span>
-	</div>
-</div>
+<!-- Hero Breadcrumb -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-01.jpg');">
+	<h2 class="ltext-105 cl0 txt-center">Shopping Cart</h2>
+</section>
 
-<!-- success message -->
+<!-- Flash Messages -->
 <c:if test="${param.success == 'true'}">
 	<div class="container m-t-20">
-		<div class="alert alert-success">
-			<i class="zmdi zmdi-check-circle m-r-8"></i>
-			Purchase successful! Your cart has been cleared and your credit updated.
+		<div class="profile-alert success">
+			<i class="fa fa-check-circle"></i>
+			<span>Purchase successful! Your cart has been cleared and your credit updated.</span>
 		</div>
 	</div>
 </c:if>
-
-<!-- error message from checkout -->
 <c:if test="${not empty error}">
 	<div class="container m-t-20">
-		<div class="alert alert-danger">
-			<i class="zmdi zmdi-alert-circle m-r-8"></i>
-				${error}
+		<div class="profile-alert error">
+			<i class="fa fa-exclamation-circle"></i>
+			<span>${error}</span>
 		</div>
 	</div>
 </c:if>
 
 <!-- Shopping Cart -->
-<form class="bg0 p-t-75 p-b-85" action="shopping-cart" method="post">
+<form class="bg0 p-t-40 p-b-85" action="shopping-cart" method="post">
 	<div class="container">
 		<div class="row">
 
 			<!-- Cart Table -->
-			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-				<div class="m-l-25 m-r--38 m-lr-0-xl">
+			<div class="col-lg-8 m-b-40">
+				<div class="cart-card">
+					<div class="cart-card-header">
+						<h4><i class="fa fa-shopping-cart"></i> Your Items</h4>
+						<c:if test="${not empty cartItems}">
+							<span class="cart-item-count">${cartItems.size()} item${cartItems.size() > 1 ? 's' : ''}</span>
+						</c:if>
+					</div>
 
-					<!-- inline AJAX errors appear here -->
+					<!-- inline AJAX errors -->
 					<div id="cart-error-container"></div>
 
 					<div class="wrap-table-shopping-cart">
@@ -104,14 +72,20 @@
 											data-product-id="${item.productId}"
 											data-price="${item.price}">
 											<td class="column-1">
-												<div class="how-itemcart1">
-													<img src="${empty item.productImageUrl
+												<a href="product?id=${item.productId}" target="_blank">
+													<div class="how-itemcart1">
+														<img src="${empty item.productImageUrl
                                                                 ? 'images/product-01.jpg'
                                                                 : item.productImageUrl}"
-														 alt="${item.productName}">
-												</div>
+															 alt="${item.productName}">
+													</div>
+												</a>
 											</td>
-											<td class="column-2">${item.productName}</td>
+											<td class="column-2">
+												<a href="product?id=${item.productId}" target="_blank" class="cart-product-name">
+													${item.productName}
+												</a>
+											</td>
 											<td class="column-3">
 												$<fmt:formatNumber value="${item.price}"
 																   minFractionDigits="2"
@@ -136,11 +110,11 @@
 																   minFractionDigits="2"
 																   maxFractionDigits="2"/>
 											</td>
-											<td class="column-6 p-r-20">
+											<td class="column-6">
 												<button type="button"
-														class="stext-106 cl6 hov1 bor3 trans-04 p-tb-5 p-lr-15 text-danger"
+														class="cart-remove-btn"
 														onclick="removeItem(this, '${item.productId}')">
-													Remove
+													<i class="fa fa-trash-o"></i>
 												</button>
 											</td>
 										</tr>
@@ -149,10 +123,10 @@
 								<c:otherwise>
 									<tr id="emptyRow">
 										<td colspan="6">
-											<div class="empty-cart-msg">
-												<i class="zmdi zmdi-shopping-cart"></i>
-												Your cart is empty.
-												<a href="shop">Continue shopping</a>
+											<div class="profile-empty">
+												<i class="fa fa-shopping-cart"></i>
+												<p>Your cart is empty.</p>
+												<a href="shop">Continue Shopping</a>
 											</div>
 										</td>
 									</tr>
@@ -160,58 +134,65 @@
 							</c:choose>
 						</table>
 					</div>
+
+					<c:if test="${not empty cartItems}">
+						<div class="cart-continue-link">
+							<a href="shop"><i class="zmdi zmdi-long-arrow-left"></i> Continue Shopping</a>
+						</div>
+					</c:if>
 				</div>
 			</div>
 
-			<!-- Cart Totals -->
-			<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-				<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-					<h4 class="mtext-109 cl2 p-b-30">Cart Totals</h4>
+			<!-- Cart Summary -->
+			<div class="col-lg-4 m-b-40">
+				<div class="cart-summary-card">
+					<h4 class="cart-summary-title">Order Summary</h4>
 
-					<div class="flex-w flex-t bor12 p-b-13">
-						<div class="size-208">
-							<span class="stext-110 cl2">Subtotal:</span>
-						</div>
-						<div class="size-209">
-                            <span class="mtext-110 cl2" id="cartSubtotal">
-                                $<fmt:formatNumber value="${subtotal}"
-												   minFractionDigits="2"
-												   maxFractionDigits="2"/>
-                            </span>
-						</div>
+					<div class="cart-summary-row">
+						<span>Subtotal</span>
+						<span id="cartSubtotal">
+							$<fmt:formatNumber value="${subtotal}"
+											   minFractionDigits="2"
+											   maxFractionDigits="2"/>
+						</span>
 					</div>
 
-					<div class="flex-w flex-t bor12 p-t-15 p-b-30">
-						<div class="size-208 w-full-ssm">
-							<span class="stext-110 cl2">Available Credit:</span>
-						</div>
-						<div class="size-209 w-full-ssm">
-                            <span class="mtext-110 cl2 text-success" id="availableCredit">
-                                $<fmt:formatNumber value="${creditLimit}"
-												   minFractionDigits="2"
-												   maxFractionDigits="2"/>
-                            </span>
-						</div>
+					<div class="cart-summary-row">
+						<span>Shipping</span>
+						<span class="order-free-shipping">Free</span>
 					</div>
 
-					<div class="flex-w flex-t p-t-27 p-b-33">
-						<div class="size-208">
-							<span class="mtext-101 cl2">Total:</span>
-						</div>
-						<div class="size-209 p-t-1">
-                            <span class="mtext-110 cl2" id="cartTotal">
-                                $<fmt:formatNumber value="${subtotal}"
-												   minFractionDigits="2"
-												   maxFractionDigits="2"/>
-                            </span>
-						</div>
+					<div class="cart-summary-divider"></div>
+
+					<div class="cart-summary-row cart-summary-credit">
+						<span><i class="fa fa-credit-card"></i> Available Credit</span>
+						<span id="availableCredit" class="cart-credit-value">
+							$<fmt:formatNumber value="${creditLimit}"
+											   minFractionDigits="2"
+											   maxFractionDigits="2"/>
+						</span>
+					</div>
+
+					<div class="cart-summary-divider"></div>
+
+					<div class="cart-summary-row cart-summary-total">
+						<span>Total</span>
+						<span id="cartTotal">
+							$<fmt:formatNumber value="${subtotal}"
+											   minFractionDigits="2"
+											   maxFractionDigits="2"/>
+						</span>
 					</div>
 
 					<button type="submit" id="btnCheckout"
-					${empty cartItems ? 'disabled' : ''}
-							class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-						Proceed to Checkout
+						${empty cartItems ? 'disabled' : ''}
+							class="cart-checkout-btn">
+						<i class="fa fa-lock"></i> Proceed to Checkout
 					</button>
+
+					<div class="cart-secure-note">
+						<i class="fa fa-shield"></i> Secure checkout — your credit will be charged upon confirmation.
+					</div>
 				</div>
 			</div>
 
@@ -317,14 +298,6 @@
 		});
 	}
 
-	function revertRow(row, input, oldQty, price) {
-		row.removeClass('removing');
-		row.css('opacity', '1').css('pointer-events', 'auto');
-		input.val(oldQty);
-		row.find('.item-total').text('$' + (price * oldQty).toFixed(2));
-		recalculate();
-	}
-
 	function recalculate() {
 		var total = 0;
 		$('.table_row').each(function() {
@@ -337,7 +310,6 @@
 
 		$('#cartSubtotal, #cartTotal').text('$' + total.toFixed(2));
 
-		var credit = parseFloat($('#availableCredit').text().replace('$', '').trim());
 		if (total > creditLimit) {
 			$('#cartTotal').addClass('credit-danger');
 			$('#btnCheckout')
@@ -345,7 +317,9 @@
 					.attr('title', 'Total exceeds your available credit');
 		} else {
 			$('#cartTotal').removeClass('credit-danger');
-			$('#btnCheckout').prop('disabled', false).removeAttr('title');
+			if ($('.table_row').length > 0) {
+				$('#btnCheckout').prop('disabled', false).removeAttr('title');
+			}
 		}
 	}
 
@@ -353,9 +327,10 @@
 		if ($('.table_row').length === 0) {
 			$('#cartTable').html(
 					'<tr id="emptyRow"><td colspan="6">' +
-					'<div class="empty-cart-msg">' +
-					'<i class="zmdi zmdi-shopping-cart"></i>' +
-					'Your cart is empty. <a href="shop">Continue shopping</a>' +
+					'<div class="profile-empty">' +
+					'<i class="fa fa-shopping-cart"></i>' +
+					'<p>Your cart is empty.</p>' +
+					'<a href="shop">Continue Shopping</a>' +
 					'</div></td></tr>'
 			);
 			$('#btnCheckout').prop('disabled', true);
@@ -364,9 +339,9 @@
 
 	function showCartError(message) {
 		$('#cart-error-container').html(
-				'<div class="alert alert-danger cart-error-msg">' +
-				'<i class="zmdi zmdi-alert-circle m-r-8"></i>' +
-				message + '</div>'
+				'<div class="profile-alert error cart-error-msg">' +
+				'<i class="fa fa-exclamation-circle"></i> ' +
+				'<span>' + message + '</span></div>'
 		);
 		setTimeout(function() {
 			$('#cart-error-container').find('.cart-error-msg')
