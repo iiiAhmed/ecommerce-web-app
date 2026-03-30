@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 	<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 		<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+			<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 			<!DOCTYPE html>
 			<html lang="en">
 
@@ -8,6 +9,142 @@
 				<title>${product.name} - Product Detail</title>
 				<jsp:include page="includes/head.jsp" />
 
+				<style>
+					/* ── Product Gallery ── */
+					.pd-gallery {
+						position: relative;
+						width: 100%;
+						user-select: none;
+					}
+
+					.pd-gallery__main {
+						position: relative;
+						width: 100%;
+						aspect-ratio: 1 / 1;
+						overflow: hidden;
+						border-radius: 12px;
+						background: #f5f5f5;
+					}
+
+					.pd-gallery__main img {
+						position: absolute;
+						inset: 0;
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+						opacity: 0;
+						transition: opacity .4s ease, transform .4s ease;
+						will-change: opacity, transform;
+						transform: scale(1.03);
+					}
+
+					.pd-gallery__main img.active {
+						opacity: 1;
+						transform: scale(1);
+						z-index: 1;
+					}
+
+					/* Arrows */
+					.pd-gallery__arrow {
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+						z-index: 5;
+						width: 44px;
+						height: 44px;
+						border: none;
+						border-radius: 50%;
+						background: rgba(255,255,255,.85);
+						backdrop-filter: blur(6px);
+						box-shadow: 0 2px 12px rgba(0,0,0,.12);
+						cursor: pointer;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						font-size: 18px;
+						color: #222;
+						opacity: 0;
+						transition: opacity .3s, background .2s, transform .2s;
+					}
+
+					.pd-gallery:hover .pd-gallery__arrow {
+						opacity: 1;
+					}
+
+					.pd-gallery__arrow:hover {
+						background: #fff;
+						transform: translateY(-50%) scale(1.08);
+					}
+
+					.pd-gallery__arrow--prev { left: 14px; }
+					.pd-gallery__arrow--next { right: 14px; }
+
+					/* Counter badge */
+					.pd-gallery__counter {
+						position: absolute;
+						bottom: 14px;
+						right: 14px;
+						z-index: 5;
+						background: rgba(0,0,0,.55);
+						backdrop-filter: blur(4px);
+						color: #fff;
+						font-size: 13px;
+						font-weight: 500;
+						padding: 4px 12px;
+						border-radius: 20px;
+						letter-spacing: .3px;
+						pointer-events: none;
+					}
+
+					/* Thumbnail strip */
+					.pd-gallery__thumbs {
+						display: flex;
+						gap: 10px;
+						margin-top: 14px;
+						overflow-x: auto;
+						padding-bottom: 4px;
+						scrollbar-width: thin;
+					}
+
+					.pd-gallery__thumb {
+						flex: 0 0 68px;
+						height: 68px;
+						border-radius: 8px;
+						overflow: hidden;
+						cursor: pointer;
+						border: 2px solid transparent;
+						opacity: .55;
+						transition: opacity .25s, border-color .25s, transform .2s;
+					}
+
+					.pd-gallery__thumb:hover {
+						opacity: .85;
+						transform: translateY(-2px);
+					}
+
+					.pd-gallery__thumb.active {
+						opacity: 1;
+						border-color: #222;
+					}
+
+					.pd-gallery__thumb img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+
+					/* Hide gallery controls when single image */
+					.pd-gallery--single .pd-gallery__arrow,
+					.pd-gallery--single .pd-gallery__counter,
+					.pd-gallery--single .pd-gallery__thumbs {
+						display: none;
+					}
+
+					@media (max-width: 767px) {
+						.pd-gallery__arrow { opacity: 1; width: 38px; height: 38px; font-size: 15px; }
+						.pd-gallery__thumb { flex: 0 0 56px; height: 56px; }
+					}
+				</style>
 
 			</head>
 
@@ -43,18 +180,52 @@
 						<div class="row">
 							<div class="col-md-6 col-lg-7 p-b-30">
 								<div class="p-l-25 p-r-30 p-lr-0-lg">
-									<div class="wrap-pic-w pos-relative">
-										<c:choose>
-											<c:when test="${not empty product.imageUrl}">
-												<img src="${product.imageUrl}" alt="${product.name}"
-													class="product-image">
-											</c:when>
-											<c:otherwise>
-												<img src="images/product-detail-01.jpg" alt="${product.name}"
-													class="product-detail-img">
-											</c:otherwise>
-										</c:choose>
+
+									<%-- Build image list: use product.images if available, fall back to imageUrl or placeholder --%>
+									<c:set var="imageList" value="${product.images}" />
+									<c:if test="${empty imageList}">
+										<c:set var="imageList" value="${empty product.imageUrl ? 'images/product-detail-01.jpg' : product.imageUrl}" />
+									</c:if>
+
+									<div class="pd-gallery${fn:length(imageList) <= 1 ? ' pd-gallery--single' : ''}" id="pdGallery">
+
+										<!-- Main image viewport -->
+										<div class="pd-gallery__main">
+											<c:forEach var="img" items="${imageList}" varStatus="st">
+												<img src="${img}" alt="${product.name} - Image ${st.index + 1}"
+													 class="${st.index == 0 ? 'active' : ''}"
+													 data-index="${st.index}">
+											</c:forEach>
+										</div>
+
+										<!-- Arrows -->
+										<button type="button" class="pd-gallery__arrow pd-gallery__arrow--prev"
+												onclick="pdGalleryNav(-1)" aria-label="Previous image">
+											<i class="fa fa-angle-left"></i>
+										</button>
+										<button type="button" class="pd-gallery__arrow pd-gallery__arrow--next"
+												onclick="pdGalleryNav(1)" aria-label="Next image">
+											<i class="fa fa-angle-right"></i>
+										</button>
+
+										<!-- Counter -->
+										<span class="pd-gallery__counter">
+											<span id="pdCurrentIdx">1</span> / ${fn:length(imageList)}
+										</span>
+
+										<!-- Thumbnails -->
+										<c:if test="${fn:length(imageList) > 1}">
+											<div class="pd-gallery__thumbs">
+												<c:forEach var="img" items="${imageList}" varStatus="st">
+													<div class="pd-gallery__thumb ${st.index == 0 ? 'active' : ''}"
+														 onclick="pdGalleryGo(${st.index})">
+														<img src="${img}" alt="Thumbnail ${st.index + 1}">
+													</div>
+												</c:forEach>
+											</div>
+										</c:if>
 									</div>
+
 								</div>
 							</div>
 
@@ -144,6 +315,60 @@
 
 				<!-- Scripts -->
 				<jsp:include page="includes/scripts.jsp" />
+
+				<script>
+					/* ── Product Gallery Navigation ── */
+					(function () {
+						var gallery = document.getElementById('pdGallery');
+						if (!gallery) return;
+
+						var imgs = gallery.querySelectorAll('.pd-gallery__main img');
+						var thumbs = gallery.querySelectorAll('.pd-gallery__thumb');
+						var counter = document.getElementById('pdCurrentIdx');
+						var total = imgs.length;
+						var current = 0;
+
+						if (total <= 1) return;
+
+						window.pdGalleryGo = function (idx) {
+							if (idx < 0) idx = total - 1;
+							if (idx >= total) idx = 0;
+							if (idx === current) return;
+
+							imgs[current].classList.remove('active');
+							if (thumbs.length) thumbs[current].classList.remove('active');
+
+							current = idx;
+
+							imgs[current].classList.add('active');
+							if (thumbs.length) {
+								thumbs[current].classList.add('active');
+								thumbs[current].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+							}
+
+							if (counter) counter.textContent = current + 1;
+						};
+
+						window.pdGalleryNav = function (dir) {
+							window.pdGalleryGo(current + dir);
+						};
+
+						/* Keyboard: left / right arrows */
+						document.addEventListener('keydown', function (e) {
+							if (e.key === 'ArrowLeft') pdGalleryNav(-1);
+							else if (e.key === 'ArrowRight') pdGalleryNav(1);
+						});
+
+						/* Swipe support for mobile */
+						var startX = 0;
+						var mainEl = gallery.querySelector('.pd-gallery__main');
+						mainEl.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+						mainEl.addEventListener('touchend', function (e) {
+							var diff = e.changedTouches[0].clientX - startX;
+							if (Math.abs(diff) > 40) pdGalleryNav(diff < 0 ? 1 : -1);
+						}, { passive: true });
+					})();
+				</script>
 
 				<script>
 					$('body').append('<div id="toast-container"></div>');
