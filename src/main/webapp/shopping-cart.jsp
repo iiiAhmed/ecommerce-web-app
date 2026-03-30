@@ -220,6 +220,23 @@
 			btn.disabled = false;
 			return;
 		}
+		if (expectedQty > 5) {
+			showCartError('Quantity cannot exceed 5 items');
+			btn.disabled = false;
+			return;
+		}
+
+		if (!productId || isNaN(productId) || productId < 0) {
+			showCartError('Invalid product identifier');
+			btn.disabled = false;
+			return;
+		}
+
+		if (isNaN(delta) || Math.abs(delta) > 1000) {
+			showCartError('Invalid quantity change');
+			btn.disabled = false;
+			return;
+		}
 
 		var price = parseFloat(row.data('price'));
 
@@ -261,8 +278,12 @@
 				}
 			},
 
-			error: function() {
-				showCartError('Could not connect to server. Please try again.');
+			error: function(xhr, status, error) {
+				if (xhr.responseJSON && xhr.responseJSON.message) {
+					showCartError(xhr.responseJSON.message);
+				} else {
+					showCartError('Could not connect to server. Please try again.');
+				}
 			},
 
 			complete: function() {

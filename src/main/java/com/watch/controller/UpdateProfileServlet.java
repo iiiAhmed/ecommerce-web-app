@@ -52,10 +52,16 @@ public class UpdateProfileServlet extends HttpServlet {
 
         if (isProfileForm) {
             // ── Server-side validation for profile details ──────────────────────
-
-            // Name: must not be blank
-            if (name.trim().isEmpty()) {
-                forwardWithError(req, resp, user, "Name cannot be empty.");
+            if (name.trim().isEmpty() || name.trim().length() < 2) {
+                forwardWithError(req, resp, user, "Name must be at least 2 characters.");
+                return;
+            }
+            if (name.trim().length() > 100) {
+                forwardWithError(req, resp, user, "Name cannot exceed 100 characters.");
+                return;
+            }
+            if (!name.trim().matches("^[A-Za-z\\s]+$")) {
+                forwardWithError(req, resp, user, "Name must contain only letters and spaces.");
                 return;
             }
 
@@ -66,6 +72,19 @@ public class UpdateProfileServlet extends HttpServlet {
                     birthday = LocalDate.parse(birthdayStr.trim());
                     if (!birthday.isBefore(LocalDate.now())) {
                         forwardWithError(req, resp, user, "Birthday cannot be today or in the future.");
+                        return;
+                    }
+                    int age = LocalDate.now().getYear() - birthday.getYear();
+                    if (LocalDate.now().getMonthValue() < birthday.getMonthValue() ||
+                            (LocalDate.now().getMonthValue() == birthday.getMonthValue() && LocalDate.now().getDayOfMonth() < birthday.getDayOfMonth())) {
+                        age--;
+                    }
+                    if (age < 18) {
+                        forwardWithError(req, resp, user, "You must be at least 18 years old.");
+                        return;
+                    }
+                    if (age > 120) {
+                        forwardWithError(req, resp, user, "Please enter a realistic date of birth.");
                         return;
                     }
                 } catch (DateTimeParseException e) {
@@ -90,9 +109,17 @@ public class UpdateProfileServlet extends HttpServlet {
                 user.setBirthday(birthday);
             }
             if (job != null) {
+                if (job.trim().length() > 50) {
+                    forwardWithError(req, resp, user, "Job title cannot exceed 50 characters.");
+                    return;
+                }
                 user.setJob(job.trim());
             }
             if (address != null) {
+                if (address.trim().length() > 500) {
+                    forwardWithError(req, resp, user, "Address cannot exceed 500 characters.");
+                    return;
+                }
                 user.setAddress(address.trim());
             }
             if (phone != null) {
@@ -116,6 +143,10 @@ public class UpdateProfileServlet extends HttpServlet {
                 double credit = Double.parseDouble(newCreditStr);
                 if (credit < 0) {
                     forwardWithError(req, resp, user, "Credit limit cannot be negative.");
+                    return;
+                }
+                if (credit > 99999) {
+                    forwardWithError(req, resp, user, "Credit limit cannot exceed $99,999.");
                     return;
                 }
                 user.setCreditLimit(credit);

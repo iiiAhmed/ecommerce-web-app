@@ -376,7 +376,26 @@
 					function changeQty(btn, delta, productId) {
 						var numEl = btn.parentNode.querySelector('.num-product');
 						var currentVal = parseInt(numEl.value);
+						var expectedQty = currentVal + delta;
 
+						if (expectedQty < 0) {
+							return;
+						}
+
+						if (expectedQty > 5) {
+							showToast('Error', 'You can\'t buy more that 5 items', 'error');
+							return;
+						}
+
+						if (!productId || isNaN(productId) || productId < 0) {
+							showToast('Error', 'Invalid product', 'error');
+							return;
+						}
+
+						if (isNaN(delta) || Math.abs(delta) > 5) {
+							showToast('Error', 'Invalid quantity change', 'error');
+							return;
+						}
 						var buttons = btn.parentNode.querySelectorAll('div[class^="btn-num-product"]');
 						buttons.forEach(function (b) { b.style.pointerEvents = 'none'; });
 
@@ -387,7 +406,6 @@
 							success: function (response) {
 								if (response.status === 'success') {
 
-									let expectedQty = currentVal + delta;
 									let actualQty = response.updatedQty;
 
 									numEl.value = actualQty;
