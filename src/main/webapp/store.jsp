@@ -89,11 +89,11 @@
 						<div class="filter-group filter-price">
 							<div class="filter-title">Price</div>
 
-							<input type="number" name="minPrice" value="${param.minPrice}"
-								   placeholder="Min price" class="form-control">
+							<input type="number" name="minPrice" id="minPrice" value="${param.minPrice}"
+								   placeholder="Min price" class="form-control" min="0" max="1000000" step="0.01">
 
-							<input type="number" name="maxPrice" value="${param.maxPrice}"
-								   placeholder="Max price" class="form-control">
+							<input type="number" name="maxPrice" id="maxPrice" value="${param.maxPrice}"
+								   placeholder="Max price" class="form-control" min="0" max="1000000" step="0.01">
 						</div>
 
 						<button type="submit" class="filter-btn">Search</button>
@@ -370,6 +370,26 @@
 	function changeQty(btn, delta, productId) {
 		var numEl = btn.parentNode.querySelector('.block2-qty-num');
 		var currentVal = parseInt(numEl.textContent);
+		var expectedQty = currentVal + delta;
+
+		if (expectedQty < 0) {
+			return;
+		}
+
+		if (expectedQty > 5) {
+			showToast('Error', 'You can\'t buy more that 5 items', 'error');
+			return;
+		}
+
+		if (!productId || isNaN(productId) || productId < 0) {
+			showToast('Error', 'Invalid product', 'error');
+			return;
+		}
+
+		if (isNaN(delta) || Math.abs(delta) > 5) {
+			showToast('Error', 'Invalid quantity change', 'error');
+			return;
+		}
 
 		var buttons = btn.parentNode.parentNode.querySelectorAll('button');
 		buttons.forEach(function(b) { b.disabled = true; });
@@ -381,7 +401,6 @@
 			success: function(response) {
 				if (response.status === 'success') {
 
-					let expectedQty = currentVal + delta;
 					let actualQty = response.updatedQty;
 
 					numEl.textContent = actualQty;
@@ -403,11 +422,15 @@
 						showToast('Cart updated', productName, 'success');
 					}
 				} else {
-					showToast('Error', response.message, 'error');
+					showToast('Error', response.message || 'Failed to update cart', 'error');
 				}
 			},
-			error: function() {
-				showToast('Error', 'Could not connect to server', 'error');
+			error: function(xhr, status, error) {
+				if (xhr.responseJSON && xhr.responseJSON.message) {
+					showToast('Error', xhr.responseJSON.message, 'error');
+				} else {
+					showToast('Error', 'Could not connect to server', 'error');
+				}
 			},
 			complete: function() {
 				buttons.forEach(function(b) { b.disabled = false; });
