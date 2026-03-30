@@ -89,7 +89,7 @@
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30"
                                                type="text" name="name" id="nameField"
-                                               value="${user.name}" placeholder="Your full name" required>
+l                                               value="${user.name}" placeholder="Your full name" required maxlength="100">
                                     </div>
                                 </div>
 
@@ -132,7 +132,7 @@
                                     <div class="bor8 how-pos4-parent">
                                         <input class="stext-111 cl2 plh3 size-116 p-l-20 p-r-30"
                                                type="text" name="job"
-                                               value="${user.job}" placeholder="Your job title">
+                                               value="${user.job}" placeholder="Your job title" maxlength="50">
                                     </div>
                                 </div>
 
@@ -141,7 +141,7 @@
                                     <p class="field-label">Address</p>
                                     <div class="bor8">
                                         <textarea class="stext-111 cl2 plh3 size-120 p-lr-20 p-tb-25"
-                                                  name="address" placeholder="Your address">${user.address}</textarea>
+                                                  name="address" placeholder="Your address" maxlength="500">${user.address}</textarea>
                                     </div>
                                 </div>
 
@@ -399,6 +399,17 @@
                 today.setHours(0, 0, 0, 0);
                 if (birthday >= today) {
                     showError(errorBanner, 'Birthday cannot be today or in the future.');
+                    return false;
+                }
+                var age = today.getFullYear() - birthday.getFullYear();
+                var m = today.getMonth() - birthday.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) age--;
+                if (age < 18) {
+                    showError(errorBanner, 'You must be at least 18 years old.');
+                    return false;
+                }
+                if (age > 120) {
+                    showError(errorBanner, 'Please enter a realistic date of birth.');
                     return false;
                 }
             }

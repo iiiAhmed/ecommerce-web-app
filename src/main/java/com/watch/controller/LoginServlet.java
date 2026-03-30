@@ -33,6 +33,12 @@ public class LoginServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
+        if (email == null || email.trim().isEmpty() || password == null || password.isEmpty()) {
+            resp.sendRedirect("sign-in.jsp?error=invalid");
+            return;
+        }
+        email = email.trim();
+
         User user = userService.authenticate(email, password);
 
         if (user != null) {
