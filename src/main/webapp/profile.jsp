@@ -4,6 +4,7 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <title>My Profile - Sync Store</title>
     <jsp:include page="includes/head.jsp" />
 </head>
@@ -13,6 +14,8 @@
     <jsp:include page="includes/header.jsp">
         <jsp:param name="activeMenu" value="" />
     </jsp:include>
+
+    <jsp:include page="includes/cart-sidebar.jsp" />
 
     <!-- Title page -->
     <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-01.jpg');">
@@ -43,7 +46,7 @@
                             <li><a href="#order-history" data-section="order-history">
                                 <i class="fa fa-shopping-bag"></i> Order History
                             </a></li>
-                            <li><a href="shopping-cart.jsp">
+                            <li><a href="shopping-cart">
                                 <i class="fa fa-shopping-cart"></i> My Cart
                             </a></li>
                             <li class="sidebar-divider"></li>
@@ -436,8 +439,13 @@ l                                               value="${user.name}" placeholder
                 showError(errorBanner, 'Please enter a valid credit amount.');
                 return false;
             }
-            if (parseFloat(creditVal) < 0) {
-                showError(errorBanner, 'Credit limit cannot be negative.');
+            var credit = parseFloat(creditVal);
+            if (credit < 100) {
+                showError(errorBanner, 'Credit limit must be at least $100.');
+                return false;
+            }
+            if (credit > 99999) {
+                showError(errorBanner, 'Credit limit cannot exceed $99,999.');
                 return false;
             }
             return true;
