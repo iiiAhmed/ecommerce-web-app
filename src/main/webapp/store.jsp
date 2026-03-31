@@ -409,9 +409,11 @@
 
 					var productName = $(btn).closest('.block2').find('.js-name-b2').text().trim();
 
-					if (actualQty === 0) {
+					if (actualQty === 0 && delta < 0) {
 						showToast('Removed from cart', productName, 'remove');
 
+					} else if (actualQty === 0 && delta > 0) {
+						showToast('Out of stock', productName, 'error');
 					} else if (actualQty < expectedQty) {
 						showToast('Stock limit reached', 'Adjusted to available quantity', 'error');
 
